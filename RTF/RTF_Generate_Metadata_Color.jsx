@@ -39,8 +39,6 @@ function RTF_Generate_Metadata_Color() {
 
     // Change text frame contents and name to color group name
     metaText.contents = editMetadataText(artGroupColors[i].name);
-
-    // metaText.contents = artGroupColors[i].name;
     metaText.name = artGroupColors[i].name;
 
     // Set color of text frame to the matching swatch color
