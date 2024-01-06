@@ -53,8 +53,10 @@ function RTF_Unite_LastColor() {
   app.executeMenuCommand("compoundPath");
   doc.defaultFillColor = lastColorSwatch.color;
 
-  // Group compound path & name to lastColorGroup
+  // Group compound path, Unite (Add) & name to lastColorGroup
   app.executeMenuCommand("group");
+  app.executeMenuCommand("Live Pathfinder Add");
+  app.executeMenuCommand("expandStyle");
   doc.selection[0].name = lastColorGroup.name;
 
   // Deselect everything
