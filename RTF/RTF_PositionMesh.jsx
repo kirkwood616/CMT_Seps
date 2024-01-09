@@ -17,11 +17,10 @@ function RTF_PositionMesh() {
 
   // Storage Variables
   var artColors = new Array();
-  var colorCount = new Array();
   var colorSettings = new Array();
   var isCanceled = false;
 
-  // Populate artColors[] with art swatch names
+  // Populate artColors[] with swatch names
   for (var i = 0; i < docSwatches.length; i++) {
     var swatchName = docSwatches[i].name;
 
@@ -30,16 +29,11 @@ function RTF_PositionMesh() {
     }
   }
 
-  // Populate colorCount[] for dropdown
-  for (var i = 0; i < artColors.length; i++) {
-    colorCount.push(i + 1);
-  }
-
   // Populate colorSettings[]
-  for (i = 0; i < artColors.length; i++) {
+  for (var i = 0; i < artColors.length; i++) {
     var settingsObject = {
-      colorName: artColors[i],
-      colorPosition: undefined,
+      colorName: "",
+      colorPosition: i,
       colorMesh: "",
     };
 
@@ -58,26 +52,22 @@ function RTF_PositionMesh() {
   var colorGroup = createGroup(gui, "column");
   colorGroup.name = "colorGroup";
 
-  // Loop and populate swatch groups
+  // Populate Control Panels
   for (var i = 0; i < artColors.length; i++) {
-    // Current Color name
-    var currentSwatchName = artColors[i];
-
     // Color Panel
     var colorPanel = createPanel(colorGroup);
     colorPanel.alignChildren = "fill";
 
-    // Color Position Dropdown
-    var colorDropdown = createDropdown(colorPanel, colorCount);
-    colorDropdown.selection = [i];
-    colorDropdown.onChange = function () {
-      colorSettings[i].colorPosition = this.selection.index;
-    };
+    // Position "button"
+    var positionButton = createButton(colorPanel, i + 1);
 
-    // Color Name (static text)
-    var colorText = colorPanel.add("statictext", undefined, currentSwatchName);
-    colorText.justify = "center";
-    colorText.minimumSize = [175, 0];
+    // Color Name Dropdown
+    var colorDropdown = createDropdown(colorPanel, artColors);
+    colorDropdown.minimumSize = [225, 0];
+    colorDropdown.selection = i;
+    colorDropdown.onChange = function () {
+      colorSettings[i].colorName = this.selection.text;
+    };
 
     // Color Mesh Count Dropdown
     var meshDropdown = createDropdown(colorPanel, meshCounts);
@@ -87,7 +77,7 @@ function RTF_PositionMesh() {
     };
   }
 
-  // Button Group
+  // Button Control Group
   var buttonGroup = createGroup(gui, "row");
   buttonGroup.alignChildren = "fill";
 
@@ -108,16 +98,15 @@ function RTF_PositionMesh() {
     // Loop over color selections, make settingsObject & add to colorSettings
     for (var i = 0; i < panelsOfColors.length; i++) {
       var panelChildren = panelsOfColors[i].children;
-      colorSettings[i].colorPosition = panelChildren[0].selection.index;
-      colorSettings[i].colorName = panelChildren[1].text;
+      colorSettings[i].colorName = panelChildren[1].selection.text;
       colorSettings[i].colorMesh = panelChildren[2].selection.text;
     }
 
-    // Boolean check for if colorPosition duplicate values exist
-    var hasDuplicates = hasPositionDuplicates(colorSettings);
+    // Check for if colorName duplicate values exist
+    var hasDuplicates = hasNameDuplicates(colorSettings);
 
     if (hasDuplicates) {
-      alert("DUPLICATE COLOR POSITIONS\nFix Errors", "Script Alert", true);
+      alert("DUPLICATE COLORS SELECTED\nFix Errors", "Script Alert", true);
     } else {
       gui.close();
     }
@@ -138,14 +127,14 @@ function RTF_PositionMesh() {
     var mesh = colorSettings[i].colorMesh;
     var newName = position + " " + name.replace(/\//g, " ") + " " + "M" + mesh;
 
-    // Loop & rename spot colors
+    // Rename spot colors
     for (var j = 0; j < docSpots.length; j++) {
       if (docSpots[j].name !== "[Registration]" && docSpots[j].name === colorSettings[i].colorName) {
         docSpots[j].name = newName.slice(2);
       }
     }
 
-    // Loop & rename color groups
+    // Rename color groups
     for (var k = 0; k < artLayerGroups.length; k++) {
       if (name === removeMeshSuffix(artLayerGroups[k].name, meshCounts)) {
         artLayerGroups[k].name = newName;
@@ -196,27 +185,27 @@ function createDropdown(parent, list) {
   return dropdown;
 }
 
-// Checks colorSettings[] for colorPosition duplicates
-function hasPositionDuplicates(array) {
-  // Position storage array
-  var positionList = [];
+// Checks colorSettings[] for colorName duplicates
+function hasNameDuplicates(array) {
+  // Names storage array
+  var namesList = [];
 
-  // Add colorPositions to positionList[]
+  // Add colorPositions to namesList[]
   for (var i = 0; i < array.length; i++) {
-    positionList.push(array[i].colorPosition);
+    namesList.push(array[i].colorName);
   }
 
   // Boolean status for if duplicates found
   var hasDuplicates = false;
 
-  // Loop over positionList[]
-  for (var i = 0; i < positionList.length; i++) {
+  // Loop over namesList[]
+  for (var i = 0; i < namesList.length; i++) {
     // Nested for loop
-    for (var j = 0; j < positionList.length; j++) {
+    for (var j = 0; j < namesList.length; j++) {
       // Prevents the element from comparing with itself
       if (i !== j) {
         // Check if elements' values are equal
-        if (positionList[i] === positionList[j]) {
+        if (namesList[i] === namesList[j]) {
           // Set hasDuplicates if equal & terminate inner loop
           hasDuplicates = true;
           break;
