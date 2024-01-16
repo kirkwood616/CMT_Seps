@@ -5,7 +5,7 @@ function RTF_Alert_FirstSteps() {
       "\n" +
       "First steps of the automation process." +
       "\n\n" +
-      "Do not skip these steps, especially Order & Art Info & Paste Art."
+      "Do not skip these steps, especially 'Order & Art Info' and 'Paste Art'."
   );
 
   // Open Template
@@ -38,7 +38,9 @@ function RTF_Alert_FirstSteps() {
       "\n" +
       "Pastes the copied artwork 0.50 inches from the top registration and centered to artboard" +
       "\n\n" +
-      "Ungroups everything in the pasted artwork. This is necessary for the next steps in the process."
+      "Ungroups everything in the pasted artwork. This is necessary for the next steps in the process." +
+      "\n\n" +
+      "Artwork should be trimmed prior to running this action."
   );
 }
 
