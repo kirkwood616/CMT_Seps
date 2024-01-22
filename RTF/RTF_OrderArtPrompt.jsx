@@ -59,7 +59,7 @@ function RTF_OrderArtPrompt() {
     // Set textframes contents & close window
     if (orderInput.text && artInput.text) {
       orderName.contents = "ORDER " + orderInput.text;
-      artName.contents = artInput.text.toUpperCase();
+      artName.contents = "ART NUMBER: " + artInput.text.toUpperCase();
       gui.close();
     }
   });
