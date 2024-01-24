@@ -1,0 +1,365 @@
+function SP_Generate_UB_SelectColors() {
+  // Active Document
+  var doc = app.activeDocument;
+
+  // Swatches in document
+  var docSwatches = doc.swatches;
+
+  // Layers in document
+  var docLayers = doc.layers;
+
+  // Selection
+  var sel = doc.selection[0];
+
+  // Storage array
+  var pathsArray = new Array();
+
+  // Alert & exit if no selection
+  if (!sel) {
+    alert("No Selected Artwork" + "\n" + "Select artwork to generate UB.");
+    return;
+  }
+
+  // If selection isn't 1 item or 1 group, create group
+  if (doc.selection.length > 1) {
+    app.executeMenuCommand("group");
+    sel = doc.selection[0];
+  }
+
+  // Add selection's paths to storage for select window
+  addPathsToStorage(doc.selection[0], pathsArray);
+
+  // GUI window
+  var gui = createWindow("SELECT COLORS FOR UB", 300);
+  var colorPanel = createPanel(gui, "Select Colors");
+  var checkboxGroup = createGroup(colorPanel, "column", "left");
+  checkboxGroup.margins = 15;
+
+  // Create checkboxes
+  for (var i = 0; i < docSwatches.length; i++) {
+    var swatchName = docSwatches[i].name;
+
+    // Generate checkboxes from colors in selection (pathsArray)
+    for (var j = 0; j < pathsArray.length; j++) {
+      if (pathsArray[j].fillColor.spot.name === swatchName) {
+        var swatchCheckbox = createCheckbox(checkboxGroup, swatchName, true);
+        break;
+      }
+    }
+  }
+
+  // Buttons
+  var buttonGroup = createGroup(gui, "row");
+  var cancelButton = createButton(buttonGroup, "CANCEL", function () {
+    gui.close();
+  });
+  var okButton = createButton(buttonGroup, "OK", function () {
+    // Storage
+    var checkedColorNames = new Array();
+    var uncheckedColorNames = new Array();
+
+    // Add checked color names to storage
+    for (var i = 0; i < checkboxGroup.children.length; i++) {
+      if (checkboxGroup.children[i].value) {
+        checkedColorNames.push(checkboxGroup.children[i].text);
+      } else {
+        uncheckedColorNames.push(checkboxGroup.children[i].text);
+      }
+    }
+
+    // Alert if no selection
+    if (!checkedColorNames.length) {
+      alert("No Colors Selected");
+      return;
+    }
+
+    // Name of layer containing selection
+    var artLayer = docLayers.getByName(doc.activeLayer.name);
+
+    // Hide all layers except artLayer
+    for (var i = 0; i < docLayers.length; i++) {
+      if (docLayers[i] !== doc.activeLayer) {
+        docLayers[i].visible = false;
+      }
+    }
+
+    // Add temp layer
+    var tempLayer = docLayers.add();
+    tempLayer.name = "TEMP";
+
+    // Duplicate selection, move to temp layer, deselect & hide art layer
+    app.executeMenuCommand("copy");
+    app.executeMenuCommand("pasteFront");
+    doc.selection[0].move(tempLayer, ElementPlacement.PLACEATBEGINNING);
+    artLayer.visible = false;
+
+    if (uncheckedColorNames.length > 0) {
+      // Delete unchecked color from temp layer
+      doc.selection = false;
+      for (var i = 0; i < uncheckedColorNames.length; i++) {
+        var uncheckedColor;
+        try {
+          uncheckedColor = docSwatches.getByName(uncheckedColorNames[i]);
+        } catch (e) {
+          alert("No Swatch Name Match");
+        }
+        var colorRef = tempLayer.pathItems.rectangle(10, 10, 150, 150);
+        colorRef.fillColor = uncheckedColor.color;
+        app.executeMenuCommand("Find Fill Color menu item");
+        app.executeMenuCommand("cut");
+      }
+    }
+    // Select temp layer art
+    tempLayer.hasSelectedArtwork = true;
+
+    // All layers visible
+    for (var i = 0; i < docLayers.length; i++) {
+      docLayers[i].visible = true;
+    }
+
+    // If selection isn't 1 item or 1 group, create group & reset sel
+    if (doc.selection.length > 1) {
+      app.executeMenuCommand("group");
+      sel = doc.selection[0];
+    }
+
+    // Move copy to UB layer
+    if (isLayerNamed("UB", docLayers)) {
+      var ubLayer = docLayers.getByName("UB");
+
+      if (ubLayer.pageItems.length > 0) {
+        // Conflict Window
+        var conflictWindow = createWindow("UB LAYER CONFLICT", 300);
+        conflictWindow.margins = 15;
+        var conflictHeader = createStaticText(conflictWindow, "UB Layer contains art.");
+        var conflictInstruction = createStaticText(conflictWindow, "Delete UB & Replace with new UB?");
+
+        // Conflict Button Group
+        var conflictButtonGroup = createGroup(conflictWindow, "row", "fill");
+        var conflictCancelButton = createButton(conflictButtonGroup, "CANCEL", function () {
+          conflictWindow.close();
+        });
+        var conflictOkButton = createButton(conflictButtonGroup, "OK", function () {
+          ubLayer.pageItems.removeAll();
+          createUB(ubLayer, docSwatches, doc);
+          conflictWindow.close();
+        });
+
+        // Show Conflict Window
+        conflictWindow.show();
+      } else {
+        createUB(ubLayer, docSwatches, doc);
+      }
+    } else {
+      var ubNewLayer = createNewLayerUB("UB", docLayers);
+      createUB(ubNewLayer, docSwatches, doc);
+    }
+
+    // Delete temp layer
+    tempLayer.remove();
+
+    // Close main window
+    gui.close();
+  });
+
+  // Show GUI
+  gui.show();
+}
+
+// Run
+try {
+  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
+    SP_Generate_UB_SelectColors();
+  } else {
+    throw new Error("SP Template File Not Active");
+  }
+} catch (e) {
+  alert(e, "Script Alert", true);
+}
+
+//*******************
+// Helper functions
+//*******************
+
+/**
+ * Checks if a string matches any layer's name.
+ * @param {String} name Name to check layer.name for
+ * @param {Layers} layers All Layers in the document
+ * @returns {Boolean}
+ */
+function isLayerNamed(name, layers) {
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].name === name) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Creates a GUI dialog window.
+ * @param {String} title String to appear in window's top bar
+ * @param {Number} width Width of window
+ * @returns {Window}
+ */
+function createWindow(title, width) {
+  var window = new Window("dialog", title);
+  window.orientation = "column";
+  window.preferredSize.width = width;
+  return window;
+}
+
+/**
+ * Creates a panel item.
+ * @param {Window|Group} parent Where to add panel into
+ * @param {String} [title] Text for panel's upper-left title
+ * @returns {Panel}
+ */
+function createPanel(parent, title) {
+  var panel = parent.add("panel", undefined, title);
+  panel.orientation = "row";
+  return panel;
+}
+
+/**
+ * Creates a static text item.
+ * @param {Window|Group|Panel} parent Where to add statictext into
+ * @param {String} text Text contents
+ * @returns {StaticText}
+ */
+function createStaticText(parent, text) {
+  var staticText = parent.add("statictext", undefined, text);
+  return staticText;
+}
+
+/**
+ * Creates a group item.
+ * @param {Window|Group|Panel} parent Where to add group into
+ * @param {String} orientation Orientation of the group
+ * @param {String} align Alignment of group's children
+ * @returns {Group}
+ */
+function createGroup(parent, orientation, align) {
+  var group = parent.add("group");
+  group.orientation = orientation;
+  group.alignChildren = align;
+  return group;
+}
+
+/**
+ * Creates a checkbox item with text. Can specify if box is checked or unchecked.
+ * @param {Window|Group|Panel} parent Where to add checbox into
+ * @param {String} text Text to appear next to checkbox
+ * @param {Boolean} value true for checked, false for unchecked
+ * @returns {Checkbox}
+ */
+function createCheckbox(parent, text, value) {
+  var checkbox = parent.add("checkbox", undefined, text);
+  checkbox.value = value;
+  return checkbox;
+}
+
+/**
+ * Creates a clickable button.
+ * @param {Window|Group|Panel} parent Where to add button into
+ * @param {String} title Text to be shown inside of button
+ * @param {() => void} onClick Callback function to run when button is clicked
+ * @returns {Button}
+ */
+function createButton(parent, title, onClick) {
+  var button = parent.add("button", undefined, title);
+  if (onClick !== undefined) button.onClick = onClick;
+  return button;
+}
+
+/**
+ * Creates a new named layer and sends to back.
+ * @param {String} name Name of new layer
+ * @param {Layers} layers Layers in document
+ * @returns {Layer}
+ */
+function createNewLayerUB(name, layers) {
+  var newLayerUB = layers.add();
+  newLayerUB.name = name;
+  newLayerUB.zOrder(ZOrderMethod.SENDTOBACK);
+  return newLayerUB;
+}
+
+/**
+ * Creates a UB from the current selection, colors it to the first WHITE UB swatch found, and moves it to a specific layer.
+ * @param {Layer} layer The Layer to move UB to
+ * @param {Swatches} swatches Swatches in the current document
+ * @param {Document} document Current document
+ */
+function createUB(layer, swatches, document) {
+  app.executeMenuCommand("compoundPath");
+  app.executeMenuCommand("group");
+  app.executeMenuCommand("Live Pathfinder Add");
+  app.executeMenuCommand("expandStyle");
+  document.selection[0].move(layer, ElementPlacement.PLACEATEND);
+
+  for (var i = 0; i < swatches.length; i++) {
+    var currentSwatch = swatches[i];
+    var indexNameMatch = currentSwatch.name.indexOf("WHITE UB");
+
+    if (indexNameMatch !== -1) {
+      document.defaultFillColor = currentSwatch.color;
+      break;
+    }
+  }
+
+  defaultStroke(document);
+  document.selection = false;
+}
+
+/**
+ * Adds a stroke & sets it's width on the selection to Process White.
+ * @param {Document} document Current document
+ */
+function defaultStroke(document) {
+  var strokeColor = new CMYKColor();
+  strokeColor.cyan = 0;
+  strokeColor.magenta = 0;
+  strokeColor.yellow = 0;
+  strokeColor.black = 0;
+
+  document.defaultStrokeColor = strokeColor;
+  document.defaultStrokeWidth = 0.4;
+}
+
+function getAllChildren(obj) {
+  var childArray = new Array();
+  for (var i = 0; i < obj.pageItems.length; i++) {
+    childArray.push(obj.pageItems[i]);
+  }
+  return childArray;
+}
+
+function addPathsToStorage(obj, storageArray) {
+  var elements = getAllChildren(obj);
+  if (elements.length < 1) {
+    return;
+  } else {
+    for (var i = 0; i < elements.length; i++) {
+      try {
+        switch (elements[i].typename) {
+          case "PathItem":
+            storageArray.push(elements[i]);
+            break;
+          case "GroupItem":
+            addPathsToStorage(elements[i]);
+            break;
+          case "CompoundPathItem":
+            var _pathItems = elements[i].pathItems;
+            for (var j = 0; j < _pathItems.length; j++) {
+              storageArray.push(_pathItems[j]);
+            }
+            break;
+          default:
+            throw new Error("Non-Path Elements Found");
+        }
+      } catch (e) {}
+    }
+  }
+}
