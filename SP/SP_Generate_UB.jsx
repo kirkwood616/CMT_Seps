@@ -41,18 +41,18 @@ function SP_Generate_UB() {
       });
       var okButton = createButton(buttonGroup, "OK", function () {
         ubLayer.pageItems.removeAll();
-        createUB(sel, ubLayer, docSwatches, doc);
+        createUB(ubLayer, docSwatches, doc);
         gui.close();
       });
 
       // Show GUI
       gui.show();
     } else {
-      createUB(sel, ubLayer, docSwatches, doc);
+      createUB(ubLayer, docSwatches, doc);
     }
   } else {
     var ubNewLayer = createNewLayerUB("UB", docLayers);
-    createUB(sel, ubNewLayer, docSwatches, doc);
+    createUB(ubNewLayer, docSwatches, doc);
   }
 }
 
@@ -153,20 +153,19 @@ function createNewLayerUB(name, layers) {
 
 /**
  * Creates a UB from the current selection, colors it to the first WHITE UB swatch found, and moves it to a specific layer.
- * @param {PageItem} selection Current selection
  * @param {Layer} layer The Layer to move UB to
  * @param {Swatches} swatches Swatches in the current document
  * @param {Document} document Current document
  */
-function createUB(selection, layer, swatches, document) {
-  var copy = selection.duplicate();
-  selection.selected = false;
-  copy.selected = true;
-  copy.move(layer, ElementPlacement.PLACEATBEGINNING);
+function createUB(layer, swatches, document) {
+  app.executeMenuCommand("copy");
+  document.selection = false;
+  app.executeMenuCommand("pasteFront");
   app.executeMenuCommand("compoundPath");
   app.executeMenuCommand("group");
   app.executeMenuCommand("Live Pathfinder Add");
   app.executeMenuCommand("expandStyle");
+  document.selection[0].move(layer, ElementPlacement.PLACEATEND);
 
   for (var i = 0; i < swatches.length; i++) {
     var currentSwatch = swatches[i];
