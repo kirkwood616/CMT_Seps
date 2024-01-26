@@ -91,6 +91,7 @@ function SP_Set_MeshCounts() {
 
         if (swatchName === panelChildren[1].text) {
           docSwatches[j].name = swatchName + " M" + panelChildren[2].selection.text;
+          break;
         }
       }
     }
@@ -197,12 +198,18 @@ function removeMeshSuffix(colorName, meshArray) {
 
   if (colorName[lastSpace + 1] === "M") {
     var lastText = colorName.slice(lastSpace + 2, colorName.length);
+    var meshDigits = parseInt(lastText.slice(0, 2));
 
     for (var i = 0; i < meshArray.length; i++) {
       if (meshArray[i] === lastText) {
         isMesh = true;
         newName = colorName.slice(0, lastSpace);
       }
+    }
+
+    if (!isNaN(meshDigits)) {
+      isMesh = true;
+      newName = colorName.slice(0, lastSpace);
     }
   }
 
