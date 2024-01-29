@@ -5,6 +5,10 @@ function SP_PastePositionArt() {
   // Active Document
   var doc = app.activeDocument;
 
+  // Registration
+  var regLayer = doc.layers.getByName("Registration");
+  var regBottomCenter = regLayer.groupItems.getByName("REG_BOTTOM_CENTER");
+
   // Transfer Art Layer
   var artLayer = doc.layers.getByName("Art");
 
@@ -14,13 +18,17 @@ function SP_PastePositionArt() {
   // Artboard rectangle bounding coordinates array
   var artboardBounds = doc.artboards[artboardIndex].artboardRect;
 
+  // Centered X position on artboard
+  var regCenteredPosition = 553.22509765623;
+
+  // Deselect everything
+  doc.selection = false;
+
   // Set Active Layer to Transfer Art Layer
   doc.activeLayer = artLayer;
 
-  // Paste art
+  // Paste & group art
   app.paste();
-
-  // Group pasted art
   app.executeMenuCommand("group");
 
   // Selected pasted art
@@ -29,8 +37,11 @@ function SP_PastePositionArt() {
   // Position art horizontally centered and 2 inches from top of artboard
   pastedArt.position = new Array((artboardBounds[2] - artboardBounds[0]) / 2 - pastedArt.width / 2, -144);
 
-  // Deselect everything
-  doc.selection = false;
+  // Store height of art
+  var artHeight = pastedArt.height;
+
+  // Move registration mark 0.50" down from bottom of art
+  regBottomCenter.position = [regCenteredPosition, artHeight * -1 + -180];
 }
 
 // Run
