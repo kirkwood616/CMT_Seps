@@ -113,13 +113,9 @@ function centerOnArtboard(item, artboard) {
  */
 function toTallPosition(art, background) {
   var yPositionBackground = -72.1862885521377;
-  var yPositionArt = yPositionBackground + 18;
   var backgroundOffset = (background.position[1] - yPositionBackground) * -1;
-  var artOffset = art.position[1] - yPositionArt;
 
   if (background.position[1] > yPositionBackground) {
-    $.writeln("true");
-    $.writeln(artOffset);
     art.translate(0, backgroundOffset);
     background.translate(0, backgroundOffset);
   }
