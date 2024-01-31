@@ -293,7 +293,6 @@ function createNewLayerUB(name, layers) {
  * @param {Document} document Current document
  */
 function createUB(layer, swatches, document) {
-  app.executeMenuCommand("compoundPath");
   app.executeMenuCommand("group");
   app.executeMenuCommand("Live Pathfinder Add");
   app.executeMenuCommand("expandStyle");
