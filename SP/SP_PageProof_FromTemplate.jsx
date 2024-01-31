@@ -39,7 +39,7 @@ function SP_PageProof_FromTemplate() {
   doc.activeLayer = proofLayer;
 
   // Set order number & art number values
-  orderNumber.textRange.contents = order.replace(/ORDER /gi, "ORDER: ");
+  orderNumber.textRange.contents = order.replace(/ORDER /gi, "ORDER #: ");
   artNumber.textRange.contents = "ART #: " + artFile;
 
   // Paste copied art
