@@ -8,9 +8,21 @@ function SP_CMYK_NoSwatchConvert() {
   // Layers in document
   var docLayers = doc.layers;
 
-  // Target Art & Metadata layers
-  var artLayer = doc.layers.getByName("Art");
-  var metadataLayer = doc.layers.getByName("Metadata");
+  // // Exit if no Art layer
+  // if (!isLayerNamed("Art", docLayers)) {
+  //   throw new Error("No Layer named 'Art'" + "\n" + "Art to be scanned needs to be on a layer named 'Art'");
+  // }
+
+  // Art layer
+  var artLayer = docLayers.getByName("Art");
+
+  // // Exit if nothin on Art layer
+  // if (!artLayer.pageItems.length) {
+  //   throw new Error("No art on 'Art' Layer" + "\n" + "Place art to be scanned on the layer named 'Art'");
+  // }
+
+  // Metadata layer
+  var metadataLayer = docLayers.getByName("Metadata");
 
   // Storage array for all path items
   var pathsArray = new Array();
@@ -26,6 +38,7 @@ function SP_CMYK_NoSwatchConvert() {
 
   // Add all path items to pathsArray
   addPathsToStorage(artLayer, pathsArray);
+  $.writeln(pathsArray.length);
 
   // Loop through pathsArray and
   for (var i = 0; i < pathsArray.length; i++) {
@@ -99,6 +112,22 @@ try {
 //*******************
 // Helper functions
 //*******************
+
+/**
+ * Checks if a string matches any layer's name.
+ * @param {String} name Name to check layer.name for
+ * @param {Layers} layers All Layers in the document
+ * @returns {Boolean}
+ */
+function isLayerNamed(name, layers) {
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].name === name) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 function getAllChildren(obj) {
   var childArray = new Array();

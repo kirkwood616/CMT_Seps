@@ -5,8 +5,25 @@ function SP_Delete_NoColorPaths() {
   // Layers in document
   var docLayers = doc.layers;
 
-  // Art layer
-  var artLayer = doc.layers.getByName("Art");
+  // Exit if no Art layer
+  if (!isLayerNamed("Art", docLayers)) {
+    throw new Error("No Layer named 'Art'" + "\n" + "Art to be scanned needs to be on a layer named 'Art'");
+  }
+
+  // Target Art layer
+  var artLayer = docLayers.getByName("Art");
+
+  // Exit if nothin on Art layer
+  if (!artLayer.pageItems.length) {
+    throw new Error("No art on 'Art' Layer" + "\n" + "Place art to be scanned on the layer named 'Art'");
+  }
+
+  // Lock all layers except Art layer
+  for (var i = 0; i < docLayers.length; i++) {
+    if (docLayers[i].name !== artLayer.name) {
+      docLayers[i].locked = true;
+    }
+  }
 
   // Storage array for all path items
   var pathsArray = new Array();
@@ -35,6 +52,13 @@ function SP_Delete_NoColorPaths() {
     }
   }
 
+  // Unlock layers except Guides
+  for (var i = 0; i < docLayers.length; i++) {
+    if (docLayers[i].name !== "Guides") {
+      docLayers[i].locked = false;
+    }
+  }
+
   // Alert
   alert(noColorCounter + " path" + (noColorCounter === 0 || noColorCounter > 1 ? "s" : "") + " deleted.");
 }
@@ -53,6 +77,22 @@ try {
 //*******************
 // Helper functions
 //*******************
+
+/**
+ * Checks if a string matches any layer's name.
+ * @param {String} name Name to check layer.name for
+ * @param {Layers} layers All Layers in the document
+ * @returns {Boolean}
+ */
+function isLayerNamed(name, layers) {
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].name === name) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 function getAllChildren(obj) {
   var childArray = new Array();

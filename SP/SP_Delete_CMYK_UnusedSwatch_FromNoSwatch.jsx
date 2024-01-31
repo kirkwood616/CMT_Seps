@@ -6,9 +6,24 @@ function SP_Delete_CMYK_UnusedSwatch_FromNoSwatch() {
   var docSpots = doc.spots;
   var docSwatches = doc.swatches;
 
-  // Target Art & Metadata layers
-  var artLayer = doc.layers.getByName("Art");
-  var metadataLayer = doc.layers.getByName("Metadata");
+  // Layers in document
+  var docLayers = doc.layers;
+
+  // Exit if no Art layer
+  if (!isLayerNamed("Art", docLayers)) {
+    throw new Error("No Layer named 'Art'" + "\n" + "Art to be scanned needs to be on a layer named 'Art'");
+  }
+
+  // Target Art layer
+  var artLayer = docLayers.getByName("Art");
+
+  // Exit if nothin on Art layer
+  if (!artLayer.pageItems.length) {
+    throw new Error("No art on 'Art' Layer" + "\n" + "Place art to be scanned on the layer named 'Art'");
+  }
+
+  // Metadata layer
+  var metadataLayer = docLayers.getByName("Metadata");
 
   // Storage array for all path items
   var pathsArray = new Array();
@@ -80,6 +95,22 @@ try {
 //*******************
 // Helper functions
 //*******************
+
+/**
+ * Checks if a string matches any layer's name.
+ * @param {String} name Name to check layer.name for
+ * @param {Layers} layers All Layers in the document
+ * @returns {Boolean}
+ */
+function isLayerNamed(name, layers) {
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].name === name) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 function getAllChildren(obj) {
   var childArray = new Array();
