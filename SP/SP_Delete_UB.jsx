@@ -2,6 +2,9 @@ function SP_Delete_UB() {
   // Active Document
   var doc = app.activeDocument;
 
+  // Deselect everything
+  doc.selection = false;
+
   // Layers in document
   var docLayers = doc.layers;
 
@@ -17,9 +20,6 @@ function SP_Delete_UB() {
   var colorCount = metaDataGroups.getByName("_COLOR COUNT");
   var countGroup = colorCount.groupItems.getByName("_COUNT GROUP");
   var countGroupTextFrames = countGroup.textFrames;
-
-  // Deselect everything
-  doc.selection = false;
 
   // Unlock Metadata layer
   metadataLayer.locked = false;
@@ -50,8 +50,10 @@ function SP_Delete_UB() {
   // Delete contents of UB layers
   for (var i = 0; i < docLayers.length; i++) {
     if (docLayers[i].name.indexOf("UB") !== -1) {
+      doc.activeLayer = docLayers[i];
       docLayers[i].hasSelectedArtwork = true;
       app.cut();
+      doc.selection = false;
     }
   }
 
