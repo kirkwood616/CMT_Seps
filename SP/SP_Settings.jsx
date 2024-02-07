@@ -17,6 +17,7 @@ function SP_Settings() {
   var defaultSettings = {
     SP_templatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "Quick Crosshairs.ait",
     SP_savePath: Folder.desktop + slash + "- WORKING DAY -" + slash,
+    SP_proofTemplatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "PAGE_PROOF.ait",
   };
   
   // Set up & load settings
@@ -48,6 +49,15 @@ function SP_Settings() {
   var savePathGroup = createGroup(savePanel, "column");
   var savePath = createEditText(savePathGroup, settingsData.SP_savePath);
 
+  // PAGE PROOF Template Panel
+  var proofTemplatePanel = createPanel(settingsWindow, "PAGE PROOF Template File Path");
+  var proofSelectButton = createButton(proofTemplatePanel, "Select", function () {
+    var proofTemplateFilePath = File.openDialog();
+    proofTemplatePath.text = proofTemplateFilePath.fullName;
+  });
+  var proofTemplatePathGroup = createGroup(proofTemplatePanel, "column");
+  var proofTemplatePath = createEditText(proofTemplatePathGroup, settingsData.SP_proofTemplatePath);
+
   // Buttons
   var buttonGroup = createGroup(settingsWindow, "row", "fill");
   buttonGroup.alignment = "center";
@@ -57,6 +67,7 @@ function SP_Settings() {
   var saveButton = createButton(buttonGroup, "SAVE", function () {
     settingsData.SP_templatePath = templatePath.text;
     settingsData.SP_savePath = savePath.text + slash;
+    settingsData.SP_proofTemplatePath = proofTemplatePath.text
     writeSettings(settingsData, settingsFile);
     settingsWindow.close();
   });

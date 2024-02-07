@@ -1,3 +1,5 @@
+#include 'json2.js';
+
 function SP_PageProof_FromTemplate() {
   // Illustrator Coordinate System
   app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
@@ -22,8 +24,15 @@ function SP_PageProof_FromTemplate() {
   // Copy art
   app.copy();
 
-  // Open & reset active document to proof template
-  app.open(new File("~/Desktop/PAGE_PROOF.ait"));
+  // Set up & load settings
+  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "SP_settings.json");
+  var settingsData = loadJSONData(settingsFile);
+  var proofPageTemplatePath = settingsData.SP_proofTemplatePath;
+
+  // Open template document
+  app.open(new File(proofPageTemplatePath));
+
+  // Reset active document to proof template
   doc = app.activeDocument;
 
   // Artboard
@@ -36,6 +45,7 @@ function SP_PageProof_FromTemplate() {
   var orderNumber = proofLayer.textFrames.getByName("ORDER_NUMBER");
   var artNumber = proofLayer.textFrames.getByName("ART_NUMBER");
 
+  // Make PROOF layer the active layer
   doc.activeLayer = proofLayer;
 
   // Set order number & art number values
@@ -91,6 +101,47 @@ try {
   }
 } catch (e) {
   alert(e, "Script Alert", true);
+}
+
+//*******************
+// Helper functions
+//*******************
+
+function setupSettingsFile(folderName, fileName) {
+  var settingsFolderPath = Folder.myDocuments + "/" + folderName;
+  var settingsFolder = new Folder(settingsFolderPath);
+
+  try {
+    if (!settingsFolder.exists) {
+      throw new Error("Settings folder doesn't exist." + "\n" + "Run 'SP Settings' and save your settings.");
+    }
+  
+    var settingsFilePath = settingsFolder + "/" + fileName;
+    var settingsFile = new File(settingsFilePath);
+
+    if (!settingsFile.exists) {
+      throw new Error("Settings file doesn't exist." + "\n" + "Run 'SP Settings' and save your settings.");
+    }
+
+    return new File(settingsFilePath);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+}
+
+function loadJSONData(file) {
+  if (file.exists) {
+    try {
+      file.encoding = "UTF-8";
+      file.open("r");
+      var data = file.read();
+      file.close();
+      data = JSON.parse(data);
+      return data;
+    } catch (e) {
+      throw new Error("Error loading Settings file.");
+    }
+  }
 }
 
 /**
