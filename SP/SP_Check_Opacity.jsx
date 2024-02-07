@@ -2,72 +2,42 @@ function SP_Check_Opacity() {
   // Active Document
   var doc = app.activeDocument;
 
-  // Layers in document
-  var docLayers = doc.layers;
+  // Selection
+  var sel = doc.selection;
 
-  // Exit if no Art layer
-  if (!isLayerNamed("Art", docLayers)) {
-    throw new Error("No Layer named 'Art'" + "\n" + "Art to be scanned needs to be on a layer named 'Art'");
+  // Exit if no selection
+  if (!sel.length) {
+    throw new Error("No Selected Art" + "\n" + "Select Art Before Running.");
   }
 
-  // Art layer
-  var artLayer = docLayers.getByName("Art");
-
-  // Exit if nothin on Art layer
-  if (!artLayer.pageItems.length) {
-    throw new Error("No art on 'Art' Layer" + "\n" + "Place art to be scanned on the layer named 'Art'");
+  // Ungroup artwork
+  if (sel.length > 0) {
+    for (var i = 0; i < sel.length; i++) {
+      ungroup(sel[i]);
+    }
   }
 
-  // Metadata layer
-  var metadataLayer = docLayers.getByName("Metadata");
-
-  // Paths & Compound Paths in Art Layer
-  var artPaths = artLayer.pathItems;
-  var artCompoundPaths = artLayer.compoundPathItems;
-
-  // Metadata Page Items
-  var metaPageItems = metadataLayer.pageItems;
+  // Storage array for all path items
+  var pathsArray = new Array();
 
   // Opacity seleted counter;
   var opacityCounter = 0;
+
+  // Layer selected art is on
+  var layerArt = doc.activeLayer;
+
+  // Add all path items to pathsArray
+  addPathsToStorage(layerArt, pathsArray);
 
   // Deselect everything
   doc.selection = false;
 
   // Find & select Paths with less than 100% opacity
-  for (var i = 0; i < artPaths.length; i++) {
-    var currentPath = artPaths[i];
+  for (var i = 0; i < pathsArray.length; i++) {
+    var currentPath = pathsArray[i];
 
     if (currentPath.opacity < 100) {
       currentPath.selected = true;
-      opacityCounter++;
-    }
-  }
-
-  // Find & select Compound Paths with less than 100% opacity
-  for (var i = 0; i < artCompoundPaths.length; i++) {
-    var currentCompound = artCompoundPaths[i];
-
-    if (artCompoundPaths[i].opacity < 100) {
-      artCompoundPaths[i].selected = true;
-      opacityCounter++;
-    }
-
-    // Find & select Paths within Compound Path with less than 100% opacity
-    for (var j = 0; j < currentCompound.pathItems.length; j++) {
-      var pathInCompound = currentCompound.pathItems[j];
-
-      if (pathInCompound.opacity < 100) {
-        pathInCompound.selected = true;
-        opacityCounter++;
-      }
-    }
-  }
-
-  // Find & select metaPageItems with less than 100% opacity
-  for (var i = 0; i < metaPageItems.length; i++) {
-    if (metaPageItems[i].opacity < 100) {
-      metaPageItems[i].selected = true;
       opacityCounter++;
     }
   }
@@ -86,6 +56,9 @@ function SP_Check_Opacity() {
         "Re-run this action to check if further adjustments are needed."
     );
   } else {
+    layerArt.hasSelectedArtwork = true;
+    app.executeMenuCommand("group");
+
     alert(opacityCounter + " items with less than 100% Opacity found." + "\n" + "Proceed.");
   }
 }
@@ -106,17 +79,61 @@ try {
 //*******************
 
 /**
- * Checks if a string matches any layer's name.
- * @param {String} name Name to check layer.name for
- * @param {Layers} layers All Layers in the document
- * @returns {Boolean}
+ * Ungroup a groupItem within Adobe Illustrator. Similar to `Object > Ungroup`
+ * @param {*} object    An Adobe Illustrator groupItem
+ * @param {*} recursive Should nested groupItems also be ungrouped
  */
-function isLayerNamed(name, layers) {
-  for (var i = 0; i < layers.length; i++) {
-    if (layers[i].name === name) {
-      return true;
+function ungroup(object, recursive) {
+  if (object.typename != "GroupItem") {
+    return;
+  }
+  recursive = typeof recursive !== "undefined" ? recursive : true;
+  var subObject;
+  while (object.pageItems.length > 0) {
+    if (object.pageItems[0].typename == "GroupItem" && !object.pageItems[0].clipped) {
+      subObject = object.pageItems[0];
+      subObject.move(object, ElementPlacement.PLACEBEFORE);
+      if (recursive) {
+        ungroup(subObject, recursive);
+      }
+    } else {
+      object.pageItems[0].move(object, ElementPlacement.PLACEBEFORE);
     }
   }
+}
 
-  return false;
+function getAllChildren(obj) {
+  var childArray = new Array();
+  for (var i = 0; i < obj.pageItems.length; i++) {
+    childArray.push(obj.pageItems[i]);
+  }
+  return childArray;
+}
+
+function addPathsToStorage(obj, storageArray) {
+  var elements = getAllChildren(obj);
+  if (elements.length < 1) {
+    return;
+  } else {
+    for (var i = 0; i < elements.length; i++) {
+      try {
+        switch (elements[i].typename) {
+          case "PathItem":
+            storageArray.push(elements[i]);
+            break;
+          case "GroupItem":
+            addPathsToStorage(elements[i]);
+            break;
+          case "CompoundPathItem":
+            var _pathItems = elements[i].pathItems;
+            for (var j = 0; j < _pathItems.length; j++) {
+              storageArray.push(_pathItems[j]);
+            }
+            break;
+          default:
+            throw new Error("Non-Path Elements Found");
+        }
+      } catch (e) {}
+    }
+  }
 }

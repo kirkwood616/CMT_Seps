@@ -2,65 +2,32 @@ function SP_Delete_NoColorPaths() {
   // Active Document
   var doc = app.activeDocument;
 
-  // Layers in document
-  var docLayers = doc.layers;
+  // Selection
+  var sel = doc.selection;
 
-  // Exit if no Art layer
-  if (!isLayerNamed("Art", docLayers)) {
-    throw new Error("No Layer named 'Art'" + "\n" + "Art to be scanned needs to be on a layer named 'Art'");
+  // Exit if no selection
+  if (!sel.length) {
+    throw new Error("No Selected Art" + "\n" + "Select Art Before Running.");
   }
 
-  // Target Art layer
-  var artLayer = docLayers.getByName("Art");
-
-  // Exit if nothin on Art layer
-  if (!artLayer.pageItems.length) {
-    throw new Error("No art on 'Art' Layer" + "\n" + "Place art to be scanned on the layer named 'Art'");
-  }
-
-  // Lock all layers except Art layer
-  for (var i = 0; i < docLayers.length; i++) {
-    if (docLayers[i].name !== artLayer.name) {
-      docLayers[i].locked = true;
+  // Ungroup artwork
+  if (sel.length > 0) {
+    for (var i = 0; i < sel.length; i++) {
+      ungroup(sel[i]);
     }
   }
 
-  // Storage array for all path items
-  var pathsArray = new Array();
+  // Reset sel to ungrouped items
+  sel = doc.selection;
 
   // Counter
-  var noColorCounter = 0;
+  var noColorCounter = deleteNoColorPaths(sel);
 
-  // Lock all layers except Art layer
-  for (var i = 0; i < docLayers.length; i++) {
-    if (docLayers[i].name !== artLayer.name) {
-      docLayers[i].locked = true;
-    }
-  }
-
-  // Deselect everything
-  doc.selection = false;
-
-  // Add all path items to pathsArray
-  addPathsToStorage(artLayer, pathsArray);
-
-  // Delete NoColor paths
-  for (var i = 0; i < pathsArray.length; i++) {
-    if (pathsArray[i].fillColor.typename === "NoColor") {
-      noColorCounter++;
-      pathsArray[i].remove();
-    }
-  }
-
-  // Unlock layers except Guides
-  for (var i = 0; i < docLayers.length; i++) {
-    if (docLayers[i].name !== "Guides") {
-      docLayers[i].locked = false;
-    }
-  }
+  // Group remaining art
+  app.executeMenuCommand("group");
 
   // Alert
-  alert(noColorCounter + " path" + (noColorCounter === 0 || noColorCounter > 1 ? "s" : "") + " deleted.");
+  alert(noColorCounter + " No Color path" + (noColorCounter === 0 || noColorCounter > 1 ? "s" : "") + " deleted.");
 }
 
 // Run
@@ -79,53 +46,55 @@ try {
 //*******************
 
 /**
- * Checks if a string matches any layer's name.
- * @param {String} name Name to check layer.name for
- * @param {Layers} layers All Layers in the document
- * @returns {Boolean}
+ * Ungroup a groupItem within Adobe Illustrator. Similar to `Object > Ungroup`
+ * @param {*} object    An Adobe Illustrator groupItem
+ * @param {*} recursive Should nested groupItems also be ungrouped
  */
-function isLayerNamed(name, layers) {
-  for (var i = 0; i < layers.length; i++) {
-    if (layers[i].name === name) {
-      return true;
+function ungroup(object, recursive) {
+  if (object.typename != "GroupItem") {
+    return;
+  }
+  recursive = typeof recursive !== "undefined" ? recursive : true;
+  var subObject;
+  while (object.pageItems.length > 0) {
+    if (object.pageItems[0].typename == "GroupItem" && !object.pageItems[0].clipped) {
+      subObject = object.pageItems[0];
+      subObject.move(object, ElementPlacement.PLACEBEFORE);
+      if (recursive) {
+        ungroup(subObject, recursive);
+      }
+    } else {
+      object.pageItems[0].move(object, ElementPlacement.PLACEBEFORE);
     }
   }
-
-  return false;
 }
 
-function getAllChildren(obj) {
-  var childArray = new Array();
-  for (var i = 0; i < obj.pageItems.length; i++) {
-    childArray.push(obj.pageItems[i]);
-  }
-  return childArray;
-}
+/**
+ * Deletes all no color paths in a selection.
+ * @param {*} selection Current selection
+ * @param {Number} [counter] Counter variable for tracking deleted paths
+ * @returns {Number} Number of deleted paths
+ */
+function deleteNoColorPaths(selection, counter) {
+  var deletedCounter = 0;
 
-function addPathsToStorage(obj, storageArray) {
-  var elements = getAllChildren(obj);
-  if (elements.length < 1) {
+  if (selection.length < 1) {
     return;
   } else {
-    for (var i = 0; i < elements.length; i++) {
-      try {
-        switch (elements[i].typename) {
-          case "PathItem":
-            storageArray.push(elements[i]);
-            break;
-          case "GroupItem":
-            addPathsToStorage(elements[i]);
-            break;
-          case "CompoundPathItem":
-            var _pathItems = elements[i].pathItems;
-            for (var j = 0; j < _pathItems.length; j++) {
-              storageArray.push(_pathItems[j]);
-            }
-            break;
-          default:
-            throw new Error("Non-Path Elements Found");
-        }
-      } catch (e) {}
+    for (var i = 0; i < selection.length; i++) {
+      switch (selection[i].typename) {
+        case "PathItem":
+          if (selection[i].fillColor.typename === "NoColor") {
+            selection[i].remove();
+            deletedCounter++;
+          }
+          break;
+        case "GroupItem":
+        case "CompoundPathItem":
+          deleteNoColorPaths(selection[i], deletedCounter);
+          break;
+      }
     }
+    return deletedCounter;
   }
 }

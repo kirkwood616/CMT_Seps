@@ -2,28 +2,26 @@ function SP_Delete_CMYK_UnusedSwatch_FromNoSwatch() {
   // Active Document
   var doc = app.activeDocument;
 
+  // Selection
+  var sel = doc.selection;
+
+  // Exit if no selection
+  if (!sel.length) {
+    throw new Error("No Selected Art" + "\n" + "Select Art Before Running.");
+  }
+
+  // Ungroup artwork
+  if (sel.length > 0) {
+    for (var i = 0; i < sel.length; i++) {
+      ungroup(sel[i]);
+    }
+  }
+
+  // Reset sel to ungrouped items
+  sel = doc.selection;
+
   // Spots & Swatches
-  var docSpots = doc.spots;
   var docSwatches = doc.swatches;
-
-  // Layers in document
-  var docLayers = doc.layers;
-
-  // Exit if no Art layer
-  if (!isLayerNamed("Art", docLayers)) {
-    throw new Error("No Layer named 'Art'" + "\n" + "Art to be scanned needs to be on a layer named 'Art'");
-  }
-
-  // Target Art layer
-  var artLayer = docLayers.getByName("Art");
-
-  // Exit if nothin on Art layer
-  if (!artLayer.pageItems.length) {
-    throw new Error("No art on 'Art' Layer" + "\n" + "Place art to be scanned on the layer named 'Art'");
-  }
-
-  // Metadata layer
-  var metadataLayer = docLayers.getByName("Metadata");
 
   // Storage array for all path items
   var pathsArray = new Array();
@@ -31,47 +29,34 @@ function SP_Delete_CMYK_UnusedSwatch_FromNoSwatch() {
   // Counter
   var deletedSwatchCounter = 0;
 
-  // Unlock metadataLayer
-  metadataLayer.locked = false;
+  // Layer selected art is on
+  var layerArt = doc.activeLayer;
+
+  // Add all path items to pathsArray
+  addPathsToStorage(layerArt, pathsArray);
 
   // Deselect everything
   doc.selection = false;
 
-  // Add all path items to pathsArray
-  addPathsToStorage(artLayer, pathsArray);
-
-  // Loop Spot Colors in reverse order
-  for (var i = docSpots.length; i--; ) {
-    // Current Spot Swatch
-    var currentSpot = docSpots[i];
-
-    // Find text. Returns -1 if not found
-    var matchNameIndex = currentSpot.name.indexOf("PROCESS COLOR");
-
-    // Delete items & spot swatch if name matches
-    if (matchNameIndex !== -1) {
-      var colorToDelete = docSwatches[currentSpot.name];
-
-      for (var j = 0; j < pathsArray.length; j++) {
-        if (pathsArray[j].fillColor.spot.name === colorToDelete.name) {
-          pathsArray[j].remove();
-        }
-      }
-
-      for (var k = 0; k < metadataLayer.textFrames.length; k++) {
-        if (metadataLayer.textFrames[k].textRange.characterAttributes.fillColor.spot.name === colorToDelete.name) {
-          metadataLayer.textFrames[k].remove();
-        }
-      }
-
-      // Delete spot swatch from palette
-      currentSpot.remove();
+  // Remove PROCESS COLOR swatches
+  for (var i = docSwatches.length; i--; ) {
+    var processMatchIndex = docSwatches[i].name.indexOf("PROCESS COLOR");
+    if (processMatchIndex !== -1) {
+      docSwatches[i].remove();
       deletedSwatchCounter++;
     }
   }
 
-  // Deselect everything
-  doc.selection = false;
+  // Remove CMYK color paths
+  for (var i = 0; i < pathsArray.length; i++) {
+    if (pathsArray[i].fillColor.typename === "CMYKColor") {
+      pathsArray[i].remove();
+    }
+  }
+
+  // Select, group & deselect original selection
+  layerArt.hasSelectedArtwork = true;
+  app.executeMenuCommand("group");
 
   // Alerts
   if (deletedSwatchCounter > 0) {
@@ -89,7 +74,7 @@ try {
     throw new Error("SP Template File Not Active");
   }
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n" + e.line, "Script Alert", true);
 }
 
 //*******************
@@ -97,19 +82,27 @@ try {
 //*******************
 
 /**
- * Checks if a string matches any layer's name.
- * @param {String} name Name to check layer.name for
- * @param {Layers} layers All Layers in the document
- * @returns {Boolean}
+ * Ungroup a groupItem within Adobe Illustrator. Similar to `Object > Ungroup`
+ * @param {*} object    An Adobe Illustrator groupItem
+ * @param {*} recursive Should nested groupItems also be ungrouped
  */
-function isLayerNamed(name, layers) {
-  for (var i = 0; i < layers.length; i++) {
-    if (layers[i].name === name) {
-      return true;
+function ungroup(object, recursive) {
+  if (object.typename != "GroupItem") {
+    return;
+  }
+  recursive = typeof recursive !== "undefined" ? recursive : true;
+  var subObject;
+  while (object.pageItems.length > 0) {
+    if (object.pageItems[0].typename == "GroupItem" && !object.pageItems[0].clipped) {
+      subObject = object.pageItems[0];
+      subObject.move(object, ElementPlacement.PLACEBEFORE);
+      if (recursive) {
+        ungroup(subObject, recursive);
+      }
+    } else {
+      object.pageItems[0].move(object, ElementPlacement.PLACEBEFORE);
     }
   }
-
-  return false;
 }
 
 function getAllChildren(obj) {

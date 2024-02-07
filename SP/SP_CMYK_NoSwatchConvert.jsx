@@ -2,27 +2,26 @@ function SP_CMYK_NoSwatchConvert() {
   // Active Document
   var doc = app.activeDocument;
 
+  // Selection
+  var sel = doc.selection;
+
+  // Exit if no selection
+  if (!sel.length) {
+    throw new Error("No Selected Art" + "\n" + "Select Art Before Running.");
+  }
+
+  // Ungroup artwork
+  if (sel.length > 0) {
+    for (var i = 0; i < sel.length; i++) {
+      ungroup(sel[i]);
+    }
+  }
+
+  // Reset sel to ungrouped items
+  sel = doc.selection;
+
   // Spots
   var docSpots = doc.spots;
-
-  // Layers in document
-  var docLayers = doc.layers;
-
-  // // Exit if no Art layer
-  // if (!isLayerNamed("Art", docLayers)) {
-  //   throw new Error("No Layer named 'Art'" + "\n" + "Art to be scanned needs to be on a layer named 'Art'");
-  // }
-
-  // Art layer
-  var artLayer = docLayers.getByName("Art");
-
-  // // Exit if nothin on Art layer
-  // if (!artLayer.pageItems.length) {
-  //   throw new Error("No art on 'Art' Layer" + "\n" + "Place art to be scanned on the layer named 'Art'");
-  // }
-
-  // Metadata layer
-  var metadataLayer = docLayers.getByName("Metadata");
 
   // Storage array for all path items
   var pathsArray = new Array();
@@ -30,15 +29,14 @@ function SP_CMYK_NoSwatchConvert() {
   // Counter
   var cmykCounter = 0;
 
-  // Unlock metadataLayer
-  metadataLayer.locked = false;
+  // Layer selected art is on
+  var layerArt = doc.activeLayer;
 
   // Deselect everything
   doc.selection = false;
 
   // Add all path items to pathsArray
-  addPathsToStorage(artLayer, pathsArray);
-  $.writeln(pathsArray.length);
+  addPathsToStorage(layerArt, pathsArray);
 
   // Loop through pathsArray and
   for (var i = 0; i < pathsArray.length; i++) {
@@ -63,7 +61,7 @@ function SP_CMYK_NoSwatchConvert() {
       newSpot.colorType = ColorModel.SPOT;
       newSpot.color = processColor;
 
-      // Declare new SpotColor and assign newSpot to value (only way this works)
+      // Declare new SpotColor and assign newSpot to value
       var newSpotColor = new SpotColor();
       newSpotColor.spot = newSpot;
 
@@ -81,6 +79,10 @@ function SP_CMYK_NoSwatchConvert() {
     }
   }
 
+  // Select, group & deselect original selection
+  doc.selection = sel;
+  app.executeMenuCommand("group");
+
   // Alerts
   if (cmykCounter > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
     alert(
@@ -91,7 +93,7 @@ function SP_CMYK_NoSwatchConvert() {
         "\n\n" +
         "Spot Swatches have been created for these colors." +
         "\n\n" +
-        "Run the Delete Process Swatch Colors action or rename the swatches before proceeding."
+        "Run 'Delete Converted CMYK Swatches' or rename the swatches before proceeding."
     );
   } else {
     alert(cmykCounter + " CMYK colors without a swatch found.");
@@ -114,19 +116,27 @@ try {
 //*******************
 
 /**
- * Checks if a string matches any layer's name.
- * @param {String} name Name to check layer.name for
- * @param {Layers} layers All Layers in the document
- * @returns {Boolean}
+ * Ungroup a groupItem within Adobe Illustrator. Similar to `Object > Ungroup`
+ * @param {*} object    An Adobe Illustrator groupItem
+ * @param {*} recursive Should nested groupItems also be ungrouped
  */
-function isLayerNamed(name, layers) {
-  for (var i = 0; i < layers.length; i++) {
-    if (layers[i].name === name) {
-      return true;
+function ungroup(object, recursive) {
+  if (object.typename != "GroupItem") {
+    return;
+  }
+  recursive = typeof recursive !== "undefined" ? recursive : true;
+  var subObject;
+  while (object.pageItems.length > 0) {
+    if (object.pageItems[0].typename == "GroupItem" && !object.pageItems[0].clipped) {
+      subObject = object.pageItems[0];
+      subObject.move(object, ElementPlacement.PLACEBEFORE);
+      if (recursive) {
+        ungroup(subObject, recursive);
+      }
+    } else {
+      object.pageItems[0].move(object, ElementPlacement.PLACEBEFORE);
     }
   }
-
-  return false;
 }
 
 function getAllChildren(obj) {
