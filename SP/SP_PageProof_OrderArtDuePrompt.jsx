@@ -28,7 +28,7 @@ function SP_PageProof_OrderArtDuePrompt() {
   var artInput = artPanel.add("edittext", undefined, artNumberText);
 
   // Due Date
-  var dueDatePanel = createPanel(gui, "Art Number");
+  var dueDatePanel = createPanel(gui, "Due Date");
   var dueDateInput = dueDatePanel.add("edittext", undefined, dueDateText);
 
   // Button Control Group
@@ -51,7 +51,7 @@ function SP_PageProof_OrderArtDuePrompt() {
     if (orderInput.text && artInput.text && dueDateInput.text) {
       orderNumber.contents = "ORDER #: " + orderInput.text;
       artNumber.contents = "ART #: " + artInput.text.toUpperCase();
-      dueDate.contents = "DUE DATE: " + dueDateInput.text;
+      dueDate.contents = "DUE: " + dueDateInput.text;
       gui.close();
     }
   });
