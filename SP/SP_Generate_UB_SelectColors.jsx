@@ -9,7 +9,7 @@ function SP_Generate_UB_SelectColors() {
   var docLayers = doc.layers;
 
   // Selection
-  var sel = doc.selection[0];
+  var sel = doc.selection;
 
   // Storage array
   var pathsArray = new Array();
@@ -20,14 +20,18 @@ function SP_Generate_UB_SelectColors() {
     return;
   }
 
-  // If selection isn't 1 item or 1 group, create group
-  if (doc.selection.length > 1) {
-    app.executeMenuCommand("group");
-    sel = doc.selection[0];
+  // Name of layer containing selection
+  var artLayer = docLayers.getByName(doc.activeLayer.name);
+
+  // Ungroup artwork
+  if (sel.length > 0) {
+    for (var i = 0; i < sel.length; i++) {
+      ungroup(sel[i]);
+    }
   }
 
   // Add selection's paths to storage for select window
-  addPathsToStorage(doc.selection[0], pathsArray);
+  addPathsToStorage(artLayer, pathsArray);
 
   // GUI window
   var gui = createWindow("SELECT COLORS FOR UB", 300);
@@ -73,49 +77,72 @@ function SP_Generate_UB_SelectColors() {
       return;
     }
 
-    // Name of layer containing selection
-    var artLayer = docLayers.getByName(doc.activeLayer.name);
-
-    // Hide all layers except artLayer
-    for (var i = 0; i < docLayers.length; i++) {
-      if (docLayers[i] !== doc.activeLayer) {
-        docLayers[i].visible = false;
-      }
-    }
-
     // Add temp layer
     var tempLayer = docLayers.add();
     tempLayer.name = "TEMP";
 
     // Duplicate selection, move to temp layer, deselect & hide art layer
+    app.executeMenuCommand("group");
     app.executeMenuCommand("copy");
     app.executeMenuCommand("pasteFront");
     doc.selection[0].move(tempLayer, ElementPlacement.PLACEATBEGINNING);
-    artLayer.visible = false;
 
-    if (uncheckedColorNames.length > 0) {
-      // Delete unchecked color from temp layer
-      doc.selection = false;
-      for (var i = 0; i < uncheckedColorNames.length; i++) {
-        var uncheckedColor;
-        try {
-          uncheckedColor = docSwatches.getByName(uncheckedColorNames[i]);
-        } catch (e) {
-          alert("No Swatch Name Match");
-        }
-        var colorRef = tempLayer.pathItems.rectangle(10, 10, 150, 150);
-        colorRef.fillColor = uncheckedColor.color;
-        app.executeMenuCommand("Find Fill Color menu item");
-        app.executeMenuCommand("cut");
+    // Reset sel to current selection & ungroup artwork
+    sel = doc.selection;
+    if (sel.length > 0) {
+      for (var i = 0; i < sel.length; i++) {
+        ungroup(sel[i]);
       }
     }
+
+    // Paths & storage for tempLayer
+    var tempPathItems = tempLayer.pathItems;
+    var tempCompoundItems = tempLayer.compoundPathItems;
+    var tempStorage = new Array();
+
+    // Deselect everything
+    doc.selection = false;
+
+    // Loop unchecked colors to delete
+    for (var i = 0; i < uncheckedColorNames.length; i++) {
+      var uncheckedColor;
+
+      try {
+        uncheckedColor = docSwatches.getByName(uncheckedColorNames[i]);
+      } catch (e) {
+        alert("No Swatch Name Match" + "\n" + "UB will have errors.", "ERROR", true);
+      }
+
+      // Loop temp PathItems & add to tempStorage
+      for (var j = 0; j < tempPathItems.length; j++) {
+        if (tempPathItems[j].fillColor.spot.name === uncheckedColor.name) {
+          tempStorage.push(tempPathItems[j]);
+        }
+      }
+
+      // Loop temp CompoundPathItems
+      for (var k = 0; k < tempCompoundItems.length; k++) {
+        var currentCompoundPaths = tempCompoundItems[k].pathItems;
+        // Loop PathItems in Compound for color match
+        for (var l = 0; l < currentCompoundPaths.length; l++) {
+          var currentPath = currentCompoundPaths[l];
+          // Add CompoundPathItem to tempStorage if match
+          if (currentPath.fillColor.spot.name === uncheckedColor.name) {
+            tempStorage.push(tempCompoundItems[k]);
+          }
+        }
+      }
+    }
+
+    // Select all items in tempStorage, delete & deselect everything
+    for (var i = tempStorage.length; i--; ) {
+      tempStorage[i].selected = true;
+    }
+    app.cut();
+    doc.selection = false;
+
     // Select temp layer art
     tempLayer.hasSelectedArtwork = true;
-
-    // All layers visible
-    for (var i = 0; i < docLayers.length; i++) {
-      docLayers[i].visible = true;
-    }
 
     // If selection isn't 1 item or 1 group, create group & reset sel
     if (doc.selection.length > 1) {
@@ -174,12 +201,36 @@ try {
     throw new Error("SP Template File Not Active");
   }
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n" + e.line, "Script Alert", true);
 }
 
 //*******************
 // Helper functions
 //*******************
+
+/**
+ * Ungroup a groupItem within Adobe Illustrator. Similar to `Object > Ungroup`
+ * @param {*} object    An Adobe Illustrator groupItem
+ * @param {*} recursive Should nested groupItems also be ungrouped
+ */
+function ungroup(object, recursive) {
+  if (object.typename != "GroupItem") {
+    return;
+  }
+  recursive = typeof recursive !== "undefined" ? recursive : true;
+  var subObject;
+  while (object.pageItems.length > 0) {
+    if (object.pageItems[0].typename == "GroupItem" && !object.pageItems[0].clipped) {
+      subObject = object.pageItems[0];
+      subObject.move(object, ElementPlacement.PLACEBEFORE);
+      if (recursive) {
+        ungroup(subObject, recursive);
+      }
+    } else {
+      object.pageItems[0].move(object, ElementPlacement.PLACEBEFORE);
+    }
+  }
+}
 
 /**
  * Checks if a string matches any layer's name.
