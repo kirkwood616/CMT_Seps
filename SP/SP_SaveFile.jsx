@@ -11,8 +11,9 @@ function SP_SaveFile() {
 
   // Metadata layer
   var metadataLayer = doc.layers.getByName("Metadata");
-  var metaLocation = metadataLayer.textFrames.getByName("_LOCATION").contents.toLowerCase();
-  var metaArtFile = metadataLayer.textFrames.getByName("_ART FILE").contents;
+  var metaGroup = metadataLayer.groupItems.getByName("MetaGroup");
+  var metaLocation = metaGroup.textFrames.getByName("_LOCATION").contents.toLowerCase();
+  var metaArtFile = metaGroup.textFrames.getByName("_ART FILE").contents;
 
   // Create file name with appropriate ending
   var fileName = metaArtFile + metaLocation + ".ai";

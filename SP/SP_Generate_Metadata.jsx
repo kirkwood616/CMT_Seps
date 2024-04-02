@@ -7,7 +7,8 @@ function SP_Generate_Metadata() {
 
   // Metadata Layer items
   var metadataLayer = doc.layers.getByName("Metadata");
-  var metaTextFrames = metadataLayer.textFrames;
+  var metaGroup = metadataLayer.groupItems.getByName("MetaGroup");
+  var metaTextFrames = metaGroup.textFrames;
 
   // Storage
   var colorFrames = new Array();
@@ -47,7 +48,7 @@ function SP_Generate_Metadata() {
   for (var i = 0; i < swatchStorage.length; i++) {
     var nameForMeta = editMetadataText(swatchStorage[i].name);
 
-    colorFrames[i].name = nameForMeta;
+    colorFrames[i].name = "COLOR";
     colorFrames[i].contents = nameForMeta;
     colorFrames[i].textRange.characterAttributes.fillColor = swatchStorage[i].color;
 

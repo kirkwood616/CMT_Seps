@@ -7,7 +7,8 @@ function SP_Generate_Metadata_Count() {
 
   // Metadata
   var metadataLayer = doc.layers.getByName("Metadata");
-  var metaDataGroups = metadataLayer.groupItems;
+  var metaGroup = metadataLayer.groupItems.getByName("MetaGroup");
+  var metaDataGroups = metaGroup.groupItems;
 
   // Boolean status for if COLOR COUNT group in Metadata
   var hasColorCount = false;

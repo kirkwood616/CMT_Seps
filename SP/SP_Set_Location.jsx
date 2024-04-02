@@ -31,7 +31,8 @@ function SP_Set_Location() {
 
   // Metadata
   var metaLayer = docLayers.getByName("Metadata");
-  var metaLocation = metaLayer.textFrames.getByName("_LOCATION");
+  var metaGroup = metaLayer.groupItems.getByName("MetaGroup");
+  var metaLocation = metaGroup.textFrames.getByName("_LOCATION");
 
   // Registration
   var regLayer = docLayers.getByName("Registration");
@@ -80,6 +81,8 @@ function SP_Set_Location() {
         regTopCenter.position = [regCenteredPosition, regTopCenterBasePosition[1]];
         // Position bottom-center registration 0.50" from art
         regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        // Position metaGroup
+        metaGroup.position = [487.296692817155, -49.7230914550501];
         // Update location text frame to new position
         metaLocation.textRange.contents = selectedLocation;
         break;
@@ -92,6 +95,8 @@ function SP_Set_Location() {
         regTopCenter.position = [regCenteredPosition, regTopCenterBasePosition[1]];
         // Position bottom-center registration 0.50" from art
         regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        // Position metaGroup
+        metaGroup.position = [487.296692817155, -49.7230914550501];
         // Update location text frame to new position
         metaLocation.textRange.contents = selectedLocation;
         break;
@@ -104,6 +109,8 @@ function SP_Set_Location() {
         regTopCenter.position = [regCenteredPosition, regTopCenterBasePosition[1]];
         // Position bottom-center registration 0.50" from art
         regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        // Position metaGroup
+        metaGroup.position = [487.296692817155, -49.7230914550501];
         // Update location text frame to new position
         metaLocation.textRange.contents = selectedLocation;
         break;
@@ -118,6 +125,8 @@ function SP_Set_Location() {
         artSelection.position = [centerPosition, 0];
         // Position bottom-center registration 0.50" down from art
         regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        // Position metaGroup
+        metaGroup.position = [487.296692817155, yPositionRegBottom(artSelection) - 4];
         // Update location text frame to new position
         metaLocation.textRange.contents = selectedLocation;
         break;
@@ -132,6 +141,8 @@ function SP_Set_Location() {
         regTopCenter.position = [regCenteredPosition, -9];
         // Position bottom-center registration 0.50" down from art
         regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        // Position metaGroup to regTopCenter
+        metaGroup.position = [487.296692817155, -8.99994692380005];
         // Update location text frame to new position
         metaLocation.textRange.contents = selectedLocation;
         break;

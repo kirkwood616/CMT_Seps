@@ -9,11 +9,12 @@ function SP_PageProof_FromTemplate() {
 
   // Metadata items
   var metadataLayer = doc.layers.getByName("Metadata");
-  var metaOrder = metadataLayer.textFrames.getByName("_ORDER");
-  var metaArtFile = metadataLayer.textFrames.getByName("_ART FILE");
+  var metaGroup = metadataLayer.groupItems.getByName("MetaGroup");
+  // var metaOrder = metaGroup.textFrames.getByName("_ORDER");
+  var metaArtFile = metaGroup.textFrames.getByName("_ART FILE");
 
   // Values for order & art file
-  var order = metaOrder.textRange.contents;
+  // var order = metaOrder.textRange.contents;
   var artFile = metaArtFile.textRange.contents;
 
   // Exit if art not selected
@@ -49,7 +50,7 @@ function SP_PageProof_FromTemplate() {
   doc.activeLayer = proofLayer;
 
   // Set order number & art number values
-  orderNumber.textRange.contents = order.replace(/ORDER /gi, "ORDER #: ");
+  // orderNumber.textRange.contents = order.replace(/ORDER /gi, "ORDER #: ");
   artNumber.textRange.contents = "ART #: " + artFile;
 
   // Paste copied art
@@ -85,7 +86,12 @@ function SP_PageProof_FromTemplate() {
   // Set Due Date
   var dueDate = proofLayer.textFrames.getByName("DUE");
   var currentDueDate = dueDate.textRange.contents.replace(/DUE: /gi, "");
+  var newOrderNumber = prompt("ENTER ORDER #", "123456", "ORDER NUMBER" )
   var newDueDate = prompt("ENTER DUE DATE", currentDueDate, "DUE DATE");
+
+  if (newOrderNumber) {
+    orderNumber.textRange.contents = "ORDER #: " + newOrderNumber;
+  }
 
   if (newDueDate) {
     dueDate.textRange.contents = "DUE: " + newDueDate;

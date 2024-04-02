@@ -15,8 +15,9 @@ function SP_Delete_UB() {
 
   // Metadata
   var metadataLayer = doc.layers.getByName("Metadata");
-  var metaDataGroups = metadataLayer.groupItems;
-  var metaTextFrames = metadataLayer.textFrames;
+  var metaGroup = metadataLayer.groupItems.getByName("MetaGroup");
+  var metaDataGroups = metaGroup.groupItems;
+  var metaTextFrames = metaGroup.textFrames;
   var colorCount = metaDataGroups.getByName("_COLOR COUNT");
   var countGroup = colorCount.groupItems.getByName("_COUNT GROUP");
   var countGroupTextFrames = countGroup.textFrames;
