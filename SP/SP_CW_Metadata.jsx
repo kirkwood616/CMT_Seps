@@ -5,6 +5,20 @@ function SP_CW_Metadata() {
   // Layers in document
   var docLayers = doc.layers;
 
+  // Storage array for CW layer names
+  var cwLayers = new Array();
+  // Add CW layer names to storage array
+  for (var i = docLayers.length; i--; ) {
+    if (docLayers[i].name.indexOf("CW_") !== -1) {
+      cwLayers.push(docLayers[i].name);
+    }
+  }
+
+  // Exit if no CW layers
+  if (!cwLayers.length) {
+    throw new Error("No Colorway (CW) Layers");
+  }
+
   // Illustrator Coordinate System
   app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
   // Artboard Index
@@ -29,15 +43,6 @@ function SP_CW_Metadata() {
   var registrationLayer = doc.layers.getByName("Registration");
   var bottomCrosshair = registrationLayer.groupItems.getByName("REG_BOTTOM_CENTER");
   var regPosition = bottomCrosshair.position;
-
-  // Storage array for CW layer names
-  var cwLayers = new Array();
-  // Add CW layer names to storage array
-  for (var i = docLayers.length; i--; ) {
-    if (docLayers[i].name.indexOf("CW_") !== -1) {
-      cwLayers.push(docLayers[i].name);
-    }
-  }
 
   // Deselect everything
   doc.selection = false;
