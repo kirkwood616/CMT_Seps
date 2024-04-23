@@ -71,7 +71,6 @@ function SP_CW_Metadata() {
     cwValues.push({ name: cwLayer.name, colors: cwSpotNames });
 
     cwLayer.hasSelectedArtwork = true;
-    app.executeMenuCommand("group");
     doc.selection = false;
   }
 
@@ -185,6 +184,24 @@ function SP_CW_Metadata() {
 
     // Close Window
     windowCW.close();
+
+    // Regroup art on CW Layers
+    for (var i = 0; i < cwLayers.length; i++) {
+      var cwLayer = docLayers.getByName(cwLayers[i]);
+      cwLayer.hasSelectedArtwork = true;
+
+      var docSel = new Array();
+      docSel = doc.selection;
+      var newGroup = cwLayer.groupItems.add();
+
+      if (docSel.length > 0) {
+        for (j = 0; j < docSel.length; j++) {
+          docSel[j].moveToEnd(newGroup);
+        }
+      }
+
+      doc.selection = false;
+    }
   };
 
   // Show Window
@@ -313,18 +330,3 @@ function addPathsToStorage(obj, storageArray) {
     }
   }
 }
-
-// function removeDuplicate(arr) {
-//   var result = [];
-//   var idx = 0;
-//   var tmp = {};
-
-//   for (var i = 0; i < arr.length; i++) {
-//     if (!tmp[arr[i]]) {
-//       tmp[arr[i]] = 1;
-//       result[idx] = arr[i];
-//       idx++;
-//     }
-//   }
-//   return result;
-// }
