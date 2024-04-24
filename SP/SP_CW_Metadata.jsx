@@ -111,6 +111,10 @@ function SP_CW_Metadata() {
   // Button Control Group
   var buttonGroup = windowCW.add("group");
   var cancelButton = buttonGroup.add("button", undefined, "Cancel");
+  cancelButton.onClick = function () {
+    windowCW.close();
+    return;
+  };
   var okButton = buttonGroup.add("button", undefined, "Generate", { name: "ok" });
 
   // Generate on OK
@@ -189,28 +193,28 @@ function SP_CW_Metadata() {
 
     // Close Window
     windowCW.close();
-
-    // Regroup art on CW Layers
-    for (var i = 0; i < cwLayers.length; i++) {
-      var cwLayer = docLayers.getByName(cwLayers[i]);
-      cwLayer.hasSelectedArtwork = true;
-
-      var docSel = new Array();
-      docSel = doc.selection;
-      var newGroup = cwLayer.groupItems.add();
-
-      if (docSel.length > 0) {
-        for (j = 0; j < docSel.length; j++) {
-          docSel[j].moveToEnd(newGroup);
-        }
-      }
-
-      doc.selection = false;
-    }
   };
 
   // Show Window
   windowCW.show();
+
+  // Regroup art on CW Layers
+  for (var i = 0; i < cwLayers.length; i++) {
+    var cwLayer = docLayers.getByName(cwLayers[i]);
+    cwLayer.hasSelectedArtwork = true;
+
+    var docSel = new Array();
+    docSel = doc.selection;
+    var newGroup = cwLayer.groupItems.add();
+
+    if (docSel.length > 0) {
+      for (j = 0; j < docSel.length; j++) {
+        docSel[j].moveToEnd(newGroup);
+      }
+    }
+
+    doc.selection = false;
+  }
 }
 
 // Run
