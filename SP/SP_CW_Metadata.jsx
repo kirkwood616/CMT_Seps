@@ -85,6 +85,8 @@ function SP_CW_Metadata() {
 
   // Tab Panel
   var tabPanel = windowCW.add("tabbedpanel");
+  tabPanel.alignChildren = "fill";
+  tabPanel.preferredSize = [325, 300];
 
   // Populate tabs w/ selection choice of UB & colors in CW layer
   for (var i = 0; i < cwValues.length; i++) {
@@ -95,7 +97,7 @@ function SP_CW_Metadata() {
 
     // Panel in Tab
     var cwTabPanel = cwTab.add("panel", undefined, "Colors");
-    cwTabPanel.alignChildren = "fill";
+    cwTabPanel.alignChildren = "left";
     // UB checkboxes
     for (var j = 0; j < swatchesUB.length; j++) {
       var ubCheck = cwTabPanel.add("checkbox", undefined, swatchesUB[j]);
@@ -104,7 +106,9 @@ function SP_CW_Metadata() {
     for (var k = 0; k < cwValues[i].colors.length; k++) {
       var cwColorCheck = cwTabPanel.add("checkbox", undefined, cwValues[i].colors[k]);
       cwColorCheck.value = true;
-      cwColorCheck.enabled = false;
+      cwColorCheck.onClick = function () {
+        this.value = true;
+      };
     }
   }
 
