@@ -45,7 +45,7 @@ function SP_CW_Metadata() {
   var regPosition = bottomCrosshair.position;
 
   // Deselect everything
-  doc.selection = false;
+  doc.selection = null;
 
   // Ungroup CW layers
   for (var i = 0; i < cwLayers.length; i++) {
@@ -56,7 +56,7 @@ function SP_CW_Metadata() {
         ungroup(doc.selection[j]);
       }
     }
-    doc.selection = false;
+    doc.selection = null;
   }
 
   // Storage for color names in each CW layer
@@ -69,14 +69,18 @@ function SP_CW_Metadata() {
     var colorNameStorage = new Array();
 
     for (var j = 0; j < pathsArr.length; j++) {
-      colorNameStorage.push(pathsArr[j].fillColor.spot.name);
+      if (pathsArr[j].fillColor.typename !== "SpotColor") {
+        cwRegroupArt(cwLayers);
+        throw new Error("Non-Spot Colors Found" + "\n" + "Check & Set Non-Spot Colors to Spot Color(s).");
+      } else {
+        colorNameStorage.push(pathsArr[j].fillColor.spot.name);
+      }
     }
 
     var cwSpotNames = removeDuplicate(colorNameStorage);
     cwValues.push({ name: cwLayer.name, colors: cwSpotNames });
 
-    cwLayer.hasSelectedArtwork = true;
-    doc.selection = false;
+    doc.selection = null;
   }
 
   // GUI Window
@@ -117,7 +121,6 @@ function SP_CW_Metadata() {
   var cancelButton = buttonGroup.add("button", undefined, "Cancel");
   cancelButton.onClick = function () {
     windowCW.close();
-    return;
   };
   var okButton = buttonGroup.add("button", undefined, "Generate", { name: "ok" });
 
@@ -143,7 +146,7 @@ function SP_CW_Metadata() {
     }
 
     // Remove any pre-existing CW_ metadata
-    doc.selection = false;
+    doc.selection = null;
     for (var i = 0; i < metadataLayer.textFrames.length; i++) {
       var frameContents = metadataLayer.textFrames[i].textRange.contents.toUpperCase();
       if (frameContents.indexOf("CW_") !== -1) {
@@ -202,23 +205,11 @@ function SP_CW_Metadata() {
   // Show Window
   windowCW.show();
 
-  // Regroup art on CW Layers
-  for (var i = 0; i < cwLayers.length; i++) {
-    var cwLayer = docLayers.getByName(cwLayers[i]);
-    cwLayer.hasSelectedArtwork = true;
+  // Deselect everything
+  doc.selection = null;
 
-    var docSel = new Array();
-    docSel = doc.selection;
-    var newGroup = cwLayer.groupItems.add();
-
-    if (docSel.length > 0) {
-      for (j = 0; j < docSel.length; j++) {
-        docSel[j].moveToEnd(newGroup);
-      }
-    }
-
-    doc.selection = false;
-  }
+  // Group art on CW layers
+  cwRegroupArt(cwLayers);
 }
 
 // Run
@@ -229,12 +220,41 @@ try {
     throw new Error("SP Template File Not Active");
   }
 } catch (e) {
-  alert(e + "\n" + e.line, "Script Alert", true);
+  alert(e + "\n\n" + e.line, "Script Alert", true);
 }
 
 //*******************
 // Helper functions
 //*******************
+
+/**
+ * Regroups art on layers prefixed with CW_ within the document.
+ * @param {string[]} cwLayerNames Array of the layer names contained in document prefixed with "CW_"
+ * @returns {void}
+ */
+function cwRegroupArt(cwLayerNames) {
+  for (var i = 0; i < cwLayerNames.length; i++) {
+    var cwLayer = app.activeDocument.layers.getByName(cwLayerNames[i]);
+
+    // App "catch up" hack
+    cwLayer.visible = false;
+    cwLayer.visible = true;
+
+    cwLayer.hasSelectedArtwork = true;
+    var docSel = new Array();
+    docSel = app.activeDocument.selection;
+    var newGroup = cwLayer.groupItems.add();
+
+    if (docSel.length > 0) {
+      for (j = 0; j < docSel.length; j++) {
+        docSel[j].moveToEnd(newGroup);
+      }
+    }
+
+    // Deselect everything
+    app.activeDocument.selection = null;
+  }
+}
 
 function cwTextFrame(document, cwNumber, frameColor, position, index) {
   var newFrame = document.layers.getByName("Metadata").textFrames.add();
@@ -260,6 +280,11 @@ function cwTextFrame(document, cwNumber, frameColor, position, index) {
   return newFrame;
 }
 
+/**
+ * Takes a number and returns true if it is even, or false if it is odd.
+ * @param {number} n A number
+ * @returns {boolean}
+ */
 function isEven(n) {
   return n % 2 == 0;
 }
