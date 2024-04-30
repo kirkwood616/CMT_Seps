@@ -33,7 +33,7 @@ function SP_CMYK_NoSwatchConvert() {
   var layerArt = doc.activeLayer;
 
   // Deselect everything
-  doc.selection = false;
+  doc.selection = null;
 
   // Add all path items to pathsArray
   addPathsToStorage(layerArt, pathsArray);
@@ -75,13 +75,14 @@ function SP_CMYK_NoSwatchConvert() {
       doc.defaultFillColor = newSpotColor;
 
       // Deselect everything
-      doc.selection = false;
+      doc.selection = null;
     }
   }
 
   // Select, group & deselect original selection
   doc.selection = sel;
   app.executeMenuCommand("group");
+  doc.selection = null;
 
   // Alerts
   if (cmykCounter > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
