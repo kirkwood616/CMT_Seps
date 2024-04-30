@@ -72,7 +72,6 @@ function SP_Set_Location() {
 
     switch (selectedLocation) {
       case "SC":
-      case "YOKE":
         // Rotate selection if matches a rotated location
         locationRotate(metaLocationText, artSelection);
         // Position selection centered & 2 inches from top of artboard
@@ -83,6 +82,20 @@ function SP_Set_Location() {
         regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
         // Position metaGroup
         metaGroup.position = [487.296692817155, -49.7230914550501];
+        // Update location text frame to new position
+        metaLocation.textRange.contents = selectedLocation;
+        break;
+      case "YOKE":
+        // Rotate selection if matches a rotated location
+        locationRotate(metaLocationText, artSelection);
+        // Position selection centered & 1" down from top of artboard
+        artSelection.position = [centerPosition, -72];
+        // Position top-center registration at 0.125" from top of artboard
+        regTopCenter.position = [regCenteredPosition, -9];
+        // Position bottom-center registration 0.50" down from art
+        regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        // Position metaGroup to regTopCenter
+        metaGroup.position = [487.296692817155, -8.99994692380005];
         // Update location text frame to new position
         metaLocation.textRange.contents = selectedLocation;
         break;
