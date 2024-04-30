@@ -36,7 +36,7 @@ function SP_Delete_CMYK_UnusedSwatch_FromNoSwatch() {
   addPathsToStorage(layerArt, pathsArray);
 
   // Deselect everything
-  doc.selection = false;
+  doc.selection = null;
 
   // Remove PROCESS COLOR swatches
   for (var i = docSwatches.length; i--; ) {
@@ -57,6 +57,7 @@ function SP_Delete_CMYK_UnusedSwatch_FromNoSwatch() {
   // Select, group & deselect original selection
   layerArt.hasSelectedArtwork = true;
   app.executeMenuCommand("group");
+  doc.selection = null;
 
   // Alerts
   if (deletedSwatchCounter > 0) {
@@ -74,7 +75,7 @@ try {
     throw new Error("SP Template File Not Active");
   }
 } catch (e) {
-  alert(e + "\n" + e.line, "Script Alert", true);
+  alert(e + "\n\n" + e.line, "Script Alert", true);
 }
 
 //*******************
