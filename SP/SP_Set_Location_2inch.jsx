@@ -65,3 +65,37 @@ try {
 } catch (e) {
   alert(e + "\n\n" + e.line, "Script Alert", true);
 }
+
+//*******************
+// Helper functions
+//*******************
+
+/**
+ * Checks if a string matches any layer's name.
+ * @param {String} name Name to check layer.name for
+ * @param {Layers} layers All Layers in the document
+ * @returns {Boolean}
+ */
+function isLayerNamed(name, layers) {
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].name === name) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+/**
+ * Returns the Y position for the bottom registration mark.
+ *
+ * Accounts for a 0.50" margin from the bottom of the art to the top of registration mark.
+ * @param {any} selection Current selection
+ * @returns {number}
+ */
+function yPositionRegBottom(selection) {
+  var artHeight = selection.height;
+  var yPositionArtBottom = selection.position[1] * -1 + artHeight;
+
+  return yPositionArtBottom * -1 - 36;
+}
