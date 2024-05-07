@@ -2,6 +2,11 @@ function SP_CW_Metadata() {
   // Active Document
   var doc = app.activeDocument;
 
+  // Deselect everything, trick redraw
+  doc.selection = null;
+  doc.activeLayer.visible = false;
+  doc.activeLayer.visible = true;
+
   // Layers in document
   var docLayers = doc.layers;
 
