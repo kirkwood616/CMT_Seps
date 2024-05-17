@@ -17,20 +17,71 @@ function SP_PageProof_Note() {
   // Proof Layer text
   var artNumber = proofLayer.textFrames.getByName("ART_NUMBER");
 
-  // Font data
-  var font = artNumber.textRange.characterAttributes.textFont;
-  var fontSize = 21;
+  // Note data
+  var noteData = ["** PRINT/FLASH/PRINT **", "** PRINT/FLASH/PRINT UB **", "** PRINT/FLASH/PRINT WHITE **", "CW_1"];
 
-  // Note
-  var newNote = activeLayer.textFrames.add();
-  newNote.textRange.characterAttributes.textFont = font;
-  newNote.textRange.contents = "** PRINT/FLASH/PRINT **";
-  newNote.textRange.characterAttributes.size = fontSize;
-  newNote.textRange.characterAttributes.fillColor = redNote;
-  newNote.paragraphs[0].justification = Justification.CENTER;
+  // GUI Window
+  var dialog = new Window("dialog", undefined, undefined, { closeButton: false });
+  dialog.text = "CREATE NOTE";
+  dialog.orientation = "column";
+  dialog.alignChildren = ["left", "top"];
+  dialog.spacing = 10;
+  dialog.margins = 25;
 
-  // Position center + 1 inch downß
-  newNote.position = new Array((artboardBounds[2] - artboardBounds[0]) / 2 - newNote.width / 2, -72);
+  // Radio Buttons
+  for (var i = 0; i < noteData.length; i++) {
+    dialog.add("radiobutton", undefined, noteData[i]);
+  }
+
+  // Button Control Group
+  var buttonGroup = dialog.add("group", undefined, { name: "buttonGroup" });
+  buttonGroup.orientation = "row";
+  buttonGroup.alignChildren = ["fill", "fill"];
+  buttonGroup.spacing = 10;
+  buttonGroup.margins = [2, 18, 2, 2];
+  buttonGroup.alignment = ["fill", "fill"];
+
+  // Cancel Button
+  var cancelButton = buttonGroup.add("button", undefined, "CANCEL");
+  cancelButton.onClick = function () {
+    dialog.close();
+  };
+
+  // OK Button
+  var okButton = buttonGroup.add("button", undefined, "OK");
+  okButton.onClick = function () {
+    // Selected Note storage
+    var noteValue;
+
+    // Get selected radiobutton
+    for (var i = 0; i < dialog.children.length; i++) {
+      var theChild = dialog.children[i];
+      if (theChild.type === "radiobutton" && theChild.value) {
+        noteValue = theChild.text;
+      }
+    }
+
+    // Font data
+    var font = artNumber.textRange.characterAttributes.textFont;
+    var fontSize = 21;
+
+    // Note
+    var newNote = activeLayer.textFrames.add();
+    newNote.textRange.characterAttributes.textFont = font;
+    newNote.textRange.contents = noteValue;
+    newNote.textRange.characterAttributes.size = fontSize;
+    newNote.textRange.characterAttributes.fillColor = redNote;
+    newNote.paragraphs[0].justification = Justification.CENTER;
+
+    // Position center + 1 inch down
+    newNote.position = new Array((artboardBounds[2] - artboardBounds[0]) / 2 - newNote.width / 2, -72);
+
+    // Close Window
+    dialog.close();
+  };
+
+  // Show Window
+  dialog.show();
 }
 
 // Run
