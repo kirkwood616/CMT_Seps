@@ -203,18 +203,18 @@ function SP_CW_Metadata() {
       }
     }
 
+    // Deselect everything
+    doc.selection = null;
+
+    // Group art on CW layers
+    cwRegroupArt(cwLayers);
+
     // Close Window
     windowCW.close();
   };
 
   // Show Window
   windowCW.show();
-
-  // Deselect everything
-  doc.selection = null;
-
-  // Group art on CW layers
-  cwRegroupArt(cwLayers);
 }
 
 // Run
