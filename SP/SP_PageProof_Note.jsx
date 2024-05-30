@@ -8,7 +8,7 @@ function SP_PageProof_Note() {
   var artboardBounds = doc.artboards[artboardIndex].artboardRect;
 
   // Swatches
-  var redNote = doc.swatches.getByName("RED_NOTE").color;
+  var redNote = redNoteSwatch();
 
   // Layers
   var activeLayer = doc.activeLayer;
@@ -93,4 +93,40 @@ try {
   }
 } catch (e) {
   alert(e + "\n" + e.line, "Script Alert", true);
+}
+
+//*******************
+// Helper functions
+//*******************
+
+/**
+ * Checks if a swatch is named "RED_NOTE". If not, creates the swatch and returns it's color.
+ * @returns Color of swatch named "RED_NOTE"
+ */
+function redNoteSwatch() {
+  var hasSwatch = false;
+
+  for (var i = 0; i < app.activeDocument.swatches.length; i++) {
+    if (app.activeDocument.swatches[i].name.indexOf("RED_NOTE") !== -1) {
+      hasSwatch = true;
+      break;
+    }
+  }
+
+  if (hasSwatch) {
+    return app.activeDocument.swatches.getByName("RED_NOTE").color;
+  } else {
+    var newCMYK = new CMYKColor();
+    newCMYK.cyan = 0;
+    newCMYK.magenta = 100;
+    newCMYK.yellow = 100;
+    newCMYK.black = 0;
+
+    var thisSpot = app.activeDocument.spots.add();
+    thisSpot.name = "RED_NOTE";
+    thisSpot.color = newCMYK;
+    thisSpot.colorType = ColorModel.SPOT;
+
+    return app.activeDocument.swatches.getByName("RED_NOTE").color;
+  }
 }
