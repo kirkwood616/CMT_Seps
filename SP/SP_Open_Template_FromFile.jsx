@@ -3,6 +3,7 @@
 function SP_Open_Template_FromFile() {
   // Active Document
   var doc = app.activeDocument;
+  var docName = doc.name;
   var sel = doc.selection;
 
   // Exit if no selection
@@ -57,6 +58,11 @@ function SP_Open_Template_FromFile() {
 
   // Selected pasted art
   var pastedArt = doc.selection[0];
+
+  // Rotate art if file name contains a pre-rotated location suffix
+  if (docName.indexOf("ud") !== -1 || docName.indexOf("pk") !== -1) {
+    pastedArt.rotate(180);
+  }
 
   // Position art horizontally centered and 2 inches from top of artboard
   pastedArt.position = new Array((artboardBounds[2] - artboardBounds[0]) / 2 - pastedArt.width / 2, -144);

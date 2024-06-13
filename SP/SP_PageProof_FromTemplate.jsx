@@ -10,11 +10,10 @@ function SP_PageProof_FromTemplate() {
   // Metadata items
   var metadataLayer = doc.layers.getByName("Metadata");
   var metaGroup = metadataLayer.groupItems.getByName("MetaGroup");
-  // var metaOrder = metaGroup.textFrames.getByName("_ORDER");
   var metaArtFile = metaGroup.textFrames.getByName("_ART FILE");
+  var metaLocation = metaGroup.textFrames.getByName("_LOCATION");
 
   // Values for order & art file
-  // var order = metaOrder.textRange.contents;
   var artFile = metaArtFile.textRange.contents;
 
   // Exit if art not selected
@@ -50,12 +49,16 @@ function SP_PageProof_FromTemplate() {
   doc.activeLayer = proofLayer;
 
   // Set order number & art number values
-  // orderNumber.textRange.contents = order.replace(/ORDER /gi, "ORDER #: ");
   artNumber.textRange.contents = "ART #: " + artFile;
 
   // Paste copied art
   app.paste();
   var pastedArt = doc.selection[0];
+
+  // Rotate art if upside down on template
+  if (metaLocation.contents === "UD" || "PK") {
+    pastedArt.rotate(180);
+  }
 
   // Resize art to 7.5" wide if over
   if (pastedArt.width > 540) {
