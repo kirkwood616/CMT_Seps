@@ -56,16 +56,6 @@ function NTF_Arrange() {
     matchStore.push(matches);
   }
 
-  // 1080 = 15" MAX WIDTH
-  // 1440 = 20" MAX HEIGHT (1449 = 20.125" ext HEIGHT)
-  // 54 = 0.75"
-  // 36 = 0.50"
-
-  // 1620 bottom guide
-  // 1588.3859 bottom starting position
-  // 36 left guide
-  // 1116 right guide
-
   // Swatches
   var docSwatches = doc.swatches;
 
