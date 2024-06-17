@@ -56,7 +56,7 @@ function SP_PageProof_FromTemplate() {
   var pastedArt = doc.selection[0];
 
   // Rotate art if upside down on template
-  if (metaLocation.contents === "UD" || "PK") {
+  if (metaLocation.contents === "UD" || metaLocation.contents === "PK") {
     pastedArt.rotate(180);
   }
 
