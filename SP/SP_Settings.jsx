@@ -7,7 +7,6 @@ function SP_Settings() {
 
   if (system === "Mac") {
     slash = "/"
-    $.writeln("\\")
   }
   if (system === "Win") {
     slash = "\\"
@@ -66,7 +65,7 @@ function SP_Settings() {
   });
   var saveButton = createButton(buttonGroup, "SAVE", function () {
     settingsData.SP_templatePath = templatePath.text;
-    settingsData.SP_savePath = savePath.text + slash;
+    settingsData.SP_savePath = savePath.text;
     settingsData.SP_proofTemplatePath = proofTemplatePath.text
     writeSettings(settingsData, settingsFile);
     settingsWindow.close();
