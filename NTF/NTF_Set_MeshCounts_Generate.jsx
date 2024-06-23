@@ -123,9 +123,6 @@ function NTF_Set_MeshCounts_Generate() {
     var colorFrames = new Array();
     var swatchStorage = new Array();
 
-    // Unlock Metadata layer
-    metadataLayer.locked = false;
-
     // Deselect everything
     doc.selection = null;
 
@@ -173,9 +170,6 @@ function NTF_Set_MeshCounts_Generate() {
 
     // Deselect everything
     doc.selection = null;
-
-    // Unlock Metadata layer
-    metadataLayer.locked = false;
 
     // Check for if COLOR COUNT group exists
     for (var i = 0; i < metaDataGroups.length; i++) {
