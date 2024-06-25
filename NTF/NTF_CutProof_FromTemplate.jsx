@@ -185,6 +185,9 @@ function NTF_CutProof_FromTemplate() {
 
   // Lock Proof Metadata layer
   proofDoc.layers.getByName("Metadata").locked = true;
+
+  // Change White swatch color to pure white
+  toProofWhite("WHITE");
 }
 
 // Run
@@ -231,4 +234,37 @@ function getColorName(name) {
   }
 
   return thisColor;
+}
+
+function toProofWhite(whiteName) {
+  for (var i = 0; i < app.activeDocument.spots.length; i++) {
+    if (app.activeDocument.spots[i].name.indexOf(whiteName) !== -1) {
+      /// CMYK
+      if (app.activeDocument.spots[i].spotKind === SpotColorKind.SPOTCMYK) {
+        var newCMYK = new CMYKColor();
+        newCMYK.cyan = newCMYK.magenta = newCMYK.yellow = newCMYK.black = 0;
+
+        app.activeDocument.spots[i].color = newCMYK;
+        continue;
+      }
+
+      /// RGB
+      if (app.activeDocument.spots[i].spotKind === SpotColorKind.SPOTRGB) {
+        var newRGB = new RGBColor();
+        newRGB.red = newRGB.green = newRGB.blue = 255;
+
+        app.activeDocument.spots[i].color = newRGB;
+        continue;
+      }
+
+      /// LAB
+      if (app.activeDocument.spots[i].spotKind === SpotColorKind.SPOTLAB) {
+        var newLAB = new LabColor();
+        newLAB.l = 100;
+        newLAB.a = newLAB.b = 0;
+
+        app.activeDocument.spots[i].color = newLAB;
+      }
+    }
+  }
 }
