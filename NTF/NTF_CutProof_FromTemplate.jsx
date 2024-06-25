@@ -2,7 +2,7 @@ function NTF_CutProof_FromTemplate() {
   // Active NTF Template Document
   var templateDoc = app.activeDocument;
 
-  // De-select everything
+  // Deselect everything
   templateDoc.selection = null;
 
   // Layers
@@ -83,7 +83,7 @@ function NTF_CutProof_FromTemplate() {
       lastRect[2] + offsetH + (proofRect[2] - proofRect[0]),
       lastRect[3],
     ];
-    newBoard.name = (i + 1).toString();
+    newBoard.name = "CP_" + (i + 1).toString();
     app.executeMenuCommand("pasteBack");
     proofDoc.selection = null;
   }
@@ -127,13 +127,13 @@ function NTF_CutProof_FromTemplate() {
       var itemWidth = sel[j].width;
       var borderBox = proofLayerNames.pathItems.rectangle(0, 0, itemWidth + 36, itemHeight + 36);
       borderBox.move(proofLayerNames, ElementPlacement.PLACEATEND);
+      borderBox.selected = true;
       borderBox.filled = false;
       borderBox.stroked = true;
       borderBox.strokeWidth = 2;
       borderBox.strokeColor = borderStroke;
       borderBox.strokeDashes = [8];
       borderBox.position = [itemPosition[0] - 18, itemPosition[1] + 18];
-      borderBox.selected = true;
     }
 
     // Group & target current art
@@ -161,7 +161,7 @@ function NTF_CutProof_FromTemplate() {
     var artboard_x = proofDoc.artboards[i].artboardRect[0] + proofDoc.artboards[i].artboardRect[2];
     proofDoc.selection[0].position = [(artboard_x - proofDoc.selection[0].width) / 2, yPosBG - heightRemainder / 2];
 
-    // De-select everything
+    // Deselect everything
     proofDoc.selection = null;
   }
 
@@ -180,8 +180,11 @@ function NTF_CutProof_FromTemplate() {
     }
   }
 
-  // De-select everything
+  // Deselect everything
   proofDoc.selection = null;
+
+  // Lock Proof Metadata layer
+  proofDoc.layers.getByName("Metadata").locked = true;
 }
 
 // Run
