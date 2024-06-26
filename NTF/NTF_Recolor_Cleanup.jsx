@@ -8,6 +8,7 @@ function NTF_Recolor_Cleanup() {
 
   // Delete empty layers
   for (var i = 0; i < docLayers.length; i++) {
+    if (!docLayers[i].visible) docLayers[i].visible = true;
     if (docLayers[i].pageItems.length < 1) docLayers[i].remove();
   }
 
@@ -22,7 +23,7 @@ function NTF_Recolor_Cleanup() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name !== "NTF_Template") {
+  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "NTF_Template") {
     NTF_Recolor_Cleanup();
   } else {
     throw new Error("Template File Not Active");
