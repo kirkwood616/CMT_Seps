@@ -14,7 +14,7 @@ function NTF_Recolor_Cleanup() {
 
   // Recolor everything on a layer to the swatch matching it's name
   for (var i = 3; i < docLayers.length; i++) {
-    var layerSwatch = doc.swatches.getByName(docLayers[i].name);
+    var layerSwatch = getLayerSwatch(docLayers[i].name);
     docLayers[i].hasSelectedArtwork = true;
     doc.defaultFillColor = layerSwatch.color;
     doc.selection = null;
@@ -30,4 +30,21 @@ try {
   }
 } catch (e) {
   alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
+}
+
+//*******************
+// Helper functions
+//*******************
+
+/**
+ * Finds the swatch that contains the supplied layer name & returns the swatch.
+ * @param {string}    layerName Name of a layer
+ * @returns {Swatch}  The swatch with a matching name
+ */
+function getLayerSwatch(layerName) {
+  for (var i = 0; i < app.activeDocument.swatches.length; i++) {
+    if (app.activeDocument.swatches[i].name.indexOf(layerName) !== -1) {
+      return app.activeDocument.swatches[i];
+    }
+  }
 }
