@@ -6,7 +6,18 @@ function SP_Set_MeshCounts_Generate() {
   var docSwatches = doc.swatches;
 
   // Mesh Counts
-  var meshCounts = ["110", "125", "156", "156S", "180", "196", "230", "255"];
+  var meshCounts = ["110", "125", "156", "180", "196", "230", "255"];
+
+  var baseMeshIndex;
+  var stdMeshIndex;
+
+  for (var i = 0; i < meshCounts.length; i++) {
+    var baseMesh = /^125$/;
+    var stdMesh = /^156$/;
+
+    if (baseMesh.test(meshCounts[i])) baseMeshIndex = i;
+    if (stdMesh.test(meshCounts[i])) stdMeshIndex = i;
+  }
 
   // Storage
   var swatchColors = new Array();
@@ -25,7 +36,7 @@ function SP_Set_MeshCounts_Generate() {
     }
   }
 
-  // De-select everything
+  // Deselect everything
   doc.selection = null;
 
   // Select Mesh GUI window
@@ -58,9 +69,9 @@ function SP_Set_MeshCounts_Generate() {
         meshDropdown.selection = j;
         break;
       } else if (colorName.indexOf("WHITE UB") !== -1) {
-        meshDropdown.selection = 1;
+        meshDropdown.selection = baseMeshIndex;
       } else {
-        meshDropdown.selection = 2;
+        meshDropdown.selection = stdMeshIndex;
       }
     }
 
@@ -223,7 +234,7 @@ try {
     throw new Error("SP Template File Not Active");
   }
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }
 
 //*******************
@@ -353,10 +364,6 @@ function extractMeshSuffix(colorName, meshArray) {
 
   return meshSuffix;
 }
-
-//*******************
-// Helper functions
-//*******************
 
 /**
  * Remove unwanted characters from Metadata color text

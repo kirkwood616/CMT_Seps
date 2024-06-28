@@ -6,7 +6,18 @@ function SP_Set_MeshCounts() {
   var docSwatches = doc.swatches;
 
   // Mesh Counts
-  var meshCounts = ["110", "125", "156", "156S", "180", "196", "230", "255"];
+  var meshCounts = ["110", "125", "156", "180", "196", "230", "255"];
+
+  var baseMeshIndex;
+  var stdMeshIndex;
+
+  for (var i = 0; i < meshCounts.length; i++) {
+    var baseMesh = /^125$/;
+    var stdMesh = /^156$/;
+
+    if (baseMesh.test(meshCounts[i])) baseMeshIndex = i;
+    if (stdMesh.test(meshCounts[i])) stdMeshIndex = i;
+  }
 
   // Storage
   var swatchColors = new Array();
@@ -58,9 +69,9 @@ function SP_Set_MeshCounts() {
         meshDropdown.selection = j;
         break;
       } else if (colorName.indexOf("WHITE UB") !== -1) {
-        meshDropdown.selection = 1;
+        meshDropdown.selection = baseMeshIndex;
       } else {
-        meshDropdown.selection = 2;
+        meshDropdown.selection = stdMeshIndex;
       }
     }
 
