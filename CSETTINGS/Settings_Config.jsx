@@ -24,7 +24,7 @@ function Settings_Config() {
     NTF_proofTemplateSavePath: Folder.desktop + slash + "- WORKING DAY -" + slash,
     RTF_templatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "RTF_Template.ait",
     RTF_savePath: Folder.desktop + slash + "- WORKING DAY -" + slash,
-    meshCounts: ["86", "110", "125", "156", "180", "196", "230", "255", "280", "305"],
+    meshCounts: ["086", "110", "125", "156", "180", "196", "230", "255", "280", "305"],
   };
 
   // Set up & load settings
@@ -228,34 +228,51 @@ function Settings_Config() {
     var meshCheckbox = createCheckbox(MESH_group, defaultSettings.meshCounts[i], isMeshChecked);
   }
 
-
-  // GROUP2
-  // ======
-  var group2 = dialog.add("group", undefined, { name: "group2" });
-  group2.orientation = "row";
-  group2.alignChildren = ["left", "top"];
-  group2.spacing = 10;
-  group2.margins = 0;
-  group2.alignment = ["center", "top"];
-
   // GROUP3
   // ======
-  var group3 = dialog.add("group", undefined, { name: "group3" });
-  group3.orientation = "row";
-  group3.alignChildren = ["center", "fill"];
-  group3.spacing = 10;
-  group3.margins = [2, 18, 2, 2];
-  group3.alignment = ["fill", "top"];
+  var buttonGroup = dialog.add("group", undefined, { name: "buttonGroup" });
+  buttonGroup.orientation = "row";
+  buttonGroup.alignChildren = ["center", "fill"];
+  buttonGroup.spacing = 10;
+  buttonGroup.margins = [2, 18, 2, 2];
+  buttonGroup.alignment = ["fill", "top"];
 
-  var button11 = group3.add("button", undefined, undefined, { name: "button11" });
-  button11.text = "CANCEL";
-  button11.preferredSize.width = 75;
-  button11.alignment = ["center", "center"];
+  var cancelButton = createButton(buttonGroup, "CANCEL", function () {
+    dialog.close();
+  });
 
-  var button12 = group3.add("button", undefined, undefined, { name: "button12" });
-  button12.text = "SAVE";
-  button12.preferredSize.width = 75;
+  var saveButton = createButton(buttonGroup, "SAVE", function () {
+    // File Paths
+    settingsData.SP_templatePath = SP_templatePath__path.text;
+    settingsData.SP_savePath = SP_templateSavePath__path.text;
+    settingsData.SP_proofTemplatePath = SP_proofPath__path.text;
+    settingsData.SP_proofTemplateSavePath = SP_proofSavePath__path.text;
+    settingsData.NTF_templatePath = NTF_templatePath__path.text;
+    settingsData.NTF_savePath = NTF_templateSavePath__path.text;
+    settingsData.NTF_proofTemplatePath = NTF_proofPath__path.text;
+    settingsData.NTF_proofTemplateSavePath = NTF_proofSavePath__path.text;
+    settingsData.RTF_templatePath = RTF_templatePath__path.text;
+    settingsData.RTF_savePath = RTF_templateSavePath__path.text;
 
+    // Mesh
+    var checkedMeshes = new Array();
+
+    for (var i = 0; i < MESH_group.children.length; i++) {
+      if (MESH_group.children[i].value) {
+        checkedMeshes.push(MESH_group.children[i].text);
+      }
+    }
+
+    checkedMeshes.sort();
+
+    settingsData.meshCounts = checkedMeshes;
+
+    // Save settings & close Dialog Windowe
+    writeSettings(settingsData, settingsFile);
+    dialog.close();
+  });
+
+  // Show Dialog Window
   dialog.show();
 }
 
