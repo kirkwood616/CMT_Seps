@@ -46,23 +46,23 @@ function Settings_Config() {
   dialog.spacing = 10;
   dialog.margins = 25;
 
-  // VERTICALTABBEDPANEL1
+  // verticalTabPanel
   // ====================
-  var verticaltabbedpanel1 = dialog.add("group", undefined, undefined, { name: "verticaltabbedpanel1" });
-  verticaltabbedpanel1.alignChildren = ["left", "fill"];
-  var verticaltabbedpanel1_nav = verticaltabbedpanel1.add("listbox", undefined, ["SP", "NTF", "RTF", "MESH"]);
-  verticaltabbedpanel1_nav.preferredSize.width = 73;
-  var verticaltabbedpanel1_innerwrap = verticaltabbedpanel1.add("group");
-  verticaltabbedpanel1_innerwrap.alignment = ["fill", "fill"];
-  verticaltabbedpanel1_innerwrap.orientation = ["stack"];
-  verticaltabbedpanel1.preferredSize.width = 600;
-  verticaltabbedpanel1.alignment = ["fill", "top"];
+  var verticalTabPanel = dialog.add("group", undefined, undefined, { name: "verticalTabPanel" });
+  verticalTabPanel.alignChildren = ["left", "fill"];
+  var verticalTabPanel_nav = verticalTabPanel.add("listbox", undefined, ["SP", "NTF", "RTF", "MESH"]);
+  verticalTabPanel_nav.preferredSize.width = 73;
+  var verticalTabPanel_innerwrap = verticalTabPanel.add("group");
+  verticalTabPanel_innerwrap.alignment = ["fill", "fill"];
+  verticalTabPanel_innerwrap.orientation = ["stack"];
+  verticalTabPanel.preferredSize.width = 600;
+  verticalTabPanel.alignment = ["fill", "top"];
 
   // TAB1 - SP
   // ====
-  var SP_tab = createTabGroup(verticaltabbedpanel1_innerwrap, "SP");
+  var SP_tab = createTabGroup(verticalTabPanel_innerwrap, "SP");
 
-  // PANEL1
+  // SP TEMPLATE PANEL
   // ======
   var SP_panel__templatePath = createFilePanel(SP_tab, "SP TEMPLATE FILE PATH");
 
@@ -73,7 +73,7 @@ function Settings_Config() {
 
   var SP_templatePath__path = createFileText(SP_panel__templatePath, settingsData.SP_templatePath);
 
-  // PANEL2
+  // SP TEMPLATE SAVE PANEL
   // ======
   var SP_panel__templateSavePath = createFilePanel(SP_tab, "SP SAVE FOLDER PATH");
 
@@ -84,7 +84,7 @@ function Settings_Config() {
 
   var SP_templateSavePath__path = createFileText(SP_panel__templateSavePath, settingsData.SP_savePath);
 
-  // PANEL3
+  // SP PROOF TEMPLATE PANEL
   // ======
   var SP_panel__proofPath = createFilePanel(SP_tab, "SP PROOF TEMPLATE FILE PATH");
 
@@ -95,7 +95,7 @@ function Settings_Config() {
 
   var SP_proofPath__path = createFileText(SP_panel__proofPath, settingsData.SP_proofTemplatePath);
 
-  // PANEL4
+  // SP PROOF SAVE PANEL
   // ======
   var SP_panel__proofSavePath = createFilePanel(SP_tab, "SP PROOF TEMPLATE SAVE PATH");
 
@@ -108,9 +108,9 @@ function Settings_Config() {
 
   // TAB2 - NTF
   // ====
-  var NTF_tab = createTabGroup(verticaltabbedpanel1_innerwrap, "NTF");
+  var NTF_tab = createTabGroup(verticalTabPanel_innerwrap, "NTF");
 
-  // PANEL5
+  // NTF TEMPLATE PANEL
   // ======
   var NTF_panel__templatePath = createFilePanel(NTF_tab, "NTF TEMPLATE FILE PATH");
 
@@ -121,7 +121,7 @@ function Settings_Config() {
 
   var NTF_templatePath__path = createFileText(NTF_panel__templatePath, settingsData.NTF_templatePath);
 
-  // PANEL6
+  // NTF SAVE PANEL
   // ======
   var NTF_panel__templateSavePath = createFilePanel(NTF_tab, "NTF SAVE FOLDER PATH");
 
@@ -132,7 +132,7 @@ function Settings_Config() {
 
   var NTF_templateSavePath__path = createFileText(NTF_panel__templateSavePath, settingsData.NTF_proofTemplateSavePath);
 
-  // PANEL7
+  // NTF PROOF TEMPLATE PANEL
   // ======
   var NTF_panel__proofPath = createFilePanel(NTF_tab, "NTF PROOF TEMPLATE FILE PATH");
 
@@ -143,7 +143,7 @@ function Settings_Config() {
 
   var NTF_proofPath__path = createFileText(NTF_panel__proofPath, settingsData.NTF_proofTemplatePath);
 
-  // PANEL8
+  // NTF PROOF SAVE PANEL
   // ======
   var NTF_panel__proofSavePath = createFilePanel(NTF_tab, "NTF PROOF TEMPLATE SAVE PATH");
 
@@ -156,9 +156,9 @@ function Settings_Config() {
 
   // TAB3 - RTF
   // ====
-  var RTF_tab = createTabGroup(verticaltabbedpanel1_innerwrap, "RTF");
+  var RTF_tab = createTabGroup(verticalTabPanel_innerwrap, "RTF");
 
-  // PANEL9
+  // RTF TEMPLATE PANEL
   // ======
   var RTF_panel__templatePath = createFilePanel(RTF_tab, "RTF TEMPLATE FILE PATH");
 
@@ -169,7 +169,7 @@ function Settings_Config() {
 
   var RTF_templatePath__path = createFileText(RTF_panel__templatePath, settingsData.RTF_templatePath);
 
-  // PANEL10
+  // NTF SAVE PANEL
   // =======
   var RTF_panel__templateSavePath = createFilePanel(RTF_tab, "RTF SAVE FOLDER PATH");
 
@@ -182,32 +182,32 @@ function Settings_Config() {
 
   // TAB4 - MESH
   // ====
-  var MESH_tab = createTabGroup(verticaltabbedpanel1_innerwrap, "MESH");
+  var MESH_tab = createTabGroup(verticalTabPanel_innerwrap, "MESH");
 
-  // VERTICALTABBEDPANEL1
+  // verticalTabPanel DISPLAY
   // ====================
-  verticaltabbedpanel1_tabs = [SP_tab, NTF_tab, RTF_tab, MESH_tab];
+  var verticalTabPanel_tabs = [SP_tab, NTF_tab, RTF_tab, MESH_tab];
 
-  for (var i = 0; i < verticaltabbedpanel1_tabs.length; i++) {
-    verticaltabbedpanel1_tabs[i].alignment = ["fill", "fill"];
-    verticaltabbedpanel1_tabs[i].visible = false;
+  for (var i = 0; i < verticalTabPanel_tabs.length; i++) {
+    verticalTabPanel_tabs[i].alignment = ["fill", "fill"];
+    verticalTabPanel_tabs[i].visible = false;
   }
 
-  verticaltabbedpanel1_nav.onChange = showTab_verticaltabbedpanel1;
+  verticalTabPanel_nav.onChange = showTab_verticalTabPanel;
 
-  function showTab_verticaltabbedpanel1() {
-    if (verticaltabbedpanel1_nav.selection !== null) {
-      for (var i = verticaltabbedpanel1_tabs.length - 1; i >= 0; i--) {
-        verticaltabbedpanel1_tabs[i].visible = false;
+  function showTab_verticalTabPanel() {
+    if (verticalTabPanel_nav.selection !== null) {
+      for (var i = verticalTabPanel_tabs.length - 1; i >= 0; i--) {
+        verticalTabPanel_tabs[i].visible = false;
       }
-      verticaltabbedpanel1_tabs[verticaltabbedpanel1_nav.selection.index].visible = true;
+      verticalTabPanel_tabs[verticalTabPanel_nav.selection.index].visible = true;
     }
   }
 
-  verticaltabbedpanel1_nav.selection = 0;
-  showTab_verticaltabbedpanel1();
+  verticalTabPanel_nav.selection = 0;
+  showTab_verticalTabPanel();
 
-  // GROUP1
+  // MESH CHECKBOX GROUP
   // ======
   var MESH_group = MESH_tab.add("group", undefined, { name: "MESH_group" });
   MESH_group.orientation = "column";
@@ -228,7 +228,7 @@ function Settings_Config() {
     var meshCheckbox = createCheckbox(MESH_group, defaultSettings.meshCounts[i], isMeshChecked);
   }
 
-  // GROUP3
+  // BUTTON CONTROL GROUP
   // ======
   var buttonGroup = dialog.add("group", undefined, { name: "buttonGroup" });
   buttonGroup.orientation = "row";
@@ -267,7 +267,7 @@ function Settings_Config() {
 
     settingsData.meshCounts = checkedMeshes;
 
-    // Save settings & close Dialog Windowe
+    // Save settings & close Dialog Window
     writeSettings(settingsData, settingsFile);
     dialog.close();
   });
@@ -287,8 +287,13 @@ try {
 // Helper functions
 //*******************
 
+/**
+ * Uses supplied folder and file name to pull settings from, or creates folder & file if they don't exist.
+ * @param {string} folderName Name of folder
+ * @param {string} fileName Name of file
+ * @returns {File}
+ */
 function setupSettingsFile(folderName, fileName) {
-  // setup save setting folder and file
   var settingsFolderPath = Folder.myDocuments + "/" + folderName;
   var settingsFolder = new Folder(settingsFolderPath);
   if (!settingsFolder.exists) settingsFolder.create();
@@ -296,7 +301,11 @@ function setupSettingsFile(folderName, fileName) {
   return new File(settingsFilePath);
 }
 
-// load settings if available
+/**
+ * Parses a JSON file and returns the data as an object.
+ * @param {File}      file JSON file
+ * @returns {Object}  Parsed JSON data
+ */
 function loadJSONData(file) {
   if (file.exists) {
     try {
@@ -312,6 +321,11 @@ function loadJSONData(file) {
   }
 }
 
+/**
+ * Writes data to a JSON file.
+ * @param {Object}  data Settings data object
+ * @param {File}    file JSON file to write settings to
+ */
 function writeSettings(data, file) {
   try {
     file.encoding = "UTF-8";
@@ -321,14 +335,6 @@ function writeSettings(data, file) {
   } catch (e) {
     ("Error saving Settings file.");
   }
-}
-
-function getObjectKeys(obj) {
-  var keys = [];
-  for (var k in obj) {
-    keys.push(k);
-  }
-  return keys;
 }
 
 /**
@@ -349,7 +355,7 @@ function createTabGroup(parent, name) {
 }
 
 /**
- * Creates a panel for file path input
+ * Creates a panel for file path input.
  * @param {Window|Group|Panel}  parent Where to add the panel into
  * @param {string}              text Text contents of panel header
  * @returns {Panel}
@@ -366,7 +372,7 @@ function createFilePanel(parent, text) {
 }
 
 /**
- * Creates a clickable button.
+ * Creates a clickable button item.
  * @param {Window|Group|Panel}  parent Where to add button into
  * @param {any}                 title Text to be shown inside of button
  * @param {() => void}          [onClick] Callback function to run when button is clicked
