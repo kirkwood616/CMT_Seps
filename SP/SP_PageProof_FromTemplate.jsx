@@ -88,9 +88,8 @@ function SP_PageProof_FromTemplate() {
 
   // Set Due Date
   var dueDate = proofLayer.textFrames.getByName("DUE");
-  var currentDueDate = dueDate.textRange.contents.replace(/DUE: /gi, "");
   var newOrderNumber = prompt("ENTER ORDER #", "123456", "ORDER NUMBER");
-  var newDueDate = prompt("ENTER DUE DATE", currentDueDate, "DUE DATE");
+  var newDueDate = prompt("ENTER DUE DATE", dateToday(), "DUE DATE");
 
   if (newOrderNumber) {
     orderNumber.textRange.contents = "ORDER #: " + newOrderNumber;
@@ -190,4 +189,18 @@ function toTallPosition(art, background) {
     art.translate(0, backgroundOffset);
     background.translate(0, backgroundOffset);
   }
+}
+
+/**
+ *
+ * @returns {string} Todays date formatted in M/DD or MM/DD
+ */
+function dateToday() {
+  var date = new Date();
+  var todaysDate =
+    (date.getMonth() > 8 ? date.getMonth() + 1 : date.getMonth() + 1) +
+    "/" +
+    (date.getDate() > 9 ? date.getDate() : date.getDate());
+
+  return todaysDate;
 }
