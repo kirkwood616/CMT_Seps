@@ -1,7 +1,19 @@
 function NTF_SaveFile() {
-  // Folder where the document will be saved
-  // Update this path to where you want your files saved
-  var destinationFolder = "~/Desktop/- WORKING DAY -/";
+  // System
+  var system = $.os.substring(0, 3);
+  var slash;
+
+  if (system === "Mac") {
+    slash = "/";
+  }
+  if (system === "Win") {
+    slash = "\\";
+  }
+
+  // Set up & load settings
+  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsData = loadJSONData(settingsFile);
+  var destinationFolder = settingsData.NTF_savePath;
 
   // Active Document
   var doc = app.activeDocument;
@@ -25,12 +37,12 @@ function NTF_SaveFile() {
 
   try {
     // Save file
-    doc.saveAs(new File(destinationFolder + fileName));
+    doc.saveAs(new File(destinationFolder + slash + fileName));
 
     // Alert
-    alert("File Saved" + "\n" + destinationFolder + fileName);
+    alert("File Saved" + "\n" + destinationFolder + slash + fileName);
   } catch (e) {
-    throw new Error(e);
+    throw new Error(e.message);
   }
 }
 
@@ -42,12 +54,46 @@ try {
     throw new Error("RTF Template File Not Active");
   }
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }
 
 //*******************
 // Helper functions
 //*******************
+
+/**
+ * Uses supplied folder and file name to pull settings from, or creates folder & file if they don't exist.
+ * @param {string} folderName Name of folder
+ * @param {string} fileName Name of file
+ * @returns {File}
+ */
+function setupSettingsFile(folderName, fileName) {
+  var settingsFolderPath = Folder.myDocuments + "/" + folderName;
+  var settingsFolder = new Folder(settingsFolderPath);
+  if (!settingsFolder.exists) settingsFolder.create();
+  var settingsFilePath = settingsFolder + "/" + fileName;
+  return new File(settingsFilePath);
+}
+
+/**
+ * Parses a JSON file and returns the data as an object.
+ * @param {File}      file JSON file
+ * @returns {Object}  Parsed JSON data
+ */
+function loadJSONData(file) {
+  if (file.exists) {
+    try {
+      file.encoding = "UTF-8";
+      file.open("r");
+      var data = file.read();
+      file.close();
+      data = JSON.parse(data);
+      return data;
+    } catch (e) {
+      ("Error loading Settings file.");
+    }
+  }
+}
 
 /**
  * Takes a provided string, from ink color Metadata, trims the string to characters preceeding an underscore (if present) and returns the trimmed string.
