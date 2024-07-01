@@ -1,3 +1,5 @@
+#include 'json2.js';
+
 function NTF_SaveFile() {
   // System
   var system = $.os.substring(0, 3);
