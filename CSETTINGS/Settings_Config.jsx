@@ -15,15 +15,15 @@ function Settings_Config() {
   // Default settings
   var defaultSettings = {
     SP_templatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "SP_Template.ait",
-    SP_savePath: Folder.desktop + slash + "- WORKING DAY -" + slash,
+    SP_savePath: Folder.desktop + slash + "- WORKING DAY -",
     SP_proofTemplatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "PAGE_PROOF.ait",
-    SP_proofTemplateSavePath: Folder.desktop + slash + "- WORKING DAY -" + slash,
+    SP_proofTemplateSavePath: Folder.desktop + slash + "- WORKING DAY -",
     NTF_templatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "NTF_Template.ait",
-    NTF_savePath: Folder.desktop + slash + "- WORKING DAY -" + slash,
+    NTF_savePath: Folder.desktop + slash + "- WORKING DAY -",
     NTF_proofTemplatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "NTF_Cut_Proof.ait",
-    NTF_proofTemplateSavePath: Folder.desktop + slash + "- WORKING DAY -" + slash,
+    NTF_proofTemplateSavePath: Folder.desktop + slash + "- WORKING DAY -",
     RTF_templatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "RTF_Template.ait",
-    RTF_savePath: Folder.desktop + slash + "- WORKING DAY -" + slash,
+    RTF_savePath: Folder.desktop + slash + "- WORKING DAY -",
     meshCounts: ["086", "110", "125", "156", "180", "196", "230", "255", "280", "305"],
   };
 
