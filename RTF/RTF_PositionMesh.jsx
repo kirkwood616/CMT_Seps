@@ -1,4 +1,10 @@
+#include 'json2.js';
+
 function RTF_PositionMesh() {
+  // Set up & load settings
+  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsData = loadJSONData(settingsFile);
+
   // Active Document
   var doc = app.activeDocument;
 
@@ -13,7 +19,14 @@ function RTF_PositionMesh() {
   var docSpots = doc.spots;
 
   // Mesh Counts
-  var meshCounts = ["110", "125", "156", "156S", "180", "196", "230", "255"];
+  var meshCounts = settingsData.meshCounts;
+  var baseMeshIndex = meshCounts[0];
+
+  for (var i = 0; i < meshCounts.length; i++) {
+    var baseMesh = /^110$/;
+
+    if (baseMesh.test(meshCounts[i])) baseMeshIndex = i;
+  }
 
   // Storage Variables
   var artColors = new Array();
@@ -71,7 +84,7 @@ function RTF_PositionMesh() {
 
     // Color Mesh Count Dropdown
     var meshDropdown = createDropdown(colorPanel, meshCounts);
-    meshDropdown.selection = 0;
+    meshDropdown.selection = baseMeshIndex;
     meshDropdown.onChange = function () {
       colorSettings[i].colorMesh = this.selection.text;
     };
@@ -157,6 +170,54 @@ try {
 //*******************
 // Helper functions
 //*******************
+
+/**
+ * Uses supplied folder and file name to pull settings from, or creates folder & file if they don't exist.
+ * @param {string} folderName Name of folder
+ * @param {string} fileName Name of file
+ * @returns {File}
+ */
+function setupSettingsFile(folderName, fileName) {
+  var settingsFolderPath = Folder.myDocuments + "/" + folderName;
+  var settingsFolder = new Folder(settingsFolderPath);
+
+  try {
+    if (!settingsFolder.exists) {
+      throw new Error("Settings folder doesn't exist." + "\n" + "Run 'CMT SEPS SETTINGS' and save your settings.");
+    }
+
+    var settingsFilePath = settingsFolder + "/" + fileName;
+    var settingsFile = new File(settingsFilePath);
+
+    if (!settingsFile.exists) {
+      throw new Error("Settings file doesn't exist." + "\n" + "Run 'CMT SEPS SETTINGS' and save your settings.");
+    }
+
+    return new File(settingsFilePath);
+  } catch (e) {
+    throw new Error(e.message);
+  }
+}
+
+/**
+ * Parses a JSON file and returns the data as an object.
+ * @param {File}      file JSON file
+ * @returns {Object}  Parsed JSON data
+ */
+function loadJSONData(file) {
+  if (file.exists) {
+    try {
+      file.encoding = "UTF-8";
+      file.open("r");
+      var data = file.read();
+      file.close();
+      data = JSON.parse(data);
+      return data;
+    } catch (e) {
+      throw new Error("Error loading Settings file.");
+    }
+  }
+}
 
 // Create Window Panel
 function createPanel(parent, title) {
