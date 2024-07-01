@@ -10,6 +10,9 @@ function SP_CW_Set_Ammount() {
     throw new Error("No Selected Art" + "\n" + "Select Art Before Running.");
   }
 
+  // Overprint Fill selection
+  #include 'Overprint_Fill_True.jsx';
+
   // Current layer (will be CW_1)
   var artLayer = doc.activeLayer;
 
