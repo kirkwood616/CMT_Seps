@@ -32,12 +32,14 @@
     - `NTF PROOF TEMPLATE FILE PATH` = `NTF_Cut_Proof.ait`
     - `RTF TEMPLATE FILE PATH` = `RTF_Template.ait`
 
-11. In the `MESH` tab there is a list of all standard mesh counts. These will appear in a list for scripts that prompt for Mesh Count selection. Uncheck any mesh counts you do not want to appear in the mesh selection lists.
+11. All `SAVE FOLDER PATH` and `SAVE PATH` are defaulted to `Desktop/- WORKING DAY -`. Either create a folder on your Desktop titled `- WORKING DAY -`, or select a folder where you would like the files saved to.
 
-12. Click `SAVE` button at the bottom to save your settings.
+12. In the `MESH` tab there is a list of all standard mesh counts. These will appear in a list for scripts that prompt for Mesh Count selection. Uncheck any mesh counts you do not want to appear in the mesh selection lists.
+
+13. Click `SAVE` button at the bottom to save your settings.
 
 > [!WARNING]
-> If you receive any errors when trying to open templates via these actions, your file paths are not set correctly.
+> If you receive any errors when trying to open templates or save files via these actions, your file paths are not set correctly. Re-run the settings action and confirm your file and folder paths are set correctly.
 
 > [!CAUTION]
 > The Settings feature will create a folder named `CMT_Seps_Settings` in your `Documents` folder. DO NOT DELETE OR MODIFY THIS FOLDER OR IT'S CONTENTS.
