@@ -10,7 +10,8 @@
 
 5. Copy or move all capitalized folders to Adobe Scripts folder (`AF, CSETTINGS, NTF, RTF, SP`)
 
-   > **_If any folders are already present in the Scripts folder, make sure to REPLACE ALL folders with the new versions_**
+   > [!IMPORTANT]
+   > If any folders are already present in the Scripts folder, make sure to REPLACE ALL folders with the new versions
 
 6. If Illustrator is currently running, Quit the application and relaunch for the scripts to be accessible.
 
@@ -18,7 +19,8 @@
 
 8. Load actions from `CMT_Seps-main/actions/CMT_Seps_ACTIONS.ait`
 
-   > _It is recommended to select `Button Mode` for ease of use._
+   > [!TIP]
+   > Í> It is recommended to select `Button Mode` for ease of use.
 
 9. Before using these actions, you will need to open any Illustrator file, and run the first action `»» CMT SEPS SETTINGS ««` to define the paths to the templates and save folders.
 
@@ -33,7 +35,9 @@
 11. In the `MESH` tab there is a list of all standard mesh counts. These will appear in a list for scripts that prompt for Mesh Count selection. Uncheck any mesh counts you do not want to appear in the mesh selection lists.
 
 12. Click `SAVE` button at the bottom to save your settings.
-    > **_If you receive any errors when trying to open templates via these actions, your file paths are not set correctly._**
 
-> [!IMPORTANT]
-> The Settings feature will create a folder named CMT*Seps_Settings in your Documents folder. \*\*\_DO NOT DELETE OR MODIFY THIS FOLDER OR IT'S CONTENTS*\*\*
+    > [!WARNING]
+    > If you receive any errors when trying to open templates via these actions, your file paths are not set correctly.
+
+> [!CAUTION]
+> The Settings feature will create a folder named `CMT_Seps_Settings` in your `Documents` folder. DO NOT DELETE OR MODIFY THIS FOLDER OR IT'S CONTENTS.
