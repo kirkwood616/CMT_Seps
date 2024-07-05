@@ -10,8 +10,8 @@
 
 5. Copy or move all capitalized folders to Adobe Scripts folder (`AF, CSETTINGS, NTF, RTF, SP`)
 
-   > [!IMPORTANT]
-   > If any folders are already present in the Scripts folder, make sure to REPLACE ALL folders with the new versions
+> [!IMPORTANT]
+> If any folders are already present in the Scripts folder, make sure to REPLACE ALL folders with the new versions
 
 6. If Illustrator is currently running, Quit the application and relaunch for the scripts to be accessible.
 
@@ -19,8 +19,8 @@
 
 8. Load actions from `CMT_Seps-main/actions/CMT_Seps_ACTIONS.ait`
 
-   > [!TIP]
-   > Í> It is recommended to select `Button Mode` for ease of use.
+> [!TIP]
+> Í> It is recommended to select `Button Mode` for ease of use.
 
 9. Before using these actions, you will need to open any Illustrator file, and run the first action `»» CMT SEPS SETTINGS ««` to define the paths to the templates and save folders.
 
@@ -36,8 +36,8 @@
 
 12. Click `SAVE` button at the bottom to save your settings.
 
-    > [!WARNING]
-    > If you receive any errors when trying to open templates via these actions, your file paths are not set correctly.
+> [!WARNING]
+> If you receive any errors when trying to open templates via these actions, your file paths are not set correctly.
 
 > [!CAUTION]
 > The Settings feature will create a folder named `CMT_Seps_Settings` in your `Documents` folder. DO NOT DELETE OR MODIFY THIS FOLDER OR IT'S CONTENTS.
