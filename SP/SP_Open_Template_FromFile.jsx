@@ -83,6 +83,7 @@ function SP_Open_Template_FromFile() {
   artName.contents = artNumber;
 }
 
+// Run
 try {
   SP_Open_Template_FromFile();
 } catch (e) {

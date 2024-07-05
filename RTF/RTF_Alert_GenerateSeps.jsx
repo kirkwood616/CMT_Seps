@@ -45,5 +45,5 @@ function RTF_Alert_GenerateSeps() {
 try {
   RTF_Alert_GenerateSeps();
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }

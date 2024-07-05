@@ -62,7 +62,7 @@ try {
     throw new Error("RTF Template File Not Active");
   }
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }
 
 //*******************

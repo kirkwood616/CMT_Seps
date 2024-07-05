@@ -68,7 +68,7 @@ try {
     throw new Error("PAGE_PROOF Template Not Active");
   }
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }
 
 //*******************

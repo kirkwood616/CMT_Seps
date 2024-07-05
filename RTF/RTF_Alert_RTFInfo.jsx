@@ -46,7 +46,7 @@ function RTF_Alert_RTFInfo() {
 try {
   RTF_Alert_RTFInfo();
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }
 
 //*******************

@@ -17,5 +17,5 @@ function RTF_Alert_GenerateLayout() {
 try {
   RTF_Alert_GenerateLayout();
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }

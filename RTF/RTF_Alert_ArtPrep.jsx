@@ -77,5 +77,5 @@ function RTF_Alert_ArtPrep() {
 try {
   RTF_Alert_ArtPrep();
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }

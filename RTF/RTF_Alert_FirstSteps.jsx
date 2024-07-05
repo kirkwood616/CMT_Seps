@@ -48,5 +48,5 @@ function RTF_Alert_FirstSteps() {
 try {
   RTF_Alert_FirstSteps();
 } catch (e) {
-  alert(e, "Script Alert", true);
+  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }
