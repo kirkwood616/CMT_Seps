@@ -20,7 +20,7 @@
 8. Load actions from `CMT_Seps-main/actions/CMT_Seps_ACTIONS.ait`
 
 > [!TIP]
-> Í> It is recommended to select `Button Mode` for ease of use.
+> It is recommended to select `Button Mode` for ease of use.
 
 9. Before using these actions, you will need to open any Illustrator file, and run the first action `»» CMT SEPS SETTINGS ««` to define the paths to the templates and save folders.
 
