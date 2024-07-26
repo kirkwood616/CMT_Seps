@@ -27,7 +27,7 @@ function RTF_SaveFile() {
   var metaArtFileText = metadataLayer.textFrames.getByName("ART FILE").contents;
 
   // Extract the art number from text frame
-  var artNumber = metaArtFileText.replace(/ART FILE: /gi, "");
+  var artNumber = metaArtFileText.replace(/ART NUMBER: /gi, "");
 
   // Create file name with appropriate ending
   var fileName = artNumber + "sc" + " " + "(RTF)" + ".ai";
