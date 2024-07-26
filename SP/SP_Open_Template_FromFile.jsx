@@ -102,7 +102,8 @@ try {
 function formatArtName(artName) {
   var newArtName = artName.replace(/.ai/gi, "");
   var noParenthesis = newArtName.replace(/\s*\(.*?\)\s*/g, "");
-  newArtName = noParenthesis;
+  var noMultipleDash = noParenthesis.split("-", 3).join("-");
+  newArtName = noMultipleDash;
 
   switch (true) {
     case newArtName.indexOf("sc") !== -1:
