@@ -1,4 +1,4 @@
-#include 'json2.js';
+//@include 'json2.js';
 
 function SP_Open_Template_FromFile() {
   // Active Document
@@ -137,7 +137,7 @@ function setupSettingsFile(folderName, fileName) {
     if (!settingsFolder.exists) {
       throw new Error("Settings folder doesn't exist." + "\n" + "Run 'CMT SEPS SETTINGS' and save your settings.");
     }
-  
+
     var settingsFilePath = settingsFolder + "/" + fileName;
     var settingsFile = new File(settingsFilePath);
 

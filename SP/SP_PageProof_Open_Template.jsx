@@ -1,4 +1,4 @@
-#include 'json2.js';
+//@include 'json2.js';
 
 function SP_PageProof_Open_Template() {
   // Set up & load settings

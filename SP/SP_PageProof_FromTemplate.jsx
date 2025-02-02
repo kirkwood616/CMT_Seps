@@ -1,4 +1,4 @@
-#include 'json2.js';
+//@include 'json2.js';
 
 function SP_PageProof_FromTemplate() {
   // Set up & load settings
@@ -54,6 +54,9 @@ function SP_PageProof_FromTemplate() {
   // Paste copied art
   app.paste();
   var pastedArt = doc.selection[0];
+
+  // Call local script to set Overprint Fill to false on art selection
+  //@include 'Overprint_Fill_False.jsx'
 
   // Rotate art if upside down on template
   if (metaLocation.contents === "UD" || metaLocation.contents === "PK") {
