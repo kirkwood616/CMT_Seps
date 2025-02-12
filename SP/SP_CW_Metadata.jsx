@@ -125,6 +125,7 @@ function SP_CW_Metadata() {
   var buttonGroup = windowCW.add("group");
   var cancelButton = buttonGroup.add("button", undefined, "Cancel");
   cancelButton.onClick = function () {
+    cwRegroupArt(cwLayers);
     windowCW.close();
   };
   var okButton = buttonGroup.add("button", undefined, "Generate", { name: "ok" });
