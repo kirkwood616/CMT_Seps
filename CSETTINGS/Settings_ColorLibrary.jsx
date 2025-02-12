@@ -2,9 +2,12 @@
 
 function Settings_ColorLibrary() {
   // Set up & load Settings_Config file
-  // var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
-  // var settingsData = loadJSONData(settingsFile);
-  // var filePath = settingsData.ColorLibrary_path;
+  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsData = loadJSONData(settingsFile);
+  var filePath = settingsData.ColorLibrary_filePath;
+
+  // Open Color Library file
+  app.open(new File(filePath));
 
   // Color Library Doc
   var doc = app.activeDocument;
@@ -44,6 +47,12 @@ function Settings_ColorLibrary() {
 
   // Save to Settings_ColorLibrary file
   writeSettings(colorData, colorLibraryFile);
+
+  // Alert Success
+  alert("Color Library Settings Successful!\n\nDocument will close.");
+
+  // Close file
+  doc.close(SaveOptions.DONOTSAVECHANGES);
 }
 
 // Run
