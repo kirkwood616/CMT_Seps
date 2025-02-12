@@ -1,16 +1,8 @@
-#include 'json2.js';
+//@include '../UTILITIES/Settings.jsx';
 
 function Settings_Config() {
   // System
-  var system = $.os.substring(0, 3);
-  var slash;
-
-  if (system === "Mac") {
-    slash = "/";
-  }
-  if (system === "Win") {
-    slash = "\\";
-  }
+  var slash = getSlashOS();
 
   // Default settings
   var defaultSettings = {
@@ -25,10 +17,12 @@ function Settings_Config() {
     RTF_templatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "RTF_Template.ait",
     RTF_savePath: Folder.desktop + slash + "- WORKING DAY -",
     meshCounts: ["086", "110", "125", "156", "180", "196", "230", "255", "280", "305"],
+    ColorLibrary_filePath:
+      Folder.desktop + slash + "CMT_seps-main" + slash + "color_library" + slash + "Ink Color Palette 2025 LOAD.ai",
   };
 
   // Set up & load settings
-  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsFile = configSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
   var settingsData = settingsFile.exists ? loadJSONData(settingsFile) : defaultSettings;
 
   if (!settingsFile.exists) {
@@ -50,8 +44,8 @@ function Settings_Config() {
   // ====================
   var verticalTabPanel = dialog.add("group", undefined, undefined, { name: "verticalTabPanel" });
   verticalTabPanel.alignChildren = ["left", "fill"];
-  var verticalTabPanel_nav = verticalTabPanel.add("listbox", undefined, ["SP", "NTF", "RTF", "MESH"]);
-  verticalTabPanel_nav.preferredSize.width = 73;
+  var verticalTabPanel_nav = verticalTabPanel.add("listbox", undefined, ["SP", "NTF", "RTF", "MESH", "COLOR LIBRARY"]);
+  verticalTabPanel_nav.preferredSize.width = 125;
   var verticalTabPanel_innerwrap = verticalTabPanel.add("group");
   verticalTabPanel_innerwrap.alignment = ["fill", "fill"];
   verticalTabPanel_innerwrap.orientation = ["stack"];
@@ -184,9 +178,24 @@ function Settings_Config() {
   // ====
   var MESH_tab = createTabGroup(verticalTabPanel_innerwrap, "MESH");
 
+  // TAB5 - COLOR LIBRARY
+  // ====
+  var ColorLibrary_tab = createTabGroup(verticalTabPanel_innerwrap, "ColorLibrary");
+
+  // COLOR LIBRARY FILE PANEL
+  // ======
+  var ColorLibrary_panel__filePath = createFilePanel(ColorLibrary_tab, "COLOR LIBRARY FILE PATH");
+
+  var ColorLibrary_filePath__button = createButton(ColorLibrary_panel__filePath, "Select", function () {
+    var ColorLibrary_TFP = File.openDialog();
+    ColorLibrary_filePath__path.text = ColorLibrary_TFP.fullName;
+  });
+
+  var ColorLibrary_filePath__path = createFileText(ColorLibrary_panel__filePath, settingsData.ColorLibrary_filePath);
+
   // verticalTabPanel DISPLAY
   // ====================
-  var verticalTabPanel_tabs = [SP_tab, NTF_tab, RTF_tab, MESH_tab];
+  var verticalTabPanel_tabs = [SP_tab, NTF_tab, RTF_tab, MESH_tab, ColorLibrary_tab];
 
   for (var i = 0; i < verticalTabPanel_tabs.length; i++) {
     verticalTabPanel_tabs[i].alignment = ["fill", "fill"];
@@ -253,6 +262,7 @@ function Settings_Config() {
     settingsData.NTF_proofTemplateSavePath = NTF_proofSavePath__path.text;
     settingsData.RTF_templatePath = RTF_templatePath__path.text;
     settingsData.RTF_savePath = RTF_templateSavePath__path.text;
+    settingsData.ColorLibrary_filePath = ColorLibrary_filePath__path.text;
 
     // Mesh
     var checkedMeshes = new Array();
@@ -286,56 +296,6 @@ try {
 //*******************
 // Helper functions
 //*******************
-
-/**
- * Uses supplied folder and file name to pull settings from, or creates folder & file if they don't exist.
- * @param {string} folderName Name of folder
- * @param {string} fileName Name of file
- * @returns {File}
- */
-function setupSettingsFile(folderName, fileName) {
-  var settingsFolderPath = Folder.myDocuments + "/" + folderName;
-  var settingsFolder = new Folder(settingsFolderPath);
-  if (!settingsFolder.exists) settingsFolder.create();
-  var settingsFilePath = settingsFolder + "/" + fileName;
-  return new File(settingsFilePath);
-}
-
-/**
- * Parses a JSON file and returns the data as an object.
- * @param {File}      file JSON file
- * @returns {Object}  Parsed JSON data
- */
-function loadJSONData(file) {
-  if (file.exists) {
-    try {
-      file.encoding = "UTF-8";
-      file.open("r");
-      var data = file.read();
-      file.close();
-      data = JSON.parse(data);
-      return data;
-    } catch (e) {
-      ("Error loading Settings file.");
-    }
-  }
-}
-
-/**
- * Writes data to a JSON file.
- * @param {Object}  data Settings data object
- * @param {File}    file JSON file to write settings to
- */
-function writeSettings(data, file) {
-  try {
-    file.encoding = "UTF-8";
-    file.open("w");
-    file.write(JSON.stringify(data));
-    file.close();
-  } catch (e) {
-    ("Error saving Settings file.");
-  }
-}
 
 /**
  * Creates a tab group in a group for a list.
