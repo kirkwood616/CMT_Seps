@@ -38,7 +38,7 @@ function addSwatchUB() {
   // Move swatches back & delete swatch group
   var groupSwatches = swatchGroup.getAllSwatches();
 
-  for (var i = 0; i < groupSwatches.length; i++) {
+  for (var i = groupSwatches.length; i--; ) {
     doc.swatchGroups[0].addSwatch(groupSwatches[i]);
   }
 
