@@ -1,4 +1,5 @@
 //@include '../UTILITIES/Layers.jsx';
+//@include '../UTILITIES/UB.jsx';
 
 function SP_Generate_UB() {
   // Active Document
@@ -61,6 +62,7 @@ function SP_Generate_UB() {
 // Run
 try {
   if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
+    addSwatchUB();
     SP_Generate_UB();
   } else {
     throw new Error("SP Template File Not Active");
