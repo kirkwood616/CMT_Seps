@@ -5,7 +5,6 @@
 function addSwatchUB() {
   var doc = app.activeDocument;
   var docSwatches = doc.swatches;
-  var swatchStorage = new Array();
 
   // Exit if WHITE UB swatch found
   for (var i = 0; i < docSwatches.length; i++) {
@@ -14,19 +13,14 @@ function addSwatchUB() {
     }
   }
 
-  // Add swatches to storage
-  for (var i = 0; i < docSwatches.length; i++) {
-    if (docSwatches[i].name !== "[None]" && docSwatches[i].name !== "[Registration]") {
-      swatchStorage.push(docSwatches[i]);
-    }
-  }
-
   // Add swatch group
   var swatchGroup = doc.swatchGroups.add();
 
   // Add swatches from storage to swatch group
-  for (var i = 0; i < swatchStorage.length; i++) {
-    swatchGroup.addSwatch(swatchStorage[i]);
+  for (var i = docSwatches.length; i--; ) {
+    if (docSwatches[i].name !== "[None]" && docSwatches[i].name !== "[Registration]") {
+      swatchGroup.addSwatch(docSwatches[i]);
+    }
   }
 
   // Create WHITE UB swatch
@@ -54,24 +48,10 @@ function addSwatchUB() {
 /**
  * Creates a new named layer and sends to back.
  * @param {String} name Name of new layer
- * @param {Layers} layers Layers in document
  * @returns {Layer}
  */
-function createNewLayerUB(name, layers) {
-  var newLayerUB = layers.add();
-  newLayerUB.name = name;
-  newLayerUB.zOrder(ZOrderMethod.SENDTOBACK);
-  return newLayerUB;
-}
-
-/**
- * Creates a new named layer and sends to back.
- * @param {String} name Name of new layer
- * @param {Layers} layers Layers in document
- * @returns {Layer}
- */
-function createNewLayerUB(name, layers) {
-  var newLayerUB = layers.add();
+function createNewLayerUB(name) {
+  var newLayerUB = app.activeDocument.layers.add();
   newLayerUB.name = name;
   newLayerUB.zOrder(ZOrderMethod.SENDTOBACK);
   return newLayerUB;
@@ -80,57 +60,52 @@ function createNewLayerUB(name, layers) {
 /**
  * Creates a UB from the current selection, colors it to the first WHITE UB swatch found, and moves it to a specific layer.
  * @param {Layer} layer The Layer to move UB to
- * @param {Swatches} swatches Swatches in the current document
- * @param {Document} document Current document
  */
-function createUB(layer, swatches, document) {
+function createUB(layer) {
   app.executeMenuCommand("copy");
-  document.selection = false;
+  app.activeDocument.selection = false;
   app.executeMenuCommand("pasteFront");
   app.executeMenuCommand("group");
   app.executeMenuCommand("Live Pathfinder Add");
   app.executeMenuCommand("expandStyle");
-  document.selection[0].move(layer, ElementPlacement.PLACEATEND);
+  app.activeDocument.selection[0].move(layer, ElementPlacement.PLACEATEND);
 
-  for (var i = 0; i < swatches.length; i++) {
-    var currentSwatch = swatches[i];
-    var indexNameMatch = currentSwatch.name.indexOf("WHITE UB");
+  for (var i = 0; i < app.activeDocument.swatches.length; i++) {
+    var indexNameMatch = app.activeDocument.swatches[i].name.indexOf("WHITE UB");
 
     if (indexNameMatch !== -1) {
-      document.defaultFillColor = currentSwatch.color;
+      app.activeDocument.defaultFillColor = app.activeDocument.swatches[i].color;
       break;
     }
   }
 
-  defaultStroke(document);
+  defaultStrokeUB(app.activeDocument);
   //@include '../UTILITIES/Overprint_Fill_True.jsx';
-  document.selection = false;
+  app.activeDocument.selection = false;
 }
 
 /**
  * Creates a UB from the current selection, colors it to the first WHITE UB swatch found, and moves it to a specific layer.
  * @param {Layer} layer The Layer to move UB to
- * @param {Swatches} swatches Swatches in the current document
- * @param {Document} document Current document
  */
-function createSelectUB(layer, swatches, document) {
+function createSelectedUB(layer) {
   app.executeMenuCommand("group");
   app.executeMenuCommand("Live Pathfinder Add");
   app.executeMenuCommand("expandStyle");
-  document.selection[0].move(layer, ElementPlacement.PLACEATEND);
+  app.activeDocument.selection[0].move(layer, ElementPlacement.PLACEATEND);
 
-  for (var i = 0; i < swatches.length; i++) {
-    var currentSwatch = swatches[i];
-    var indexNameMatch = currentSwatch.name.indexOf("WHITE UB");
+  for (var i = 0; i < app.activeDocument.swatches.length; i++) {
+    var indexNameMatch = app.activeDocument.swatches[i].name.indexOf("WHITE UB");
 
     if (indexNameMatch !== -1) {
-      document.defaultFillColor = currentSwatch.color;
+      app.activeDocument.defaultFillColor = app.activeDocument.swatches[i].color;
       break;
     }
   }
 
-  defaultStroke(document);
-  document.selection = false;
+  defaultStrokeUB(app.activeDocument);
+  //@include '../UTILITIES/Overprint_Fill_True.jsx';
+  app.activeDocument.selection = false;
 }
 
 /**
