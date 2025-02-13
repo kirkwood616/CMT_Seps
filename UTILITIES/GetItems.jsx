@@ -1,5 +1,5 @@
 //@include 'Polyfills.js';
-//@include 'Layer_utils.jsx';
+//@include 'Layers.jsx';
 
 /**
  * Recursive function to get PathItems from a collection of PageItems
