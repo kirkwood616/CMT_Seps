@@ -1,4 +1,5 @@
 //@include '../UTILITIES/Settings.jsx';
+//@include '../UTILITIES/Layers.jsx';
 
 function SP_PageProof_FromTemplate() {
   // Set up & load settings
@@ -20,9 +21,13 @@ function SP_PageProof_FromTemplate() {
   // Values for order & art file
   var artFile = metaArtFile.textRange.contents;
 
-  // Exit if art not selected
-  if (doc.selection.length < 1) {
-    throw new Error("Select Art Before Running.");
+  // If Art layer, try to select, else exit & alert if no selection
+  if (!doc.selection.length) {
+    if (isLayerNamed("Art")) {
+      doc.layers.getByName("Art").hasSelectedArtwork = true;
+    } else {
+      throw new Error("No Art Layer. Select Art Before Running.");
+    }
   }
 
   // Copy art
@@ -53,6 +58,12 @@ function SP_PageProof_FromTemplate() {
 
   // Paste copied art
   app.paste();
+
+  // If selection isn't 1 item or 1 group, create group
+  if (doc.selection.length > 1) {
+    app.executeMenuCommand("group");
+  }
+
   var pastedArt = doc.selection[0];
 
   // Call local script to set Overprint Fill to false on art selection
