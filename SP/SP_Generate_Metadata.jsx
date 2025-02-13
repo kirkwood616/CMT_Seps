@@ -1,3 +1,5 @@
+//@include 'SP_Generate_Metadata_Count.jsx';
+
 function SP_Generate_Metadata() {
   // Active Document
   var doc = app.activeDocument;
@@ -64,6 +66,7 @@ function SP_Generate_Metadata() {
 try {
   if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
     SP_Generate_Metadata();
+    SP_Generate_Metadata_Count();
   } else {
     throw new Error("SP Template File Not Active");
   }

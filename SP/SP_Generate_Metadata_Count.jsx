@@ -76,14 +76,3 @@ function SP_Generate_Metadata_Count() {
   // Set of count with total color number
   ofCountText.contents = "of " + swatchStorage.length;
 }
-
-// Run
-try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
-    SP_Generate_Metadata_Count();
-  } else {
-    throw new Error("SP Template File Not Active");
-  }
-} catch (e) {
-  alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
-}
