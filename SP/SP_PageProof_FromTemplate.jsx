@@ -1,4 +1,4 @@
-//@include 'json2.js';
+//@include '../UTILITIES/Settings.jsx';
 
 function SP_PageProof_FromTemplate() {
   // Set up & load settings
@@ -56,7 +56,7 @@ function SP_PageProof_FromTemplate() {
   var pastedArt = doc.selection[0];
 
   // Call local script to set Overprint Fill to false on art selection
-  //@include 'Overprint_Fill_False.jsx'
+  //@include '../UTILITIES/Overprint_Fill_False.jsx'
 
   // Rotate art if upside down on template
   if (metaLocation.contents === "UD" || metaLocation.contents === "PK") {
@@ -117,54 +117,6 @@ try {
 //*******************
 // Helper functions
 //*******************
-
-/**
- * Uses supplied folder and file name to pull settings from, or creates folder & file if they don't exist.
- * @param {string} folderName Name of folder
- * @param {string} fileName Name of file
- * @returns {File}
- */
-function setupSettingsFile(folderName, fileName) {
-  var settingsFolderPath = Folder.myDocuments + "/" + folderName;
-  var settingsFolder = new Folder(settingsFolderPath);
-
-  try {
-    if (!settingsFolder.exists) {
-      throw new Error("Settings folder doesn't exist." + "\n" + "Run 'CMT SEPS SETTINGS' and save your settings.");
-    }
-
-    var settingsFilePath = settingsFolder + "/" + fileName;
-    var settingsFile = new File(settingsFilePath);
-
-    if (!settingsFile.exists) {
-      throw new Error("Settings file doesn't exist." + "\n" + "Run 'CMT SEPS SETTINGS' and save your settings.");
-    }
-
-    return new File(settingsFilePath);
-  } catch (e) {
-    throw new Error(e.message);
-  }
-}
-
-/**
- * Parses a JSON file and returns the data as an object.
- * @param {File}      file JSON file
- * @returns {Object}  Parsed JSON data
- */
-function loadJSONData(file) {
-  if (file.exists) {
-    try {
-      file.encoding = "UTF-8";
-      file.open("r");
-      var data = file.read();
-      file.close();
-      data = JSON.parse(data);
-      return data;
-    } catch (e) {
-      throw new Error("Error loading Settings file.");
-    }
-  }
-}
 
 /**
  * Centers item vertically & horizontally on the current artboard.

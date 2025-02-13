@@ -1,3 +1,5 @@
+//@include '../UTILITIES/Layers.jsx';
+
 function SP_Generate_UB() {
   // Active Document
   var doc = app.activeDocument;
@@ -24,7 +26,7 @@ function SP_Generate_UB() {
   }
 
   // Move copy to UB layer
-  if (isLayerNamed("UB", docLayers)) {
+  if (isLayerNamed("UB")) {
     var ubLayer = docLayers.getByName("UB");
 
     if (ubLayer.pageItems.length > 0) {
@@ -70,22 +72,6 @@ try {
 //*******************
 // Helper functions
 //*******************
-
-/**
- * Checks if a string matches any layer's name.
- * @param {String} name Name to check layer.name for
- * @param {Layers} layers All Layers in the document
- * @returns {Boolean}
- */
-function isLayerNamed(name, layers) {
-  for (var i = 0; i < layers.length; i++) {
-    if (layers[i].name === name) {
-      return true;
-    }
-  }
-
-  return false;
-}
 
 /**
  * Creates a GUI dialog window.
@@ -177,6 +163,7 @@ function createUB(layer, swatches, document) {
   }
 
   defaultStroke(document);
+  //@include '../UTILITIES/Overprint_Fill_True.jsx';
   document.selection = false;
 }
 

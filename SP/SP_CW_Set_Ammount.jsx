@@ -1,3 +1,5 @@
+//@include '../UTILITIES/Layers.jsx';
+
 function SP_CW_Set_Ammount() {
   // Active Document
   var doc = app.activeDocument;
@@ -11,7 +13,7 @@ function SP_CW_Set_Ammount() {
   }
 
   // Overprint Fill selection
-  #include 'Overprint_Fill_True.jsx';
+  //@include '../UTILITIES/Overprint_Fill_True.jsx';
 
   // Current layer (will be CW_1)
   var artLayer = doc.activeLayer;
@@ -172,43 +174,4 @@ function createButton(parent, title, onClick) {
   var button = parent.add("button", undefined, title);
   if (onClick !== undefined) button.onClick = onClick;
   return button;
-}
-
-/**
- * Checks if a string matches any layer's name.
- * @param {String} name Name to check layer.name for
- * @param {Layers} layers All Layers in the document
- * @returns {Boolean}
- */
-function isLayerNamed(name, layers) {
-  for (var i = 0; i < layers.length; i++) {
-    if (layers[i].name === name) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-function removeAllCW(layers) {
-  var isCW_1 = false;
-
-  for (var i = 0; i < layers.length; i++) {
-    if (layers[i].name === "CW_1") {
-      isCW_1 = true;
-    } else {
-      isCW_1 = false;
-    }
-  }
-
-  if (isCW_1) {
-    var artLayerCW_1 = layers.getByName("CW_1");
-    artLayerCW_1.name = "Art";
-
-    for (var i = 0; i < layers.length; i++) {
-      if (layers[i].name.indexOf("CW_") !== -1) {
-        layers[i].remove();
-      }
-    }
-  }
 }

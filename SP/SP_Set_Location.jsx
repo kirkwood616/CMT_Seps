@@ -1,3 +1,5 @@
+//@include '../UTILITIES/Layers.jsx';
+
 function SP_Set_Location() {
   // Illustrator Coordinate System
   app.coordinateSystem = CoordinateSystem.ARTBOARDCOORDINATESYSTEM;
@@ -10,7 +12,7 @@ function SP_Set_Location() {
 
   // Select Art layer (if exists) or exit if layer or selection
   if (!doc.selection.length) {
-    if (isLayerNamed("Art", docLayers)) {
+    if (isLayerNamed("Art")) {
       var artLayer = docLayers.getByName("Art");
       artLayer.hasSelectedArtwork = true;
     } else {
@@ -246,22 +248,6 @@ function createButton(parent, title, onClick) {
   var button = parent.add("button", undefined, title);
   if (onClick !== undefined) button.onClick = onClick;
   return button;
-}
-
-/**
- * Checks if a string matches any layer's name.
- * @param {String} name Name to check layer.name for
- * @param {Layers} layers All Layers in the document
- * @returns {Boolean}
- */
-function isLayerNamed(name, layers) {
-  for (var i = 0; i < layers.length; i++) {
-    if (layers[i].name === name) {
-      return true;
-    }
-  }
-
-  return false;
 }
 
 /**
