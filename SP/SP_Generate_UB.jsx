@@ -4,23 +4,21 @@
 function SP_Generate_UB() {
   // Active Document
   var doc = app.activeDocument;
-
-  // Layers in document
   var docLayers = doc.layers;
 
-  // Selection
-  var sel = doc.selection[0];
-
-  // Alert & exit if no selection
-  if (!sel) {
-    alert("No Selected Artwork" + "\n" + "Select artwork to generate UB.");
-    return;
+  // If Art layer, try to select, else alert & exit if no selection
+  if (!doc.selection.length) {
+    if (isLayerNamed("Art")) {
+      docLayers.getByName("Art").hasSelectedArtwork = true;
+    } else {
+      alert("No Selected Artwork" + "\n" + "Select artwork to generate UB.");
+      return;
+    }
   }
 
   // If selection isn't 1 item or 1 group, create group
   if (doc.selection.length > 1) {
     app.executeMenuCommand("group");
-    sel = doc.selection[0];
   }
 
   // Move copy to UB layer

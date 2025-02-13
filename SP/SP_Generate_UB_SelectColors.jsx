@@ -4,24 +4,21 @@
 function SP_Generate_UB_SelectColors() {
   // Active Document
   var doc = app.activeDocument;
-
-  // Swatches in document
   var docSwatches = doc.swatches;
-
-  // Layers in document
   var docLayers = doc.layers;
+
+  // If Art layer, try to select, else alert & exit if no selection
+  if (!doc.selection.length) {
+    if (isLayerNamed("Art")) {
+      docLayers.getByName("Art").hasSelectedArtwork = true;
+    } else {
+      alert("No Selected Artwork" + "\n" + "Select artwork to generate UB.");
+      return;
+    }
+  }
 
   // Selection
   var sel = doc.selection;
-
-  // Storage array
-  var pathsArray = new Array();
-
-  // Alert & exit if no selection
-  if (!sel) {
-    alert("No Selected Artwork" + "\n" + "Select artwork to generate UB.");
-    return;
-  }
 
   // Name of layer containing selection
   var artLayer = docLayers.getByName(doc.activeLayer.name);
@@ -32,6 +29,9 @@ function SP_Generate_UB_SelectColors() {
       ungroup(sel[i]);
     }
   }
+
+  // Storage array
+  var pathsArray = new Array();
 
   // Add selection's paths to storage for select window
   addPathsToStorage(artLayer, pathsArray);
