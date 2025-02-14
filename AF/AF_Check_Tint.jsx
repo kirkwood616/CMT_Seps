@@ -57,11 +57,9 @@ function AF_Check_Tint() {
     );
   } else {
     layerArt.hasSelectedArtwork = true;
-
-    if (doc.artboards[0].name.indexOf("RTF") === -1) {
-      app.executeMenuCommand("group");
-    }
-
+    app.executeMenuCommand("group");
+    doc.selection = null;
+    layerArt.hasSelectedArtwork = true;
     alert(tintCounter + " items with less than 100% Tint found." + "\n" + "Proceed.");
   }
 }

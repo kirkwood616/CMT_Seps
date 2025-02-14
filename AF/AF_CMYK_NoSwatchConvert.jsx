@@ -81,9 +81,7 @@ function AF_CMYK_NoSwatchConvert() {
 
   // Select, group & deselect original selection
   doc.selection = sel;
-  if (doc.artboards[0].name.indexOf("RTF") === -1) {
-    app.executeMenuCommand("group");
-  }
+  app.executeMenuCommand("group");
   doc.selection = null;
 
   // Alerts

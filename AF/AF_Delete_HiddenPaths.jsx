@@ -24,9 +24,7 @@ function AF_Delete_HiddenPaths() {
   var hiddenCounter = deleteHiddenPaths(sel);
 
   // Group remaining art
-  if (doc.artboards[0].name.indexOf("RTF") === -1) {
-    app.executeMenuCommand("group");
-  }
+  app.executeMenuCommand("group");
 
   // Alert
   alert(hiddenCounter + " hidden path" + (hiddenCounter === 0 || hiddenCounter > 1 ? "s" : "") + " deleted.");

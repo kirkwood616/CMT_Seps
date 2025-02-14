@@ -56,9 +56,7 @@ function AF_Delete_CMYK_UnusedSwatch_FromNoSwatch() {
 
   // Select, group & deselect original selection
   layerArt.hasSelectedArtwork = true;
-  if (doc.artboards[0].name.indexOf("RTF") === -1) {
-    app.executeMenuCommand("group");
-  }
+  app.executeMenuCommand("group");
   doc.selection = null;
 
   // Alerts

@@ -24,9 +24,7 @@ function AF_Delete_NoColorPaths() {
   var noColorCounter = deleteNoColorPaths(sel);
 
   // Group remaining art
-  if (doc.artboards[0].name.indexOf("RTF") === -1) {
-    app.executeMenuCommand("group");
-  }
+  app.executeMenuCommand("group");
 
   // Alert
   alert(noColorCounter + " No Color path" + (noColorCounter === 0 || noColorCounter > 1 ? "s" : "") + " deleted.");

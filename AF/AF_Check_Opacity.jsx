@@ -26,11 +26,11 @@ function AF_Check_Opacity() {
   // Layer selected art is on
   var layerArt = doc.activeLayer;
 
+  // Deselect everything
+  doc.selection = null;
+
   // Add all path items to pathsArray
   addPathsToStorage(layerArt, pathsArray);
-
-  // Deselect everything
-  doc.selection = false;
 
   // Find & select Paths with less than 100% opacity
   for (var i = 0; i < pathsArray.length; i++) {
@@ -57,11 +57,9 @@ function AF_Check_Opacity() {
     );
   } else {
     layerArt.hasSelectedArtwork = true;
-
-    if (doc.artboards[0].name.indexOf("RTF") === -1) {
-      app.executeMenuCommand("group");
-    }
-
+    app.executeMenuCommand("group");
+    doc.selection = null;
+    layerArt.hasSelectedArtwork = true;
     alert(opacityCounter + " items with less than 100% Opacity found." + "\n" + "Proceed.");
   }
 }
