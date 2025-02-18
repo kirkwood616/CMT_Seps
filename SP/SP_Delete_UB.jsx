@@ -2,6 +2,9 @@ function SP_Delete_UB() {
   // Active Document
   var doc = app.activeDocument;
 
+  // Original Active Layer
+  var originLayer = doc.activeLayer;
+
   // Deselect everything
   doc.selection = false;
 
@@ -64,6 +67,9 @@ function SP_Delete_UB() {
       docSwatches[i].remove();
     }
   }
+
+  // Reset Active Layer to original
+  doc.activeLayer = originLayer;
 }
 
 // Run

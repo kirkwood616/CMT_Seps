@@ -10,6 +10,7 @@ function SP_Generate_UB_SelectColors() {
   // If Art layer, try to select, else alert & exit if no selection
   if (!doc.selection.length) {
     if (isLayerNamed("Art")) {
+      doc.activeLayer = docLayers.getByName("Art");
       docLayers.getByName("Art").hasSelectedArtwork = true;
     } else {
       alert("No Selected Artwork" + "\n" + "Select artwork to generate UB.");
@@ -20,8 +21,8 @@ function SP_Generate_UB_SelectColors() {
   // Selection
   var sel = doc.selection;
 
-  // Name of layer containing selection
-  var artLayer = docLayers.getByName(doc.activeLayer.name);
+  // Original Active Layer
+  var originLayer = doc.activeLayer;
 
   // Ungroup artwork
   if (sel.length > 0) {
@@ -34,7 +35,7 @@ function SP_Generate_UB_SelectColors() {
   var pathsArray = new Array();
 
   // Add selection's paths to storage for select window
-  addPathsToStorage(artLayer, pathsArray);
+  addPathsToStorage(originLayer, pathsArray);
 
   // GUI window
   var gui = createWindow("SELECT COLORS FOR UB", 300);
@@ -187,6 +188,9 @@ function SP_Generate_UB_SelectColors() {
 
     // Delete temp layer
     tempLayer.remove();
+
+    // Set active layer to original
+    doc.activeLayer = originLayer;
 
     // Close main window
     gui.close();

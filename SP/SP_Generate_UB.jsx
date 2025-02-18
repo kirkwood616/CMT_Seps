@@ -9,12 +9,16 @@ function SP_Generate_UB() {
   // If Art layer, try to select, else alert & exit if no selection
   if (!doc.selection.length) {
     if (isLayerNamed("Art")) {
+      doc.activeLayer = docLayers.getByName("Art");
       docLayers.getByName("Art").hasSelectedArtwork = true;
     } else {
       alert("No Selected Artwork" + "\n" + "Select artwork to generate UB.");
       return;
     }
   }
+
+  // Original Active Layer
+  var originLayer = doc.activeLayer;
 
   // If selection isn't 1 item or 1 group, create group
   if (doc.selection.length > 1) {
@@ -52,6 +56,9 @@ function SP_Generate_UB() {
     var ubNewLayer = createNewLayerUB("UB");
     createUB(ubNewLayer);
   }
+
+  // Set active layer to original
+  doc.activeLayer = originLayer;
 }
 
 // Run
