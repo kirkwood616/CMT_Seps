@@ -1,5 +1,6 @@
 //@include '../UTILITIES/Settings.jsx';
 //@include '../UTILITIES/Layers.jsx';
+//@include '../UTILITIES/Proofs.jsx';
 
 function SP_PageProof_FromTemplate() {
   // Set up & load settings
@@ -100,6 +101,9 @@ function SP_PageProof_FromTemplate() {
   // Deselect everything
   doc.selection = false;
 
+  // Change White swatches to pure white
+  toProofWhite();
+
   // Set Due Date
   var dueDate = proofLayer.textFrames.getByName("DUE");
   var newOrderNumber = prompt("ENTER ORDER #", "123456", "ORDER NUMBER");
@@ -155,18 +159,4 @@ function toTallPosition(art, background) {
     art.translate(0, backgroundOffset);
     background.translate(0, backgroundOffset);
   }
-}
-
-/**
- *
- * @returns {string} Todays date formatted in M/DD or MM/DD
- */
-function dateToday() {
-  var date = new Date();
-  var todaysDate =
-    (date.getMonth() > 8 ? date.getMonth() + 1 : date.getMonth() + 1) +
-    "/" +
-    (date.getDate() > 9 ? date.getDate() : date.getDate());
-
-  return todaysDate;
 }
