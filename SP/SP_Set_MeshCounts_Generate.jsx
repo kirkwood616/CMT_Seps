@@ -1,4 +1,5 @@
 //@include '../UTILITIES/Settings.jsx';
+//@include '../UTILITIES/FormatText.jsx';
 
 function SP_Set_MeshCounts_Generate() {
   // Set up & load settings
@@ -154,7 +155,7 @@ function SP_Set_MeshCounts_Generate() {
 
     // Set edited name, contents and fill color
     for (var i = 0; i < swatchStorage.length; i++) {
-      var nameForMeta = editMetadataText(swatchStorage[i].name);
+      var nameForMeta = removeUnwantedChars(swatchStorage[i].name);
 
       colorFrames[i].name = "COLOR";
       colorFrames[i].contents = nameForMeta;
@@ -368,25 +369,4 @@ function extractMeshSuffix(colorName, meshArray) {
   }
 
   return meshSuffix;
-}
-
-/**
- * Remove unwanted characters from Metadata color text
- * @param {String} colorName - Spot swatch color name
- * @returns {String} Text with removed chars
- */
-function editMetadataText(colorName) {
-  // Remove any forward slashes from text
-  var noForwardSlash = colorName.replace(/\//g, " ");
-
-  // Remove "Spot" from text
-  var noSpot = noForwardSlash.replace(/SPOT /gi, "");
-
-  // Remove "PANTONE " from text
-  var noPantone = noSpot.replace(/PANTONE /gi, "");
-
-  // Remove parenthesis and contents contained between
-  var noParenthesis = noPantone.replace(/\s*\(.*?\)\s*/g, " ");
-
-  return noParenthesis;
 }

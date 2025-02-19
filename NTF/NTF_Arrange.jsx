@@ -1,3 +1,5 @@
+//@include '../UTILITIES/FormatText.jsx';
+
 function NTF_Arrange() {
   // Active Document
   var doc = app.activeDocument;
@@ -67,7 +69,7 @@ function NTF_Arrange() {
 
   for (var i = 0; i < docSwatches.length; i++) {
     if (docSwatches[i].name !== "[None]" && docSwatches[i].name !== "[Registration]") {
-      colorSwatch = removeSwatchInfo(docSwatches[i].name);
+      colorSwatch = removeUnwantedChars(docSwatches[i].name).toUpperCase();
     }
   }
 
@@ -207,24 +209,6 @@ try {
 //*******************
 // Helper functions
 //*******************
-
-/**
- * Remove unwanted characters from swatch text
- * @param {String}    colorName - Spot swatch color name
- * @returns {String}  Text with removed chars
- */
-function removeSwatchInfo(colorName) {
-  // Remove any forward slashes from text
-  var noForwardSlash = colorName.replace(/\//g, "");
-
-  // Remove "Spot" from text
-  var noSpot = noForwardSlash.replace(/SPOT /gi, "");
-
-  // Remove parenthesis and contents contained between
-  var noParenthesis = noSpot.replace(/\s*\(.*?\)\s*/g, "");
-
-  return noParenthesis.toUpperCase();
-}
 
 /**
  *

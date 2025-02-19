@@ -1,3 +1,5 @@
+//@include '../UTILITIES/FormatText.jsx';
+
 function RTF_Generate_Metadata_Color() {
   // Active Document
   var doc = app.activeDocument;
@@ -38,7 +40,7 @@ function RTF_Generate_Metadata_Color() {
     var swatchMatch = docSwatches.getByName(groupSwatchName);
 
     // Change text frame contents and name to color group name
-    metaText.contents = editMetadataText(artGroupColors[i].name);
+    metaText.contents = removeUnwantedChars(artGroupColors[i].name);
     metaText.name = artGroupColors[i].name;
 
     // Set color of text frame to the matching swatch color
@@ -63,29 +65,4 @@ try {
   }
 } catch (e) {
   alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
-}
-
-//*******************
-// Helper functions
-//*******************
-
-/**
- * Remove unwanted characters from Metadata color text
- * @param {String} colorName - Spot swatch color name
- * @returns {String} Text with removed chars
- */
-function editMetadataText(colorName) {
-  // Remove any forward slashes from text
-  var noForwardSlash = colorName.replace(/\//g, " ");
-
-  // Remove "Spot" from text
-  var noSpot = noForwardSlash.replace(/SPOT/gi, "");
-
-  // Remove "PANTONE " from text
-  var noPantone = noSpot.replace(/PANTONE /gi, "");
-
-  // Remove parenthesis and contents contained between
-  var noParenthesis = noPantone.replace(/\s*\(.*?\)\s*/g, " ");
-
-  return noParenthesis;
 }
