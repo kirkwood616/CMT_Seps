@@ -1,14 +1,26 @@
 //@include '../UTILITIES/Settings.jsx';
+//@include '../UTILITIES/Layers.jsx';
+//@include '../UTILITIES/FormatText.jsx';
 
 function SP_Open_Template_FromFile() {
   // Active Document
   var doc = app.activeDocument;
   var docName = doc.name;
-  var sel = doc.selection;
 
-  // Exit if no selection
-  if (!sel.length) {
-    throw new Error("No Selected Art" + "\n" + "Select Art Before Running.");
+  // If Art layer, try to select, else alert & exit if no selection
+  if (!doc.selection.length) {
+    if (isLayerNamed("Art")) {
+      doc.activeLayer = doc.layers.getByName("Art");
+      doc.layers.getByName("Art").hasSelectedArtwork = true;
+    } else {
+      alert("No Selected Artwork" + "\n" + "Select artwork ");
+      return;
+    }
+  }
+
+  // If selection isn't 1 item or 1 group, create group
+  if (doc.selection.length > 1) {
+    app.executeMenuCommand("group");
   }
 
   // Formatted art file name
@@ -55,7 +67,6 @@ function SP_Open_Template_FromFile() {
 
   // Paste & group art
   app.paste();
-  app.executeMenuCommand("group");
 
   // Selected pasted art
   var pastedArt = doc.selection[0];
@@ -81,6 +92,9 @@ function SP_Open_Template_FromFile() {
 
   // Set Art File Metadata to original filename
   artName.contents = artNumber;
+
+  // De-select everything
+  doc.selection = null;
 }
 
 // Run
@@ -88,37 +102,4 @@ try {
   SP_Open_Template_FromFile();
 } catch (e) {
   alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
-}
-
-//*******************
-// Helper functions
-//*******************
-
-/**
- * Takes an art file name & formats it removing unwanted characters.
- * @param {string}    artName Art file name
- * @returns {string}  Formatted art name
- */
-function formatArtName(artName) {
-  var newArtName = artName.replace(/.ai/gi, "");
-  var noParenthesis = newArtName.replace(/\s*\(.*?\)\s*/g, "");
-  var noMultipleDash = noParenthesis.split("-", 3).join("-");
-  newArtName = noMultipleDash;
-
-  switch (true) {
-    case newArtName.indexOf("sc") !== -1:
-    case newArtName.indexOf("sl") !== -1:
-    case newArtName.indexOf("sr") !== -1:
-    case newArtName.indexOf("pk") !== -1:
-    case newArtName.indexOf("ud") !== -1:
-      newArtName = newArtName.substring(0, newArtName.length - 2);
-      break;
-    case newArtName.indexOf("yoke") !== -1:
-      newArtName = newArtName.substring(0, newArtName.length - 4);
-      break;
-    default:
-      break;
-  }
-
-  return newArtName;
 }
