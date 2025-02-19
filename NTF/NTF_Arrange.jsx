@@ -10,8 +10,8 @@ function NTF_Arrange() {
     throw new Error("No Selected Art" + "\n" + "Select Art Before Running.");
   }
 
-   // Overprint Fill selection
-   #include 'Overprint_Fill_True.jsx';
+  // Overprint Fill selection
+  //@include '../UTILITIES/Overprint_Fill_True.jsx';
 
   // Copy array of selection
   var selCopy = sel.slice();

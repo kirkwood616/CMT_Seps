@@ -1,4 +1,5 @@
-#include 'json2.js';
+//@include '../UTILITIES/Settings.jsx';
+//@include '../UTILITIES/Proofs.jsx';
 
 function NTF_CutProof_FromTemplate() {
   // Active NTF Template Document
@@ -190,8 +191,8 @@ function NTF_CutProof_FromTemplate() {
   // Lock Proof Metadata layer
   proofDoc.layers.getByName("Metadata").locked = true;
 
-  // Change White swatch color to pure white
-  toProofWhite("WHITE");
+  // Change White swatches to pure white
+  toProofWhite();
 }
 
 // Run
@@ -210,54 +211,6 @@ try {
 //*******************
 
 /**
- * Uses supplied folder and file name to pull settings from, or creates folder & file if they don't exist.
- * @param {string} folderName Name of folder
- * @param {string} fileName Name of file
- * @returns {File}
- */
-function setupSettingsFile(folderName, fileName) {
-  var settingsFolderPath = Folder.myDocuments + "/" + folderName;
-  var settingsFolder = new Folder(settingsFolderPath);
-  if (!settingsFolder.exists) settingsFolder.create();
-  var settingsFilePath = settingsFolder + "/" + fileName;
-  return new File(settingsFilePath);
-}
-
-/**
- * Parses a JSON file and returns the data as an object.
- * @param {File}      file JSON file
- * @returns {Object}  Parsed JSON data
- */
-function loadJSONData(file) {
-  if (file.exists) {
-    try {
-      file.encoding = "UTF-8";
-      file.open("r");
-      var data = file.read();
-      file.close();
-      data = JSON.parse(data);
-      return data;
-    } catch (e) {
-      ("Error loading Settings file.");
-    }
-  }
-}
-
-/**
- *
- * @returns {String} Todays date formatted in M/DD or MM/DD
- */
-function dateToday() {
-  var date = new Date();
-  var todaysDate =
-    (date.getMonth() > 8 ? date.getMonth() + 1 : date.getMonth() + 1) +
-    "/" +
-    (date.getDate() > 9 ? date.getDate() : date.getDate());
-
-  return todaysDate;
-}
-
-/**
  * Takes a provided string, from ink color Metadata, trims the string to characters preceding an underscore (if present) and returns the trimmed string.
  * @param {String} name
  * @returns {String}
@@ -272,37 +225,4 @@ function getColorName(name) {
   }
 
   return thisColor;
-}
-
-function toProofWhite(whiteName) {
-  for (var i = 0; i < app.activeDocument.spots.length; i++) {
-    if (app.activeDocument.spots[i].name.indexOf(whiteName) !== -1) {
-      /// CMYK
-      if (app.activeDocument.spots[i].spotKind === SpotColorKind.SPOTCMYK) {
-        var newCMYK = new CMYKColor();
-        newCMYK.cyan = newCMYK.magenta = newCMYK.yellow = newCMYK.black = 0;
-
-        app.activeDocument.spots[i].color = newCMYK;
-        continue;
-      }
-
-      /// RGB
-      if (app.activeDocument.spots[i].spotKind === SpotColorKind.SPOTRGB) {
-        var newRGB = new RGBColor();
-        newRGB.red = newRGB.green = newRGB.blue = 255;
-
-        app.activeDocument.spots[i].color = newRGB;
-        continue;
-      }
-
-      /// LAB
-      if (app.activeDocument.spots[i].spotKind === SpotColorKind.SPOTLAB) {
-        var newLAB = new LabColor();
-        newLAB.l = 100;
-        newLAB.a = newLAB.b = 0;
-
-        app.activeDocument.spots[i].color = newLAB;
-      }
-    }
-  }
 }
