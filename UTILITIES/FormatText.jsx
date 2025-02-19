@@ -1,6 +1,37 @@
 //@include '../UTILITIES/Polyfills.js';
 
 /**
+ * Takes an art file name & formats it removing file extension, parenthesis & its contents, and any file name suffix after the standard art file name format.
+ * @param {String}    artName Art file name
+ * @returns {String}  Formatted art name
+ * @example 25-MK-1234-5678-1(1).ai => 25-MK-1234
+ */
+function formatArtName(artName) {
+  var newArtName = artName
+    .replace(/.ai/gi, "")
+    .replace(/\s*\(.*?\)\s*/g, "")
+    .split("-", 3)
+    .join("-");
+
+  switch (true) {
+    case newArtName.indexOf("sc") > -1:
+    case newArtName.indexOf("sl") > -1:
+    case newArtName.indexOf("sr") > -1:
+    case newArtName.indexOf("pk") > -1:
+    case newArtName.indexOf("ud") > -1:
+      newArtName = newArtName.substring(0, newArtName.length - 2);
+      break;
+    case newArtName.indexOf("yoke") > -1:
+      newArtName = newArtName.substring(0, newArtName.length - 4);
+      break;
+    default:
+      break;
+  }
+
+  return newArtName;
+}
+
+/**
  * Returns a new string removing occurrences of '/', '\\', 'Spot', 'Pantone'
  * and any characters contained within parenthesis, along with the parenthesis themselves.
  * @param {String}    theString
