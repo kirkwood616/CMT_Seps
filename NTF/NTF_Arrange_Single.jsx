@@ -1,3 +1,6 @@
+//@include '../UTILITIES/FormatText.jsx';
+//@include '../UTILITIES/Polyfills.js';
+
 function NTF_Arrange_Single() {
   // Active Document
   var doc = app.activeDocument;
@@ -21,7 +24,7 @@ function NTF_Arrange_Single() {
 
   for (var i = 0; i < docSwatches.length; i++) {
     if (docSwatches[i].name !== "[None]" && docSwatches[i].name !== "[Registration]") {
-      colorSwatch = removeSwatchInfo(docSwatches[i].name);
+      colorSwatch = removeUnwantedChars(docSwatches[i].name).trim().toUpperCase();
       docSwatches[i].name = colorSwatch + "_1";
     }
   }

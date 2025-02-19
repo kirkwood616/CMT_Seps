@@ -1,4 +1,5 @@
 //@include '../UTILITIES/FormatText.jsx';
+//@include '../UTILITIES/Polyfills.js';
 
 function NTF_Arrange() {
   // Active Document
@@ -69,7 +70,7 @@ function NTF_Arrange() {
 
   for (var i = 0; i < docSwatches.length; i++) {
     if (docSwatches[i].name !== "[None]" && docSwatches[i].name !== "[Registration]") {
-      colorSwatch = removeUnwantedChars(docSwatches[i].name).toUpperCase();
+      colorSwatch = removeUnwantedChars(docSwatches[i].name).trim().toUpperCase();
     }
   }
 
