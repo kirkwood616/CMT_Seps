@@ -1,4 +1,5 @@
-#include 'json2.js';
+//@include '../UTILITIES/json2.js';
+//@include '../UTILITIES/FormatText.jsx';
 
 function RTF_PositionMesh() {
   // Set up & load settings
@@ -171,54 +172,6 @@ try {
 // Helper functions
 //*******************
 
-/**
- * Uses supplied folder and file name to pull settings from, or creates folder & file if they don't exist.
- * @param {string} folderName Name of folder
- * @param {string} fileName Name of file
- * @returns {File}
- */
-function setupSettingsFile(folderName, fileName) {
-  var settingsFolderPath = Folder.myDocuments + "/" + folderName;
-  var settingsFolder = new Folder(settingsFolderPath);
-
-  try {
-    if (!settingsFolder.exists) {
-      throw new Error("Settings folder doesn't exist." + "\n" + "Run 'CMT SEPS SETTINGS' and save your settings.");
-    }
-
-    var settingsFilePath = settingsFolder + "/" + fileName;
-    var settingsFile = new File(settingsFilePath);
-
-    if (!settingsFile.exists) {
-      throw new Error("Settings file doesn't exist." + "\n" + "Run 'CMT SEPS SETTINGS' and save your settings.");
-    }
-
-    return new File(settingsFilePath);
-  } catch (e) {
-    throw new Error(e.message);
-  }
-}
-
-/**
- * Parses a JSON file and returns the data as an object.
- * @param {File}      file JSON file
- * @returns {Object}  Parsed JSON data
- */
-function loadJSONData(file) {
-  if (file.exists) {
-    try {
-      file.encoding = "UTF-8";
-      file.open("r");
-      var data = file.read();
-      file.close();
-      data = JSON.parse(data);
-      return data;
-    } catch (e) {
-      throw new Error("Error loading Settings file.");
-    }
-  }
-}
-
 // Create Window Panel
 function createPanel(parent, title) {
   var panel = parent.add("panel", undefined, title);
@@ -280,32 +233,4 @@ function hasNameDuplicates(array) {
   }
 
   return hasDuplicates;
-}
-
-/**
- *
- * @param {String} colorName Name of color
- * @returns {String} Color name with mesh suffix removed or original color name
- */
-function removeMeshSuffix(colorName, meshArray) {
-  var newName = "";
-  var isMesh = false;
-  var lastSpace = colorName.lastIndexOf(" ");
-
-  if (colorName[lastSpace + 1] === "M") {
-    var lastText = colorName.slice(lastSpace + 2, colorName.length);
-
-    for (var i = 0; i < meshArray.length; i++) {
-      if (meshArray[i] === lastText) {
-        isMesh = true;
-        newName = colorName.slice(0, lastSpace);
-      }
-    }
-  }
-
-  if (isMesh) {
-    return newName;
-  } else {
-    return colorName;
-  }
 }

@@ -1,5 +1,6 @@
 //@include '../UTILITIES/Settings.jsx';
 //@include '../UTILITIES/FormatText.jsx';
+//@include '../UTILITIES/Polyfills.js';
 
 function SP_Set_MeshCounts_Generate() {
   // Set up & load settings
@@ -28,17 +29,13 @@ function SP_Set_MeshCounts_Generate() {
   // Storage
   var swatchColors = new Array();
 
+  // Trim white space at start & end of swatch name
+  trimSwatchNames();
+
   // Populate swatchColors[] with swatch names
   for (var i = 0; i < docSwatches.length; i++) {
-    var currentSwatchName = docSwatches[i].name;
-
-    // If space at end of name => remove
-    if (currentSwatchName !== "[None]" && currentSwatchName !== "[Registration]") {
-      if (currentSwatchName.charAt(currentSwatchName.length - 1) === " ") {
-        var noEndingSpaceName = currentSwatchName.slice(0, -1);
-        docSwatches[i].name = noEndingSpaceName;
-      }
-      swatchColors.push(currentSwatchName);
+    if (docSwatches[i].name !== "[None]" && docSwatches[i].name !== "[Registration]") {
+      swatchColors.push(docSwatches[i].name);
     }
   }
 
@@ -311,62 +308,4 @@ function createButton(parent, title, onClick) {
   var button = parent.add("button", undefined, title);
   if (onClick !== undefined) button.onClick = onClick;
   return button;
-}
-
-/**
- * Removes screen mesh indicator suffix (i.e. 'M156')
- * @param {String} colorName Name of color
- * @param {Array.<string>} meshArray Array of mesh counts (i.e. '156')
- * @returns {String}
- */
-function removeMeshSuffix(colorName, meshArray) {
-  var newName = "";
-  var isMesh = false;
-  var lastSpace = colorName.lastIndexOf(" ");
-
-  if (colorName[lastSpace + 1] === "M") {
-    var lastText = colorName.slice(lastSpace + 2, colorName.length);
-    var meshDigits = parseInt(lastText.slice(0, 2));
-
-    for (var i = 0; i < meshArray.length; i++) {
-      if (meshArray[i] === lastText) {
-        isMesh = true;
-        newName = colorName.slice(0, lastSpace);
-      }
-    }
-
-    if (!isNaN(meshDigits)) {
-      isMesh = true;
-      newName = colorName.slice(0, lastSpace);
-    }
-  }
-
-  if (isMesh) {
-    return newName;
-  } else {
-    return colorName;
-  }
-}
-
-/**
- * Extracts screen mesh indicator suffix without preceeding 'M'
- * @param {String} colorName Name of color
- * @param {Array.<string>} meshArray Array of mesh counts (i.e. '156')
- * @returns {String}
- */
-function extractMeshSuffix(colorName, meshArray) {
-  var meshSuffix = "";
-  var lastSpace = colorName.lastIndexOf(" ");
-
-  if (colorName[lastSpace + 1] === "M") {
-    var lastText = colorName.slice(lastSpace + 2, colorName.length);
-
-    for (var i = 0; i < meshArray.length; i++) {
-      if (meshArray[i] === lastText) {
-        meshSuffix = lastText;
-      }
-    }
-  }
-
-  return meshSuffix;
 }
