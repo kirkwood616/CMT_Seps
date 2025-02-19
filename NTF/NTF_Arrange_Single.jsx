@@ -62,25 +62,3 @@ try {
 } catch (e) {
   alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
 }
-
-//*******************
-// Helper functions
-//*******************
-
-/**
- * Remove unwanted characters from swatch text
- * @param {string}    colorName - Spot swatch color name
- * @returns {string}  Text with removed chars
- */
-function removeSwatchInfo(colorName) {
-  // Remove any forward slashes from text
-  var noForwardSlash = colorName.replace(/\//g, "");
-
-  // Remove "Spot" from text
-  var noSpot = noForwardSlash.replace(/SPOT /gi, "");
-
-  // Remove parenthesis and contents contained between
-  var noParenthesis = noSpot.replace(/\s*\(.*?\)\s*/g, "");
-
-  return noParenthesis.toUpperCase();
-}
