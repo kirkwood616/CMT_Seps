@@ -16,6 +16,9 @@ function SP_Generate_UB_SelectColors() {
   // Original Active Layer
   var originLayer = doc.activeLayer;
 
+  // Overprint selected art
+  //@include '../UTILITIES/Overprint_Fill_True.jsx';
+
   // Ungroup artwork
   if (sel.length > 0) {
     for (var i = 0; i < sel.length; i++) {
