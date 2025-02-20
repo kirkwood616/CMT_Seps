@@ -73,8 +73,25 @@ function SP_PageProof_Note() {
     newNote.textRange.characterAttributes.fillColor = redNote;
     newNote.paragraphs[0].justification = Justification.CENTER;
 
-    // Position center + 1 inch down
-    newNote.position = new Array((artboardBounds[2] - artboardBounds[0]) / 2 - newNote.width / 2, -72);
+    // Place Note centered above shirt (if exists), else @ 1" down
+    var isShirt = false;
+    var shirtCount = 0;
+
+    for (var i = 0; i < proofLayer.pageItems.length; i++) {
+      if (proofLayer.pageItems[i].name === "SHIRT") {
+        isShirt = true;
+        shirtCount++;
+      }
+    }
+
+    if (isShirt && shirtCount === 1) {
+      var theShirt = proofLayer.pageItems.getByName("SHIRT");
+      var notePosY = theShirt.position[1] + newNote.height + 5;
+
+      newNote.position = [(artboardBounds[2] - artboardBounds[0]) / 2 - newNote.width / 2, notePosY];
+    } else {
+      newNote.position = [(artboardBounds[2] - artboardBounds[0]) / 2 - newNote.width / 2, -72];
+    }
 
     // Close Window
     dialog.close();
@@ -113,9 +130,7 @@ function redNoteSwatch() {
     }
   }
 
-  if (hasSwatch) {
-    return app.activeDocument.swatches.getByName("RED_NOTE").color;
-  } else {
+  if (!hasSwatch) {
     var newCMYK = new CMYKColor();
     newCMYK.cyan = 0;
     newCMYK.magenta = 100;
@@ -126,7 +141,7 @@ function redNoteSwatch() {
     thisSpot.name = "RED_NOTE";
     thisSpot.color = newCMYK;
     thisSpot.colorType = ColorModel.SPOT;
-
-    return app.activeDocument.swatches.getByName("RED_NOTE").color;
   }
+
+  return app.activeDocument.swatches.getByName("RED_NOTE").color;
 }
