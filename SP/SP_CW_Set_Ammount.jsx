@@ -4,13 +4,22 @@ function SP_CW_Set_Ammount() {
   // Active Document
   var doc = app.activeDocument;
 
+  // Select Art layer (if exists) or exit if layer or selection
+  if (!doc.selection.length) {
+    if (isLayerNamed("Art")) {
+      doc.layers.getByName("Art").hasSelectedArtwork = true;
+    } else {
+      throw new Error("No Art Layer or Selected Art.");
+    }
+  }
+
+  // If selection isn't 1 item or 1 group, create group
+  if (doc.selection.length > 1) {
+    app.executeMenuCommand("group");
+  }
+
   // Current Selection
   var sel = doc.selection;
-
-  // Exit if no selection
-  if (!sel.length) {
-    throw new Error("No Selected Art" + "\n" + "Select Art Before Running.");
-  }
 
   // Overprint Fill selection
   //@include '../UTILITIES/Overprint_Fill_True.jsx';
@@ -90,7 +99,7 @@ function SP_CW_Set_Ammount() {
     }
 
     // De-select everything
-    doc.selection = false;
+    doc.selection = null;
 
     // Set CW_1 to active layer
     doc.activeLayer = artLayer;
