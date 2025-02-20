@@ -165,6 +165,10 @@ function SP_Set_Location() {
         break;
     }
 
+    // De-select everything
+    doc.selection = null;
+
+    // Close Window
     locationWindow.close();
   });
 
