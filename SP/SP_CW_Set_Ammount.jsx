@@ -4,19 +4,8 @@ function SP_CW_Set_Ammount() {
   // Active Document
   var doc = app.activeDocument;
 
-  // Select Art layer (if exists) or exit if layer or selection
-  if (!doc.selection.length) {
-    if (isLayerNamed("Art")) {
-      doc.layers.getByName("Art").hasSelectedArtwork = true;
-    } else {
-      throw new Error("No Art Layer or Selected Art.");
-    }
-  }
-
-  // If selection isn't 1 item or 1 group, create group
-  if (doc.selection.length > 1) {
-    app.executeMenuCommand("group");
-  }
+  // If Art layer try to select, else alert & exit if no selection
+  selectArtLayer();
 
   // Current Selection
   var sel = doc.selection;

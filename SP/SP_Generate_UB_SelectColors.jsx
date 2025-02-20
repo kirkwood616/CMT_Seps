@@ -7,16 +7,8 @@ function SP_Generate_UB_SelectColors() {
   var docSwatches = doc.swatches;
   var docLayers = doc.layers;
 
-  // If Art layer, try to select, else alert & exit if no selection
-  if (!doc.selection.length) {
-    if (isLayerNamed("Art")) {
-      doc.activeLayer = docLayers.getByName("Art");
-      docLayers.getByName("Art").hasSelectedArtwork = true;
-    } else {
-      alert("No Selected Artwork" + "\n" + "Select artwork to generate UB.");
-      return;
-    }
-  }
+  // If Art layer try to select, else alert & exit if no selection
+  selectArtLayer();
 
   // Selection
   var sel = doc.selection;

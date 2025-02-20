@@ -7,21 +7,8 @@ function SP_Open_Template_FromFile() {
   var doc = app.activeDocument;
   var docName = doc.name;
 
-  // If Art layer, try to select, else alert & exit if no selection
-  if (!doc.selection.length) {
-    if (isLayerNamed("Art")) {
-      doc.activeLayer = doc.layers.getByName("Art");
-      doc.layers.getByName("Art").hasSelectedArtwork = true;
-    } else {
-      alert("No Selected Artwork" + "\n" + "Select artwork ");
-      return;
-    }
-  }
-
-  // If selection isn't 1 item or 1 group, create group
-  if (doc.selection.length > 1) {
-    app.executeMenuCommand("group");
-  }
+  // If Art layer try to select, else alert & exit if no selection
+  selectArtLayer();
 
   // Formatted art file name
   var artNumber = formatArtName(doc.name);

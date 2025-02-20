@@ -22,14 +22,8 @@ function SP_PageProof_FromTemplate() {
   // Values for order & art file
   var artFile = metaArtFile.textRange.contents;
 
-  // If Art layer, try to select, else exit & alert if no selection
-  if (!doc.selection.length) {
-    if (isLayerNamed("Art")) {
-      doc.layers.getByName("Art").hasSelectedArtwork = true;
-    } else {
-      throw new Error("No Art Layer. Select Art Before Running.");
-    }
-  }
+  // If Art layer try to select, else alert & exit if no selection
+  selectArtLayer();
 
   // Copy art
   app.copy();

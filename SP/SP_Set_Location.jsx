@@ -10,20 +10,8 @@ function SP_Set_Location() {
   // Layers in document
   var docLayers = doc.layers;
 
-  // Select Art layer (if exists) or exit if layer or selection
-  if (!doc.selection.length) {
-    if (isLayerNamed("Art")) {
-      var artLayer = docLayers.getByName("Art");
-      artLayer.hasSelectedArtwork = true;
-    } else {
-      throw new Error("No Art Selected.");
-    }
-  }
-
-  // If selection isn't 1 item or 1 group, create group
-  if (doc.selection.length > 1) {
-    app.executeMenuCommand("group");
-  }
+  // If Art layer try to select, else alert & exit if no selection
+  selectArtLayer();
 
   // Artboard Index
   var artboardIndex = doc.artboards.getActiveArtboardIndex();
