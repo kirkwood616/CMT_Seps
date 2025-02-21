@@ -4,6 +4,9 @@ function SP_CW_Set_Ammount() {
   // Active Document
   var doc = app.activeDocument;
 
+  // Exit if CW_ layers exist
+  if (cwLayersExist()) throw new Error("CW Layers Currently Exist");
+
   // If Art layer try to select, else alert & exit if no selection
   selectArtLayer();
 

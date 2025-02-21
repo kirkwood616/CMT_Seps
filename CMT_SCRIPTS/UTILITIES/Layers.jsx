@@ -28,3 +28,19 @@ function selectArtLayer() {
 
   if (app.activeDocument.selection.length > 1) app.executeMenuCommand("group");
 }
+
+/**
+ * Checks if any layers in the active document's name begin with 'CW_'
+ * @returns {Boolean}
+ */
+function cwLayersExist() {
+  var isNameCW = false;
+
+  for (var i = 0; i < app.activeDocument.layers.length; i++) {
+    if (app.activeDocument.layers[i].name.indexOf("CW_") !== -1) {
+      isNameCW = true;
+    }
+  }
+
+  return isNameCW;
+}

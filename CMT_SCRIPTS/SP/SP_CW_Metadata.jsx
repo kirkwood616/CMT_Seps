@@ -1,6 +1,11 @@
+//@include '../UTILITIES/Layers.jsx';
+
 function SP_CW_Metadata() {
   // Active Document
   var doc = app.activeDocument;
+
+  // Exit if no CW_ layers
+  if (!cwLayersExist()) throw new Error("No CW Layers");
 
   // Deselect everything, trick redraw
   doc.selection = null;
@@ -49,7 +54,7 @@ function SP_CW_Metadata() {
   var bottomCrosshair = registrationLayer.groupItems.getByName("REG_BOTTOM_CENTER");
   var regPosition = bottomCrosshair.position;
 
-  // Deselect everything
+  // De-select everything
   doc.selection = null;
 
   // Ungroup CW layers
@@ -204,7 +209,7 @@ function SP_CW_Metadata() {
       }
     }
 
-    // Deselect everything
+    // De-select everything
     doc.selection = null;
 
     // Group art on CW layers

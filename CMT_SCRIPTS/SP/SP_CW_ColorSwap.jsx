@@ -1,4 +1,5 @@
 //@include '../UTILITIES/GetItems.jsx';
+//@include '../UTILITIES/Layers.jsx';
 //@include '../UTILITIES/Settings.jsx';
 
 function SP_CW_ColorSwap() {
@@ -7,16 +8,11 @@ function SP_CW_ColorSwap() {
   var docLayers = doc.layers;
   var docSwatches = doc.swatches;
 
-  // Deselect everything
+  // Exit if no CW_ layers
+  if (!cwLayersExist()) throw new Error("No CW Layers");
+
+  // De-select everything
   doc.selection = null;
-
-  // Exit if no CW_ layers in document
-  var isLayersCW = checkLayersCW();
-
-  if (!isLayersCW) {
-    alert("No 'CW_' Layers Found", "Script Alert", true);
-    return;
-  }
 
   // Color Library data from settings file
   var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_ColorLibrary.json");
@@ -332,22 +328,6 @@ try {
 //*******************
 // Helper functions
 //*******************
-
-/**
- * Checks if any layers in the active document's name begin with 'CW_'
- * @returns {Boolean}
- */
-function checkLayersCW() {
-  var isNameCW = false;
-
-  for (var i = 0; i < app.activeDocument.layers.length; i++) {
-    if (app.activeDocument.layers[i].name.indexOf("CW_") !== -1) {
-      isNameCW = true;
-    }
-  }
-
-  return isNameCW;
-}
 
 /**
  * Returns a color data object from a list.
