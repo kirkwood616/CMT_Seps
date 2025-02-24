@@ -1,4 +1,5 @@
 //@include '../UTILITIES/Settings.jsx';
+//@include '../UTILITIES/Colors.jsx';
 
 function Settings_ColorLibrary() {
   // Set up & load Settings_Config file
@@ -16,7 +17,7 @@ function Settings_ColorLibrary() {
   // Color Data storage (Object Array)
   var colorData = new Array();
 
-  // Search Spot Colors, get color info, add to storage
+  // Search Spot Colors, get color info, convert RGB to CMYK, add to storage
   for (var i = 0; i < docSpots.length; i++) {
     if (docSpots[i].name === "[Registration]") continue;
 
@@ -29,7 +30,9 @@ function Settings_ColorLibrary() {
         break;
 
       case SpotColorKind.SPOTRGB:
-        colorInfo.kind = "RGB";
+        var convertedCMYK = convertRGBtoCMYK(colorInfo.values);
+        colorInfo.values = convertedCMYK;
+        colorInfo.kind = "CMYK";
         colorData.push(colorInfo);
         break;
 
