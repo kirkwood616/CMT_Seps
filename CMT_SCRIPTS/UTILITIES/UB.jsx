@@ -80,8 +80,8 @@ function createUB(layer) {
     }
   }
 
-  defaultStrokeUB(app.activeDocument);
   //@include '../UTILITIES/Overprint_Fill_True.jsx';
+  defaultStrokeUB(app.activeDocument);
   app.activeDocument.selection = false;
 }
 
@@ -104,8 +104,8 @@ function createSelectedUB(layer) {
     }
   }
 
-  defaultStrokeUB(app.activeDocument);
   //@include '../UTILITIES/Overprint_Fill_True.jsx';
+  defaultStrokeUB(app.activeDocument);
   app.activeDocument.selection = false;
 }
 
