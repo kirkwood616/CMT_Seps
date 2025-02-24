@@ -138,7 +138,6 @@ function SP_CW_ColorSwap() {
   // LIST BOX CURRENT COLOR
   // ============
   for (var i = 0; i < cwValues.length; i++) {
-    // var currentColorListBox_array = cwValues[i].colors;
     var currentColorListBox = refCurrListPanel[i].add("listbox", undefined, cwValues[i].colors);
     currentColorListBox.preferredSize.width = 200;
 
