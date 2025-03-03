@@ -70,7 +70,7 @@ function NTF_Arrange() {
     return b.length - a.length;
   });
 
-  var singleIndex;
+  var singleIndex = 0;
 
   for (var i = 0; i < matchStore.length; i++) {
     if (matchStore[i].length === 1) {
