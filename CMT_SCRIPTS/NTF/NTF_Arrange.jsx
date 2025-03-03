@@ -4,13 +4,16 @@
 function NTF_Arrange() {
   // Active Document
   var doc = app.activeDocument;
+  var docSwatches = doc.swatches;
+  var artBoard = doc.artboards[0];
+  var artboard_x = artBoard.artboardRect[0] + artBoard.artboardRect[2];
 
   // Current Selection
   var sel = doc.selection;
 
   // Exit if no selection
   if (!sel.length) {
-    throw new Error("No Selected Art" + "\n" + "Select Art Before Running.");
+    throw new Error("No Selected Art" + "\n" + "Select Names Before Running.");
   }
 
   // Overprint Fill selection
@@ -62,8 +65,29 @@ function NTF_Arrange() {
     matchStore.push(matches);
   }
 
-  // Swatches
-  var docSwatches = doc.swatches;
+  // Sort matches by match-length and physical width (large to small)
+  matchStore.sort(function (a, b) {
+    return b.length - a.length;
+  });
+
+  var singleIndex;
+
+  for (var i = 0; i < matchStore.length; i++) {
+    if (matchStore[i].length === 1) {
+      singleIndex = i;
+      break;
+    }
+  }
+
+  var unsorted = matchStore.slice(singleIndex);
+  matchStore.length = singleIndex;
+  unsorted.sort(function (a, b) {
+    return sel[b[0]].width - sel[a[0]].width;
+  });
+  matchStore.sort(function (a, b) {
+    return sel[b[0]].width - sel[a[0]].width;
+  });
+  matchStore.push.apply(matchStore, unsorted);
 
   // Get swatch name
   var colorSwatch = new String();
@@ -111,8 +135,11 @@ function NTF_Arrange() {
       activeLayer = newLayer;
     }
 
-    // First item always aligned to left guide
+    // First item always aligned to left guide, or centered if only 1 item
     sel[matchSet[0]].position = [36, yPosition];
+    if (matchSet.length === 1) {
+      sel[matchSet[0]].position = [(artboard_x - sel[matchSet[0]].width) / 2, yPosition];
+    }
     sel[matchSet[0]].move(activeLayer, ElementPlacement.PLACEATEND);
 
     // Last item always aligned to right guide
