@@ -42,8 +42,8 @@ function SP_PageProof_FromTemplate() {
   // PROOF layer items
   var proofLayer = doc.layers.getByName("PROOF");
   var shirt = proofLayer.pathItems.getByName("SHIRT");
-  var orderNumber = proofLayer.textFrames.getByName("ORDER_NUMBER");
-  var artNumber = proofLayer.textFrames.getByName("ART_NUMBER");
+  var orderNumber = doc.textFrames.getByName("ORDER_NUMBER");
+  var artNumber = doc.textFrames.getByName("ART_NUMBER");
 
   // Make PROOF layer the active layer
   doc.activeLayer = proofLayer;

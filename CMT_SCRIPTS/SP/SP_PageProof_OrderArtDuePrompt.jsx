@@ -2,13 +2,12 @@ function SP_PageProof_OrderArtDuePrompt() {
   // Active Document
   var doc = app.activeDocument;
 
-  // PROOF layer items
-  var proofLayer = doc.layers.getByName("PROOF");
-  var orderNumber = proofLayer.textFrames.getByName("ORDER_NUMBER");
-  var artNumber = proofLayer.textFrames.getByName("ART_NUMBER");
-  var dueDate = proofLayer.textFrames.getByName("DUE");
+  // Text Frame items
+  var orderNumber = doc.textFrames.getByName("ORDER_NUMBER");
+  var artNumber = doc.textFrames.getByName("ART_NUMBER");
+  var dueDate = doc.textFrames.getByName("DUE");
 
-  // Replace leading text on proof layer items
+  // Replace leading text on text frame items
   var orderNumberText = orderNumber.textRange.contents.replace(/ORDER #: /gi, "");
   var artNumberText = artNumber.textRange.contents.replace(/ART #: /gi, "").toUpperCase();
   var dueDateText = dueDate.textRange.contents.replace(/DUE: /gi, "");

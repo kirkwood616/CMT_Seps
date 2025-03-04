@@ -13,8 +13,7 @@ function SP_PageProof_SaveFile() {
   var doc = app.activeDocument;
 
   // PROOF layer items
-  var proofLayer = doc.layers.getByName("PROOF");
-  var artNumber = proofLayer.textFrames.getByName("ART_NUMBER");
+  var artNumber = doc.textFrames.getByName("ART_NUMBER");
   var artNumberText = artNumber.textRange.contents.replace(/ART #: /gi, "").toUpperCase();
 
   // Create file name with appropriate ending

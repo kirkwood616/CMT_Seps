@@ -14,8 +14,8 @@ function SP_PageProof_Note() {
   var activeLayer = doc.activeLayer;
   var proofLayer = doc.layers.getByName("PROOF");
 
-  // Proof Layer text
-  var artNumber = proofLayer.textFrames.getByName("ART_NUMBER");
+  // Art Number text frame
+  var artNumber = doc.textFrames.getByName("ART_NUMBER");
 
   // Note data
   var noteData = ["** PRINT/FLASH/PRINT **", "** PRINT/FLASH/PRINT UB **", "** PRINT/FLASH/PRINT WHITE **", "CW_1"];
