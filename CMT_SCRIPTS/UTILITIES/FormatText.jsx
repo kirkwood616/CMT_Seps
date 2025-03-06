@@ -37,11 +37,13 @@ function formatArtName(artName) {
 function formatSwatchNames() {
   for (var i = 0; i < app.activeDocument.swatches.length; i++) {
     var swatchName = app.activeDocument.swatches[i].name;
-    swatchName = swatchName.replace(/\//g, "_");
+    swatchName = swatchName.replace(/\//g, "_").trim();
 
     if (swatchName.charAt(0) === "P" && swatchName.charAt(1) === " ") {
       swatchName = swatchName.slice(2);
     }
+
+    app.activeDocument.swatches[i].name = swatchName;
   }
 }
 

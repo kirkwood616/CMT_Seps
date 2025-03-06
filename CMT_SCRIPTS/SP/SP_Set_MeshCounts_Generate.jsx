@@ -32,9 +32,6 @@ function SP_Set_MeshCounts_Generate() {
   // Storage
   var swatchColors = new Array();
 
-  // Trim white space at start & end of swatch name
-  trimSwatchNames();
-
   // Populate swatchColors[] with swatch names
   for (var i = 0; i < docSwatches.length; i++) {
     if (docSwatches[i].name !== "[None]" && docSwatches[i].name !== "[Registration]") {
