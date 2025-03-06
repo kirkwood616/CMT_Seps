@@ -32,6 +32,20 @@ function formatArtName(artName) {
 }
 
 /**
+ * Replaces any "\/" with "_" and removes a leading private prefix of "P " from all swatch names.
+ */
+function formatSwatchNames() {
+  for (var i = 0; i < app.activeDocument.swatches.length; i++) {
+    var swatchName = app.activeDocument.swatches[i].name;
+    swatchName = swatchName.replace(/\//g, "_");
+
+    if (swatchName.charAt(0) === "P" && swatchName.charAt(1) === " ") {
+      swatchName = swatchName.slice(2);
+    }
+  }
+}
+
+/**
  * Returns a new string removing occurrences of '/', '\\', 'Spot', 'Pantone'
  * and any characters contained within parenthesis, along with the parenthesis themselves.
  * @param {String}    theString

@@ -13,6 +13,9 @@ function SP_Set_MeshCounts_Generate() {
   // Swatches
   var docSwatches = doc.swatches;
 
+  // Remove unwanted items from all swatch names
+  formatSwatchNames();
+
   // Mesh Counts
   var meshCounts = settingsData.meshCounts;
   var baseMeshIndex = meshCounts[1];
