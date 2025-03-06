@@ -15,18 +15,25 @@ function isLayerNamed(name) {
 
 /**
  * Searches layer names for 'Art' layer. If present, selects its contents and creates a group if not currently grouped.
+ *
+ * If items are currently selected, it will group the items if they are not grouped.
  * @returns {void}
  */
 function selectArtLayer() {
-  if (!app.activeDocument.selection.length) {
-    if (isLayerNamed("Art")) {
-      app.activeDocument.layers.getByName("Art").hasSelectedArtwork = true;
-    } else {
-      throw new Error("No Art Layer or Selected Art.");
-    }
+  if (app.activeDocument.selection.length) {
+    if (app.activeDocument.selection.length > 1) app.executeMenuCommand("group");
+    return;
   }
 
-  if (app.activeDocument.selection.length > 1) app.executeMenuCommand("group");
+  if (isLayerNamed("Art")) {
+    if (!app.activeDocument.layers.getByName("Art").pageItems.length) {
+      throw new Error("No Items on Art Layer. Select Art.");
+    }
+    app.activeDocument.layers.getByName("Art").hasSelectedArtwork = true;
+    if (app.activeDocument.selection.length > 1) app.executeMenuCommand("group");
+  } else {
+    throw new Error("No Art Layer or Selected Art.");
+  }
 }
 
 /**
@@ -34,13 +41,11 @@ function selectArtLayer() {
  * @returns {Boolean}
  */
 function cwLayersExist() {
-  var isNameCW = false;
-
   for (var i = 0; i < app.activeDocument.layers.length; i++) {
     if (app.activeDocument.layers[i].name.indexOf("CW_") !== -1) {
-      isNameCW = true;
+      return true;
     }
   }
 
-  return isNameCW;
+  return false;
 }
