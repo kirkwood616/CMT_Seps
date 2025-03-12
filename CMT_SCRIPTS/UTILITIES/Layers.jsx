@@ -29,6 +29,7 @@ function selectArtLayer() {
     if (!app.activeDocument.layers.getByName("Art").pageItems.length) {
       throw new Error("No Items on Art Layer. Select Art.");
     }
+    app.activeDocument.activeLayer = app.activeDocument.layers.getByName("Art");
     app.activeDocument.layers.getByName("Art").hasSelectedArtwork = true;
     if (app.activeDocument.selection.length > 1) app.executeMenuCommand("group");
   } else {
