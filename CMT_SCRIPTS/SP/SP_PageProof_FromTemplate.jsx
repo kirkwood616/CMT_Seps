@@ -1,6 +1,7 @@
 //@include '../UTILITIES/Settings.jsx';
 //@include '../UTILITIES/Layers.jsx';
 //@include '../UTILITIES/Proofs.jsx';
+//@include './SP_PageProofCW_FromTemplate.jsx';
 
 function SP_PageProof_FromTemplate() {
   // Set up & load settings
@@ -115,42 +116,10 @@ function SP_PageProof_FromTemplate() {
 // Run
 try {
   if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
-    SP_PageProof_FromTemplate();
+    cwLayersExist() ? SP_PageProofCW_FromTemplate() : SP_PageProof_FromTemplate();
   } else {
     throw new Error("SP Template File Not Active");
   }
 } catch (e) {
   alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
-}
-
-//*******************
-// Helper functions
-//*******************
-
-/**
- * Centers item vertically & horizontally on the current artboard.
- * @param {PathItem|any} item Selected art or path item
- * @param {Artboard} artboard Current artboard
- */
-function centerOnArtboard(item, artboard) {
-  var artboard_x = artboard.artboardRect[0] + artboard.artboardRect[2];
-  var artboard_y = artboard.artboardRect[1] + artboard.artboardRect[3];
-  var x = (artboard_x - item.width) / 2;
-  var y = (artboard_y + item.height) / 2;
-  item.position = [x, y];
-}
-
-/**
- * Moves art and it's background to desired location if it overflows into the header area of the document.
- * @param {any} art Selected art
- * @param {PathItem} background Background color path behind art
- */
-function toTallPosition(art, background) {
-  var yPositionBackground = -72.1862885521377;
-  var backgroundOffset = (background.position[1] - yPositionBackground) * -1;
-
-  if (background.position[1] > yPositionBackground) {
-    art.translate(0, backgroundOffset);
-    background.translate(0, backgroundOffset);
-  }
 }
