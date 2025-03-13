@@ -9,7 +9,7 @@ function RTF_OrderArtPrompt() {
 
   // Remove leading text in Order & Art File text frames
   var orderNameText = orderName.contents.replace("ORDER ", "");
-  var artNameText = artName.contents.replace("ART FILE: ", "");
+  var artNameText = artName.contents.replace("ART NUMBER: ", "");
 
   // GUI Window
   var gui = new Window("dialog", "SET ORDER & ART NUMBER");
