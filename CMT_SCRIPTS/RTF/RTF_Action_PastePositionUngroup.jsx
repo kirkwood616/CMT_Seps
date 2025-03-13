@@ -1,6 +1,6 @@
 function RTF_Action_PastePositionUngroup() {
-  // @include "RTF_PastePositionArt.jsx"
-  // @include "RTF_Ungroup_TransferArt.jsx"
+  //@include './RTF_PastePositionArt.jsx';
+  //@include './RTF_Ungroup_TransferArt.jsx';
 }
 
 // Run
