@@ -50,7 +50,7 @@ function SP_CW_Set_Ammount() {
         artLayerCW_1.name = "Art";
 
         for (var i = 0; i < doc.layers.length; i++) {
-          if (doc.layers[i].name.indexOf("CW_") !== -1) {
+          if (doc.layers[i].name.indexOf("CW_") > -1) {
             doc.layers[i].remove();
           }
         }
@@ -63,34 +63,22 @@ function SP_CW_Set_Ammount() {
     // Rename current layer "CW_1"
     artLayer.name = "CW_1";
 
-    // Index of CW_1
-    var indexCW_1;
-
-    for (var i = 0; i < doc.layers.length; i++) {
-      if (doc.layers[i].name === artLayer.name) {
-        indexCW_1 = i;
-        break;
-      }
-    }
-
     // Duplicate CW_1 layer, position & rename to it's respective number
     for (var i = 1; i < numberSelection; i++) {
       var newLayer = doc.layers.add();
       newLayer.name = "CW_" + (i + 1).toString();
-      newLayer.zOrder(ZOrderMethod.SENDTOBACK);
 
-      for (var j = 1; j < indexCW_1; j++) {
-        newLayer.zOrder(ZOrderMethod.BRINGFORWARD);
-      }
-
+      doc.activeLayer = artLayer;
+      artLayer.hasSelectedArtwork = true;
       app.copy();
       app.executeMenuCommand("pasteFront");
       sel = doc.selection[0];
       sel.move(newLayer, ElementPlacement.PLACEATEND);
-      indexCW_1++;
+
+      newLayer.move(doc.layers["CW_" + i], ElementPlacement.PLACEBEFORE);
     }
 
-    // De-select everything
+    // Deselect everything
     doc.selection = null;
 
     // Set CW_1 to active layer
