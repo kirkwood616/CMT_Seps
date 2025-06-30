@@ -1,5 +1,6 @@
 //@include '../UTILITIES/FormatText.jsx';
 //@include '../UTILITIES/Polyfills.js';
+//@include '../UTILITIES/Elements.jsx';
 
 function NTF_Arrange_Single() {
   // Active Document
@@ -23,8 +24,13 @@ function NTF_Arrange_Single() {
   var colorSwatch = "";
 
   for (var i = 0; i < docSwatches.length; i++) {
-    if (docSwatches[i].name !== "[None]" && docSwatches[i].name !== "[Registration]") {
-      colorSwatch = removeUnwantedChars(docSwatches[i].name).trim().toUpperCase();
+    if (
+      docSwatches[i].name !== "[None]" &&
+      docSwatches[i].name !== "[Registration]"
+    ) {
+      colorSwatch = removeUnwantedChars(docSwatches[i].name)
+        .trim()
+        .toUpperCase();
       docSwatches[i].name = colorSwatch + "_1";
     }
   }
@@ -43,10 +49,17 @@ function NTF_Arrange_Single() {
     sel[i].position = [(artboard_x - sel[i].width) / 2, sel[i].position[1]];
   }
 
-  // Group, position vertically centered to artboard & ungroup
+  // Group, position vertically centered to artboard
   app.executeMenuCommand("group");
-  doc.selection[0].position = [doc.selection[0].position[0], (artboard_y + doc.selection[0].height) / 2];
-  app.executeMenuCommand("ungroup");
+
+  doc.selection[0].position = [
+    doc.selection[0].position[0],
+    (artboard_y + doc.selection[0].height) / 2,
+  ];
+
+  // Ungroup if multiline
+  var isMultiline = isGroupMultiline(doc.selection[0]);
+  if (isMultiline) app.executeMenuCommand("ungroup");
 
   // Deselect everything
   doc.selection = null;

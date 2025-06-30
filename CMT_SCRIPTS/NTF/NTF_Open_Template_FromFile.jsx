@@ -1,8 +1,12 @@
 //@include '../UTILITIES/Settings.jsx';
+//@include '../UTILITIES/Elements.jsx';
 
 function NTF_Open_Template_FromFile() {
   // Set up & load settings
-  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsFile = setupSettingsFile(
+    "CMT_Seps_Settings",
+    "Settings_Config.json"
+  );
   var settingsData = loadJSONData(settingsFile);
   var templateDocPath = settingsData.NTF_templatePath;
 
@@ -40,8 +44,10 @@ function NTF_Open_Template_FromFile() {
   sel = templateDoc.selection[0];
   sel.position = [templateRect[0] - sel.width, sel.position[1]];
 
-  // Ungroup art
-  app.executeMenuCommand("ungroup");
+  // Ungroup art if multiple lines
+  var isMultiline = isGroupMultiline(sel);
+
+  if (isMultiline) app.executeMenuCommand("ungroup");
 }
 
 // Run
