@@ -1,3 +1,4 @@
+//@include '../UTILITIES/Polyfills.js';
 //@include '../UTILITIES/Settings.jsx';
 //@include '../UTILITIES/Layers.jsx';
 //@include '../UTILITIES/Proofs.jsx';
@@ -5,7 +6,10 @@
 
 function SP_PageProof_FromTemplate() {
   // Set up & load settings
-  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsFile = setupSettingsFile(
+    "CMT_Seps_Settings",
+    "Settings_Config.json"
+  );
   var settingsData = loadJSONData(settingsFile);
 
   // Illustrator Coordinate System
@@ -105,18 +109,23 @@ function SP_PageProof_FromTemplate() {
   var newDueDate = prompt("ENTER DUE DATE", dateToday(), "DUE DATE");
 
   if (newOrderNumber) {
-    orderNumber.textRange.contents = "ORDER #: " + newOrderNumber;
+    orderNumber.textRange.contents = "ORDER #: " + newOrderNumber.trim();
   }
 
   if (newDueDate) {
-    dueDate.textRange.contents = "DUE: " + newDueDate;
+    dueDate.textRange.contents = "DUE: " + newDueDate.trim();
   }
 }
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
-    cwLayersExist() ? SP_PageProofCW_FromTemplate() : SP_PageProof_FromTemplate();
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "SP_Template"
+  ) {
+    cwLayersExist()
+      ? SP_PageProofCW_FromTemplate()
+      : SP_PageProof_FromTemplate();
   } else {
     throw new Error("SP Template File Not Active");
   }

@@ -1,3 +1,5 @@
+//@include '../UTILITIES/Polyfills.js';
+
 function SP_PageProof_OrderArtDuePrompt() {
   // Active Document
   var doc = app.activeDocument;
@@ -8,8 +10,13 @@ function SP_PageProof_OrderArtDuePrompt() {
   var dueDate = doc.textFrames.getByName("DUE");
 
   // Replace leading text on text frame items
-  var orderNumberText = orderNumber.textRange.contents.replace(/ORDER #: /gi, "");
-  var artNumberText = artNumber.textRange.contents.replace(/ART #: /gi, "").toUpperCase();
+  var orderNumberText = orderNumber.textRange.contents.replace(
+    /ORDER #: /gi,
+    ""
+  );
+  var artNumberText = artNumber.textRange.contents
+    .replace(/ART #: /gi, "")
+    .toUpperCase();
   var dueDateText = dueDate.textRange.contents.replace(/DUE: /gi, "");
 
   // GUI Window
@@ -48,9 +55,9 @@ function SP_PageProof_OrderArtDuePrompt() {
 
     // Set textframes contents & close window
     if (orderInput.text && artInput.text && dueDateInput.text) {
-      orderNumber.contents = "ORDER #: " + orderInput.text;
-      artNumber.contents = "ART #: " + artInput.text.toUpperCase();
-      dueDate.contents = "DUE: " + dueDateInput.text;
+      orderNumber.contents = "ORDER #: " + orderInput.text.trim();
+      artNumber.contents = "ART #: " + artInput.text.trim().toUpperCase();
+      dueDate.contents = "DUE: " + dueDateInput.text.trim();
       gui.close();
     }
   });
@@ -61,7 +68,10 @@ function SP_PageProof_OrderArtDuePrompt() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "PAGE_PROOF") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "PAGE_PROOF"
+  ) {
     SP_PageProof_OrderArtDuePrompt();
   } else {
     throw new Error("PAGE_PROOF Template Not Active");

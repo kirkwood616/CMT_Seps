@@ -1,3 +1,5 @@
+//@include '../UTILITIES/Polyfills.js';
+
 function NTF_Set_OrderArt() {
   // Active Document
   var doc = app.activeDocument;
@@ -62,8 +64,8 @@ function NTF_Set_OrderArt() {
 
     // Set textframes contents & close window
     if (orderInput.text && artInput.text) {
-      orderName.contents = "ORDER " + orderInput.text;
-      artName.contents = "ART FILE: " + artInput.text.toUpperCase();
+      orderName.contents = "ORDER " + orderInput.text.trim();
+      artName.contents = "ART FILE: " + artInput.text.trim().toUpperCase();
       gui.close();
     }
 
@@ -77,7 +79,10 @@ function NTF_Set_OrderArt() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "NTF_Template") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "NTF_Template"
+  ) {
     NTF_Set_OrderArt();
   } else {
     throw new Error("Template File Not Active");

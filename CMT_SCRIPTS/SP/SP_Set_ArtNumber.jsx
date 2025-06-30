@@ -1,3 +1,5 @@
+//@include '../UTILITIES/Polyfills.js';
+
 function SP_Set_ArtNumber() {
   // Active Document
   var doc = app.activeDocument;
@@ -40,7 +42,7 @@ function SP_Set_ArtNumber() {
 
     // Set textframes contents & close window
     if (artInput.text) {
-      artName.contents = artInput.text.toUpperCase();
+      artName.contents = artInput.text.trim().toUpperCase();
       gui.close();
     }
   });
@@ -51,7 +53,10 @@ function SP_Set_ArtNumber() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "SP_Template"
+  ) {
     SP_Set_ArtNumber();
   } else {
     throw new Error("SP Template File Not Active");

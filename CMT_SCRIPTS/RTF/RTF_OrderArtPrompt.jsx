@@ -1,3 +1,5 @@
+//@include '../UTILITIES/Polyfills.js';
+
 function RTF_OrderArtPrompt() {
   // Active Document
   var doc = app.activeDocument;
@@ -58,8 +60,8 @@ function RTF_OrderArtPrompt() {
 
     // Set textframes contents & close window
     if (orderInput.text && artInput.text) {
-      orderName.contents = "ORDER " + orderInput.text;
-      artName.contents = "ART NUMBER: " + artInput.text.toUpperCase();
+      orderName.contents = "ORDER " + orderInput.text.trim();
+      artName.contents = "ART NUMBER: " + artInput.text.trim().toUpperCase();
       gui.close();
     }
   });
@@ -70,7 +72,10 @@ function RTF_OrderArtPrompt() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "RTF_Template") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "RTF_Template"
+  ) {
     RTF_OrderArtPrompt();
   } else {
     throw new Error("RTF Template File Not Active");
