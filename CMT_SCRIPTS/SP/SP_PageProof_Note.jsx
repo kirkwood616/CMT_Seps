@@ -18,10 +18,19 @@ function SP_PageProof_Note() {
   var artNumber = doc.textFrames.getByName("ART_NUMBER");
 
   // Note data
-  var noteData = ["** PRINT/FLASH/PRINT **", "** PRINT/FLASH/PRINT UB **", "** PRINT/FLASH/PRINT WHITE **", "CW_1"];
+  var noteData = [
+    "** PRINT/FLASH/PRINT **",
+    "** PRINT/FLASH/PRINT UB **",
+    "** PRINT/FLASH/PRINT WHITE **",
+    "CW_1",
+    "** LEFT SLEEVE **",
+    "** RIGHT SLEEVE **",
+  ];
 
   // GUI Window
-  var dialog = new Window("dialog", undefined, undefined, { closeButton: false });
+  var dialog = new Window("dialog", undefined, undefined, {
+    closeButton: false,
+  });
   dialog.text = "CREATE NOTE";
   dialog.orientation = "column";
   dialog.alignChildren = ["left", "top"];
@@ -88,9 +97,15 @@ function SP_PageProof_Note() {
       var theShirt = proofLayer.pageItems.getByName("SHIRT");
       var notePosY = theShirt.position[1] + newNote.height + 5;
 
-      newNote.position = [(artboardBounds[2] - artboardBounds[0]) / 2 - newNote.width / 2, notePosY];
+      newNote.position = [
+        (artboardBounds[2] - artboardBounds[0]) / 2 - newNote.width / 2,
+        notePosY,
+      ];
     } else {
-      newNote.position = [(artboardBounds[2] - artboardBounds[0]) / 2 - newNote.width / 2, -72];
+      newNote.position = [
+        (artboardBounds[2] - artboardBounds[0]) / 2 - newNote.width / 2,
+        -72,
+      ];
     }
 
     // Close Window
@@ -103,7 +118,10 @@ function SP_PageProof_Note() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "PAGE_PROOF") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "PAGE_PROOF"
+  ) {
     SP_PageProof_Note();
   } else {
     throw new Error("PAGE_PROOF Template Not Active");
