@@ -48,6 +48,9 @@ function NTF_Open_Template_FromFile() {
   var isMultiline = isGroupMultiline(sel);
 
   if (isMultiline) app.executeMenuCommand("ungroup");
+
+  // Set Order/Art #
+  //@include './NTF_Set_OrderArt.jsx';
 }
 
 // Run
