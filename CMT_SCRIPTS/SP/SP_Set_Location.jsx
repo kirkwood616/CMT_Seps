@@ -49,13 +49,21 @@ function SP_Set_Location() {
   var cancelButton = createButton(buttonGroup, "CANCEL", function () {
     locationWindow.close();
   });
+
   var okButton = createButton(buttonGroup, "OK", function () {
     var artSelection = doc.selection[0];
     var selectedLocation = locationGroup.children[1].selection.text;
     var metaLocationText = metaLocation.textRange.contents;
-    var centerPosition = (artboardBounds[2] - artboardBounds[0]) / 2 - doc.selection[0].width / 2;
+    var centerPosition =
+      (artboardBounds[2] - artboardBounds[0]) / 2 - doc.selection[0].width / 2;
     var regCenteredPosition = 553.22509765623;
     var regTopCenterBasePosition = [regCenteredPosition, -49.7246093738895];
+
+    // Original position of selection
+    var originalPosition = new Array(
+      artSelection.position[0],
+      artSelection.position[1]
+    );
 
     // Top-center registration visible
     regTopCenter.hidden = false;
@@ -66,24 +74,49 @@ function SP_Set_Location() {
         locationRotate(metaLocationText, artSelection);
         // Position selection centered & 2 inches from top of artboard
         artSelection.position = new Array(centerPosition, -144);
+        // Move UB art to the new location and rotate if necessary
+        moveLocationUB(
+          metaLocationText,
+          selectedLocation,
+          artSelection,
+          originalPosition
+        );
         // Position top-center registration to base position
-        regTopCenter.position = [regCenteredPosition, regTopCenterBasePosition[1]];
+        regTopCenter.position = [
+          regCenteredPosition,
+          regTopCenterBasePosition[1],
+        ];
         // Position bottom-center registration 0.50" from art
-        regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        regBottomCenter.position = [
+          regCenteredPosition,
+          yPositionRegBottom(artSelection),
+        ];
+
         // Position metaGroup
         metaGroup.position = [487.296692817155, -49.7230914550501];
         // Update location text frame to new position
         metaLocation.textRange.contents = selectedLocation;
+
         break;
       case "YOKE":
         // Rotate selection if matches a rotated location
         locationRotate(metaLocationText, artSelection);
         // Position selection centered & 1" down from top of artboard
         artSelection.position = [centerPosition, -72];
+        // Move UB art to the new location and rotate if necessary
+        moveLocationUB(
+          metaLocationText,
+          selectedLocation,
+          artSelection,
+          originalPosition
+        );
         // Position top-center registration at 0.125" from top of artboard
         regTopCenter.position = [regCenteredPosition, -9];
         // Position bottom-center registration 0.50" down from art
-        regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        regBottomCenter.position = [
+          regCenteredPosition,
+          yPositionRegBottom(artSelection),
+        ];
         // Position metaGroup to regTopCenter
         metaGroup.position = [487.296692817155, -8.99994692380005];
         // Update location text frame to new position
@@ -94,10 +127,23 @@ function SP_Set_Location() {
         locationRotate(metaLocationText, artSelection);
         // Position selection centered to SL position & 2 inches from top of artboard
         artSelection.position = new Array(xPositionSL(artSelection), -144);
+        // Move UB art to the new location and rotate if necessary
+        moveLocationUB(
+          metaLocationText,
+          selectedLocation,
+          artSelection,
+          originalPosition
+        );
         // Position top-center registration to base position
-        regTopCenter.position = [regCenteredPosition, regTopCenterBasePosition[1]];
+        regTopCenter.position = [
+          regCenteredPosition,
+          regTopCenterBasePosition[1],
+        ];
         // Position bottom-center registration 0.50" from art
-        regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        regBottomCenter.position = [
+          regCenteredPosition,
+          yPositionRegBottom(artSelection),
+        ];
         // Position metaGroup
         metaGroup.position = [487.296692817155, -49.7230914550501];
         // Update location text frame to new position
@@ -108,10 +154,23 @@ function SP_Set_Location() {
         locationRotate(metaLocationText, artSelection);
         // Position selection centered to SR position & 2 inches from top of artboard
         artSelection.position = new Array(xPositionSR(artSelection), -144);
+        // Move UB art to the new location and rotate if necessary
+        moveLocationUB(
+          metaLocationText,
+          selectedLocation,
+          artSelection,
+          originalPosition
+        );
         // Position top-center registration to base position
-        regTopCenter.position = [regCenteredPosition, regTopCenterBasePosition[1]];
+        regTopCenter.position = [
+          regCenteredPosition,
+          regTopCenterBasePosition[1],
+        ];
         // Position bottom-center registration 0.50" from art
-        regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        regBottomCenter.position = [
+          regCenteredPosition,
+          yPositionRegBottom(artSelection),
+        ];
         // Position metaGroup
         metaGroup.position = [487.296692817155, -49.7230914550501];
         // Update location text frame to new position
@@ -126,10 +185,23 @@ function SP_Set_Location() {
         }
         // Position selection centered & at top of artboard
         artSelection.position = [centerPosition, 0];
+        // Move UB art to the new location and rotate if necessary
+        moveLocationUB(
+          metaLocationText,
+          selectedLocation,
+          artSelection,
+          originalPosition
+        );
         // Position bottom-center registration 0.50" down from art
-        regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        regBottomCenter.position = [
+          regCenteredPosition,
+          yPositionRegBottom(artSelection),
+        ];
         // Position metaGroup
-        metaGroup.position = [487.296692817155, yPositionRegBottom(artSelection) - 4];
+        metaGroup.position = [
+          487.296692817155,
+          yPositionRegBottom(artSelection) - 4,
+        ];
         // Update location text frame to new position
         metaLocation.textRange.contents = selectedLocation;
         break;
@@ -140,10 +212,20 @@ function SP_Set_Location() {
         }
         // Position selection centered & 1" down from top of artboard
         artSelection.position = [centerPosition, -72];
+        // Move UB art to the new location and rotate if necessary
+        moveLocationUB(
+          metaLocationText,
+          selectedLocation,
+          artSelection,
+          originalPosition
+        );
         // Position top-center registration at 0.125" from top of artboard
         regTopCenter.position = [regCenteredPosition, -9];
         // Position bottom-center registration 0.50" down from art
-        regBottomCenter.position = [regCenteredPosition, yPositionRegBottom(artSelection)];
+        regBottomCenter.position = [
+          regCenteredPosition,
+          yPositionRegBottom(artSelection),
+        ];
         // Position metaGroup to regTopCenter
         metaGroup.position = [487.296692817155, -8.99994692380005];
         // Update location text frame to new position
@@ -166,7 +248,10 @@ function SP_Set_Location() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "SP_Template"
+  ) {
     SP_Set_Location();
   } else {
     throw new Error("SP Template File Not Active");
@@ -245,13 +330,13 @@ function createButton(parent, title, onClick) {
 /**
  * Checks if current location text matches a rotated location.
  *
- * If true, rotates selection -180 degrees.
+ * If true, rotates selection 180 degrees.
  * @param {String} contents Location text
  * @param {any} selection Current selection
  */
 function locationRotate(contents, selection) {
   if (contents === "PK" || contents === "UD") {
-    selection.rotate(-180);
+    selection.rotate(180);
   }
 }
 
@@ -295,4 +380,64 @@ function yPositionRegBottom(selection) {
   var yPositionArtBottom = selection.position[1] * -1 + artHeight;
 
   return yPositionArtBottom * -1 - 36;
+}
+
+/**
+ * Moves the UB, if present, to the new location of the Art selection and rotated
+ * based on the current and selected location.
+ * @param {String}    currLoc The current set location
+ * @param {String}    newLoc The new location
+ * @param {any}       artSel Selected artwork
+ * @param {Array}     ogPos Original position of the art
+ * @returns {void}
+ */
+function moveLocationUB(currLoc, newLoc, artSel, ogPos) {
+  if (!isLayerNamed("UB")) return;
+
+  var ubLayer = app.activeDocument.layers.getByName("UB");
+
+  if (ubLayer.pageItems.length < 1) return;
+
+  var moveDifference = new Array(
+    artSel.position[0] - ogPos[0],
+    artSel.position[1] - ogPos[1]
+  );
+
+  app.activeDocument.selection = null;
+  ubLayer.hasSelectedArtwork = true;
+
+  if (app.activeDocument.selection.length > 1) {
+    app.executeMenuCommand("group");
+  }
+
+  var rect = ubLayer.pathItems.rectangle(
+    ogPos[0],
+    ogPos[1],
+    artSel.width,
+    artSel.height
+  );
+
+  rect.position = [ogPos[0], ogPos[1]];
+
+  ubLayer.hasSelectedArtwork = true;
+  app.executeMenuCommand("group");
+  app.activeDocument.selection[0].translate(
+    moveDifference[0],
+    moveDifference[1]
+  );
+
+  if (newLoc === "UD" || newLoc === "PK") {
+    if (currLoc !== "UD" || "PK") {
+      app.activeDocument.selection[0].rotate(180);
+    }
+  }
+
+  if (newLoc !== "UD" || "PK") {
+    if (currLoc === "UD" || currLoc === "PK") {
+      app.activeDocument.selection[0].rotate(180);
+    }
+  }
+
+  app.executeMenuCommand("ungroup");
+  rect.remove();
 }
