@@ -103,18 +103,8 @@ function SP_PageProof_FromTemplate() {
   // Change White swatches to pure white
   toProofWhite();
 
-  // Set Due Date
-  var dueDate = proofLayer.textFrames.getByName("DUE");
-  var newOrderNumber = prompt("ENTER ORDER #", "123456", "ORDER NUMBER");
-  var newDueDate = prompt("ENTER DUE DATE", dateToday(), "DUE DATE");
-
-  if (newOrderNumber) {
-    orderNumber.textRange.contents = "ORDER #: " + newOrderNumber.trim();
-  }
-
-  if (newDueDate) {
-    dueDate.textRange.contents = "DUE: " + newDueDate.trim();
-  }
+  // Input for Order / Art # / Due Date
+  //@include './SP_PageProof_OrderArtDuePrompt.jsx';
 }
 
 // Run

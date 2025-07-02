@@ -1,10 +1,14 @@
 //@include '../UTILITIES/Settings.jsx';
 //@include '../UTILITIES/Layers.jsx';
 //@include '../UTILITIES/Proofs.jsx';
+//@include '../UTILITIES/Polyfills.js';
 
 function SP_PageProofCW_FromTemplate() {
   // Set up & load settings
-  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsFile = setupSettingsFile(
+    "CMT_Seps_Settings",
+    "Settings_Config.json"
+  );
   var settingsData = loadJSONData(settingsFile);
 
   // Illustrator Coordinate System
@@ -30,7 +34,8 @@ function SP_PageProofCW_FromTemplate() {
   var cwLayers = new Array();
 
   for (var i = 0; i < artDoc.layers.length; i++) {
-    if (artDoc.layers[i].name.indexOf("CW_") > -1) cwLayers.push(artDoc.layers[i].name);
+    if (artDoc.layers[i].name.indexOf("CW_") > -1)
+      cwLayers.push(artDoc.layers[i].name);
   }
 
   // Open template document
@@ -132,21 +137,14 @@ function SP_PageProofCW_FromTemplate() {
   toProofWhite();
 
   for (var i = 0; i < proofDoc.layers.length; i++) {
-    if (proofDoc.layers[i].name.indexOf("CW_") > -1 && proofDoc.layers[i].name !== "CW_1") {
+    if (
+      proofDoc.layers[i].name.indexOf("CW_") > -1 &&
+      proofDoc.layers[i].name !== "CW_1"
+    ) {
       proofDoc.layers[i].visible = false;
     }
   }
 
-  // Set Due Date
-  var dueDate = proofLayer.textFrames.getByName("DUE");
-  var newOrderNumber = prompt("ENTER ORDER #", "123456", "ORDER NUMBER");
-  var newDueDate = prompt("ENTER DUE DATE", dateToday(), "DUE DATE");
-
-  if (newOrderNumber) {
-    orderNumber.textRange.contents = "ORDER #: " + newOrderNumber;
-  }
-
-  if (newDueDate) {
-    dueDate.textRange.contents = "DUE: " + newDueDate;
-  }
+  // Input for Order / Art # / Due Date
+  //@include './SP_PageProof_OrderArtDuePrompt.jsx';
 }
