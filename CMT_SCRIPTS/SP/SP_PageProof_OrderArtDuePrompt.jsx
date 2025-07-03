@@ -6,8 +6,8 @@ function SP_PageProof_OrderArtDuePrompt() {
 
   // Text Frame items
   var orderNumber = doc.textFrames.getByName("ORDER_NUMBER");
-  var artNumber = doc.textFrames.getByName("ART_NUMBER");
   var dueDate = doc.textFrames.getByName("DUE");
+  var artNumber = doc.textFrames.getByName("ART_NUMBER");
 
   // Replace leading text on text frame items
   var orderNumberText = orderNumber.textRange.contents.replace(
@@ -29,13 +29,13 @@ function SP_PageProof_OrderArtDuePrompt() {
   var orderInput = orderPanel.add("edittext", undefined, orderNumberText);
   orderInput.active = true;
 
-  // Art Panel
-  var artPanel = createPanel(gui, "Art Number");
-  var artInput = artPanel.add("edittext", undefined, artNumberText);
-
   // Due Date
   var dueDatePanel = createPanel(gui, "Due Date");
   var dueDateInput = dueDatePanel.add("edittext", undefined, dueDateText);
+
+  // Art Panel
+  var artPanel = createPanel(gui, "Art Number");
+  var artInput = artPanel.add("edittext", undefined, artNumberText);
 
   // Button Control Group
   var buttonGroup = createGroup(gui, "row");
@@ -56,8 +56,8 @@ function SP_PageProof_OrderArtDuePrompt() {
     // Set textframes contents & close window
     if (orderInput.text && artInput.text && dueDateInput.text) {
       orderNumber.contents = "ORDER #: " + orderInput.text.trim();
-      artNumber.contents = "ART #: " + artInput.text.trim().toUpperCase();
       dueDate.contents = "DUE: " + dueDateInput.text.trim();
+      artNumber.contents = "ART #: " + artInput.text.trim().toUpperCase();
       gui.close();
     }
   });
