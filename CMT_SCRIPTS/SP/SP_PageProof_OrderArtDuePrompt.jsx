@@ -26,7 +26,11 @@ function SP_PageProof_OrderArtDuePrompt() {
 
   // Order Panel
   var orderPanel = createPanel(gui, "Order Number");
-  var orderInput = orderPanel.add("edittext", undefined, orderNumberText);
+  var orderInput = orderPanel.add(
+    "edittext",
+    undefined,
+    orderNumberText.replace(/XXXXXX/gi, "")
+  );
   orderInput.active = true;
 
   // Due Date
