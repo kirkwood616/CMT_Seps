@@ -47,8 +47,10 @@ function SP_PageProof_FromTemplate() {
   // PROOF layer items
   var proofLayer = doc.layers.getByName("PROOF");
   var shirt = proofLayer.pathItems.getByName("SHIRT");
-  var orderNumber = doc.textFrames.getByName("ORDER_NUMBER");
   var artNumber = doc.textFrames.getByName("ART_NUMBER");
+  var dueDate = doc.textFrames.getByName("DUE");
+  // Change due date to today's date
+  dueDate.textRange.contents = dateToday();
 
   // Make PROOF layer the active layer
   doc.activeLayer = proofLayer;
