@@ -136,15 +136,9 @@ function SP_PageProofCW_FromTemplate() {
   // Change White swatches to pure white
   toProofWhite();
 
-  for (var i = 0; i < proofDoc.layers.length; i++) {
-    if (
-      proofDoc.layers[i].name.indexOf("CW_") > -1 &&
-      proofDoc.layers[i].name !== "CW_1"
-    ) {
-      proofDoc.layers[i].visible = false;
-    }
-  }
-
   // Input for Order / Art # / Due Date
   //@include './SP_PageProof_OrderArtDuePrompt.jsx';
+
+  // Arrange CW layers
+  //@include './SP_PageProofCW_Arrange.jsx';
 }
