@@ -42,6 +42,18 @@ function SP_PageProofCW_Arrange() {
   // Deselect everything
   doc.selection = null;
 
+  // Resize if too tall
+  for (var i = 0; i < docLayers.length; i++) {
+    if (docLayers[i].name.indexOf("CW_") < 0) continue;
+
+    var thisLayerArt = docLayers[i].pageItems[0];
+
+    if (thisLayerArt.height > 696) {
+      var yScaleBy = (696 / thisLayerArt.height) * 100;
+      thisLayerArt.resize(yScaleBy, yScaleBy);
+    }
+  }
+
   // Store dimensions of CW_ group
   var cw1 = docLayers.getByName("CW_1");
 
@@ -66,6 +78,9 @@ function SP_PageProofCW_Arrange() {
   var verticalCopies = Math.floor(
     maxArtBounds[1] / (cwImageDimensions[1] + margin / 2)
   );
+
+  if (horizontalCopies === 0) horizontalCopies = 1;
+  if (verticalCopies === 0) verticalCopies = 1;
 
   // Horizontal dimensions & positions
   var marginsHorizontal = (margin / 2) * horizontalCopies;
