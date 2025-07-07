@@ -109,7 +109,11 @@ function SP_Generate_UB_SelectColors() {
       try {
         uncheckedColor = docSwatches.getByName(uncheckedColorNames[i]);
       } catch (e) {
-        alert("No Swatch Name Match" + "\n" + "UB will have errors.", "ERROR", true);
+        alert(
+          "No Swatch Name Match" + "\n" + "UB will have errors.",
+          "ERROR",
+          true
+        );
       }
 
       // Loop temp PathItems & add to tempStorage
@@ -152,24 +156,39 @@ function SP_Generate_UB_SelectColors() {
     // Move copy to UB layer
     if (isLayerNamed("UB")) {
       var ubLayer = docLayers.getByName("UB");
+      ubLayer.visible = true;
 
       if (ubLayer.pageItems.length > 0) {
         // Conflict Window
         var conflictWindow = createWindow("UB LAYER CONFLICT", 300);
         conflictWindow.margins = 15;
-        var conflictHeader = createStaticText(conflictWindow, "UB Layer contains art.");
-        var conflictInstruction = createStaticText(conflictWindow, "Delete UB & Replace with new UB?");
+        var conflictHeader = createStaticText(
+          conflictWindow,
+          "UB Layer contains art."
+        );
+        var conflictInstruction = createStaticText(
+          conflictWindow,
+          "Delete UB & Replace with new UB?"
+        );
 
         // Conflict Button Group
         var conflictButtonGroup = createGroup(conflictWindow, "row", "fill");
-        var conflictCancelButton = createButton(conflictButtonGroup, "CANCEL", function () {
-          conflictWindow.close();
-        });
-        var conflictOkButton = createButton(conflictButtonGroup, "OK", function () {
-          ubLayer.pageItems.removeAll();
-          createSelectedUB(ubLayer);
-          conflictWindow.close();
-        });
+        var conflictCancelButton = createButton(
+          conflictButtonGroup,
+          "CANCEL",
+          function () {
+            conflictWindow.close();
+          }
+        );
+        var conflictOkButton = createButton(
+          conflictButtonGroup,
+          "OK",
+          function () {
+            ubLayer.pageItems.removeAll();
+            createSelectedUB(ubLayer);
+            conflictWindow.close();
+          }
+        );
 
         // Show Conflict Window
         conflictWindow.show();
@@ -197,7 +216,10 @@ function SP_Generate_UB_SelectColors() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "SP_Template"
+  ) {
     addSwatchUB();
     SP_Generate_UB_SelectColors();
   } else {
@@ -223,7 +245,10 @@ function ungroup(object, recursive) {
   recursive = typeof recursive !== "undefined" ? recursive : true;
   var subObject;
   while (object.pageItems.length > 0) {
-    if (object.pageItems[0].typename == "GroupItem" && !object.pageItems[0].clipped) {
+    if (
+      object.pageItems[0].typename == "GroupItem" &&
+      !object.pageItems[0].clipped
+    ) {
       subObject = object.pageItems[0];
       subObject.move(object, ElementPlacement.PLACEBEFORE);
       if (recursive) {

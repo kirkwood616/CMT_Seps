@@ -15,13 +15,17 @@ function SP_Generate_UB() {
   // Move copy to UB layer
   if (isLayerNamed("UB")) {
     var ubLayer = docLayers.getByName("UB");
+    ubLayer.visible = true;
 
     if (ubLayer.pageItems.length > 0) {
       // GUI Conflict Window
       var gui = createWindow("UB LAYER CONFLICT", 300);
       gui.margins = 15;
       var guiHeader = createStaticText(gui, "UB Layer contains art.");
-      var guiInstruction = createStaticText(gui, "Delete UB & Replace with new UB?");
+      var guiInstruction = createStaticText(
+        gui,
+        "Delete UB & Replace with new UB?"
+      );
 
       // Button Group
       var buttonGroup = createGroup(gui, "row", "fill");
@@ -50,7 +54,10 @@ function SP_Generate_UB() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "SP_Template"
+  ) {
     addSwatchUB();
     SP_Generate_UB();
   } else {
