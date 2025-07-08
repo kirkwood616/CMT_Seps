@@ -8,10 +8,11 @@
 
 4. Open unzipped folder titled `CMT_Seps-main`
 
-5. Copy or move all capitalized folders to Adobe Scripts folder (`AF, CSETTINGS, NTF, RTF, SP`)
+5. Copy or move the `CMT_SCRIPTS` folder to Illustrator's Scripts folder `... > Presets > en_US > Scripts`
 
 > [!IMPORTANT]
-> If any folders are already present in the Scripts folder, make sure to REPLACE ALL folders with the new versions
+> If the `CMT_SCRIPTS` folder is already present in Illustrator's `Scripts` folder, delete or replace it with the new version.
+> If replacing a previous version where all folders (AF, CSETTINGS, NTF, RTF, SP) were directly located in Illustrator's `Scripts` folder, delete all these folders and replace with `CMT_SCRIPTS` folder.
 
 6. If Illustrator is currently running, Quit the application and relaunch for the scripts to be accessible.
 
@@ -43,3 +44,5 @@
 
 > [!CAUTION]
 > The Settings feature will create a folder named `CMT_Seps_Settings` in your `Documents` folder. DO NOT DELETE OR MODIFY THIS FOLDER OR IT'S CONTENTS.
+
+14. Finally, with an Illustrator document open, in the actions panel you will need to run `»» COLOR LIBRARY IMPORT ««`. You will see an alert with the message "Color Library Settings Successful!". You are now ready to proceed with using the actions & scripts.
