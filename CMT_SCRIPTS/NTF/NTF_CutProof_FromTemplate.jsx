@@ -21,7 +21,10 @@ function NTF_CutProof_FromTemplate() {
   }
 
   // Set up & load settings
-  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsFile = setupSettingsFile(
+    "CMT_Seps_Settings",
+    "Settings_Config.json"
+  );
   var settingsData = loadJSONData(settingsFile);
   var proofDocPath = settingsData.NTF_proofTemplatePath;
 
@@ -69,7 +72,10 @@ function NTF_CutProof_FromTemplate() {
   var proofBackgroundLayer = proofDoc.layers.getByName("BACKGROUND");
   var proofBackground = proofBackgroundLayer.pathItems.getByName("_BG");
   var proofBackgroundPosition = proofBackground.position;
-  var proofBackgroundDimensions = [proofBackground.width, proofBackground.height];
+  var proofBackgroundDimensions = [
+    proofBackground.width,
+    proofBackground.height,
+  ];
 
   // Duplicate artboards based on color layers amount
   if (templateColorLayers.length > 1) {
@@ -89,14 +95,26 @@ function NTF_CutProof_FromTemplate() {
       lastRect[3],
     ];
     newBoard.name = "CP_" + (i + 1).toString();
-    app.executeMenuCommand("pasteBack");
+    proofDoc.artboards.setActiveArtboardIndex(i);
+    app.executeMenuCommand("paste");
+    app.executeMenuCommand("group");
+    var artboardWidth = newBoard.artboardRect[2] - newBoard.artboardRect[0];
+    var artboardHeight = newBoard.artboardRect[1] - newBoard.artboardRect[3];
+    var item = app.activeDocument.selection[0];
+    var newX = newBoard.artboardRect[0] + (artboardWidth - item.width) / 2;
+    var newY = newBoard.artboardRect[1] - (artboardHeight - item.height) / 2;
+    item.position = [newX, newY];
+    app.executeMenuCommand("ungroup");
     proofDoc.selection = null;
   }
 
   if (templateColorLayers.length > 1) {
     for (var i = proofDoc.pathItems.length; i--; ) {
       if (proofDoc.pathItems[i].name === "_BG") {
-        proofDoc.pathItems[i].move(proofBackgroundLayer, ElementPlacement.PLACEATEND);
+        proofDoc.pathItems[i].move(
+          proofBackgroundLayer,
+          ElementPlacement.PLACEATEND
+        );
       }
     }
   }
@@ -121,7 +139,7 @@ function NTF_CutProof_FromTemplate() {
     app.activeDocument = proofDoc;
     proofDoc.activeLayer = proofLayerNames;
     proofDoc.artboards.setActiveArtboardIndex(i);
-    app.executeMenuCommand("pasteFront");
+    app.executeMenuCommand("paste");
 
     // Add cut borders
     var sel = proofDoc.selection;
@@ -130,7 +148,12 @@ function NTF_CutProof_FromTemplate() {
       var itemPosition = sel[j].position;
       var itemHeight = sel[j].height;
       var itemWidth = sel[j].width;
-      var borderBox = proofLayerNames.pathItems.rectangle(0, 0, itemWidth + 36, itemHeight + 36);
+      var borderBox = proofLayerNames.pathItems.rectangle(
+        0,
+        0,
+        itemWidth + 36,
+        itemHeight + 36
+      );
       borderBox.move(proofLayerNames, ElementPlacement.PLACEATEND);
       borderBox.selected = true;
       borderBox.filled = false;
@@ -163,8 +186,13 @@ function NTF_CutProof_FromTemplate() {
     var heightRemainder = heightBG - proofDoc.selection[0].height;
 
     // Position selection centered in background
-    var artboard_x = proofDoc.artboards[i].artboardRect[0] + proofDoc.artboards[i].artboardRect[2];
-    proofDoc.selection[0].position = [(artboard_x - proofDoc.selection[0].width) / 2, yPosBG - heightRemainder / 2];
+    var artboard_x =
+      proofDoc.artboards[i].artboardRect[0] +
+      proofDoc.artboards[i].artboardRect[2];
+    proofDoc.selection[0].position = [
+      (artboard_x - proofDoc.selection[0].width) / 2,
+      yPosBG - heightRemainder / 2,
+    ];
 
     // Deselect everything
     proofDoc.selection = null;
@@ -178,7 +206,8 @@ function NTF_CutProof_FromTemplate() {
     var theSel = proofDoc.selection;
     for (var j = 0; j < theSel.length; j++) {
       if (theSel[j].name === "SHEET_COUNT") {
-        theSel[j].contents = (i + 1).toString() + " OF " + proofDoc.artboards.length.toString();
+        theSel[j].contents =
+          (i + 1).toString() + " OF " + proofDoc.artboards.length.toString();
         proofDoc.selection = null;
         break;
       }
@@ -197,7 +226,10 @@ function NTF_CutProof_FromTemplate() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "NTF_Template") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "NTF_Template"
+  ) {
     NTF_CutProof_FromTemplate();
   } else {
     throw new Error("Template File Not Active");
