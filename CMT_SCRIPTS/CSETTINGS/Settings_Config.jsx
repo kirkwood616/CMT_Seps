@@ -6,24 +6,90 @@ function Settings_Config() {
 
   // Default settings
   var defaultSettings = {
-    SP_templatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "SP_Template.ait",
+    SP_templatePath:
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "templates" +
+      slash +
+      "SP_Template.ait",
     SP_savePath: Folder.desktop + slash + "- WORKING DAY -",
-    SP_proofTemplatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "PAGE_PROOF.ait",
+    SP_proofTemplatePath:
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "templates" +
+      slash +
+      "PAGE_PROOF.ait",
     SP_proofTemplateSavePath: Folder.desktop + slash + "- WORKING DAY -",
-    NTF_templatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "NTF_Template.ait",
+    DTF_templatePath:
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "templates" +
+      slash +
+      "DTF_Template.ait",
+    DTF_savePath: Folder.desktop + slash + "- WORKING DAY -",
+    NTF_templatePath:
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "templates" +
+      slash +
+      "NTF_Template.ait",
     NTF_savePath: Folder.desktop + slash + "- WORKING DAY -",
-    NTF_proofTemplatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "NTF_Cut_Proof.ait",
+    NTF_proofTemplatePath:
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "templates" +
+      slash +
+      "NTF_Cut_Proof.ait",
     NTF_proofTemplateSavePath: Folder.desktop + slash + "- WORKING DAY -",
-    RTF_templatePath: Folder.desktop + slash + "CMT_seps-main" + slash + "templates" + slash + "RTF_Template.ait",
+    RTF_templatePath:
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "templates" +
+      slash +
+      "RTF_Template.ait",
     RTF_savePath: Folder.desktop + slash + "- WORKING DAY -",
-    meshCounts: ["086", "110", "125", "156", "180", "196", "230", "255", "280", "305"],
+    meshCounts: [
+      "086",
+      "110",
+      "125",
+      "156",
+      "180",
+      "196",
+      "230",
+      "255",
+      "280",
+      "305",
+    ],
     ColorLibrary_filePath:
-      Folder.desktop + slash + "CMT_seps-main" + slash + "color_library" + slash + "Ink Color Palette 2025 LOAD.ai",
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "color_library" +
+      slash +
+      "Ink Color Palette 2025 LOAD.ai",
   };
 
   // Set up & load settings
-  var settingsFile = configSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
-  var settingsData = settingsFile.exists ? loadJSONData(settingsFile) : defaultSettings;
+  var settingsFile = configSettingsFile(
+    "CMT_Seps_Settings",
+    "Settings_Config.json"
+  );
+  var settingsData = settingsFile.exists
+    ? loadJSONData(settingsFile)
+    : defaultSettings;
 
   if (!settingsFile.exists) {
     writeSettings(defaultSettings, settingsFile);
@@ -31,7 +97,9 @@ function Settings_Config() {
 
   // DIALOG WINDOW
   // ======
-  var dialog = new Window("dialog", undefined, undefined, { closeButton: false });
+  var dialog = new Window("dialog", undefined, undefined, {
+    closeButton: false,
+  });
   dialog.text = "CMT SEP SETTINGS";
   dialog.preferredSize.width = 600;
   dialog.preferredSize.height = 350;
@@ -42,9 +110,18 @@ function Settings_Config() {
 
   // verticalTabPanel
   // ====================
-  var verticalTabPanel = dialog.add("group", undefined, undefined, { name: "verticalTabPanel" });
+  var verticalTabPanel = dialog.add("group", undefined, undefined, {
+    name: "verticalTabPanel",
+  });
   verticalTabPanel.alignChildren = ["left", "fill"];
-  var verticalTabPanel_nav = verticalTabPanel.add("listbox", undefined, ["SP", "NTF", "RTF", "MESH", "COLOR LIBRARY"]);
+  var verticalTabPanel_nav = verticalTabPanel.add("listbox", undefined, [
+    "SP",
+    "DTF",
+    "NTF",
+    "RTF",
+    "MESH",
+    "COLOR LIBRARY",
+  ]);
   verticalTabPanel_nav.preferredSize.width = 125;
   var verticalTabPanel_innerwrap = verticalTabPanel.add("group");
   verticalTabPanel_innerwrap.alignment = ["fill", "fill"];
@@ -60,142 +137,305 @@ function Settings_Config() {
   // ======
   var SP_panel__templatePath = createFilePanel(SP_tab, "SP TEMPLATE FILE PATH");
 
-  var SP_templatePath__button = createButton(SP_panel__templatePath, "Select", function () {
-    var SP_TFP = File.openDialog();
-    SP_templatePath__path.text = SP_TFP.fullName;
-  });
+  var SP_templatePath__button = createButton(
+    SP_panel__templatePath,
+    "Select",
+    function () {
+      var SP_TFP = File.openDialog();
+      SP_templatePath__path.text = SP_TFP.fullName;
+    }
+  );
 
-  var SP_templatePath__path = createFileText(SP_panel__templatePath, settingsData.SP_templatePath);
+  var SP_templatePath__path = createFileText(
+    SP_panel__templatePath,
+    settingsData.SP_templatePath
+  );
 
   // SP TEMPLATE SAVE PANEL
   // ======
-  var SP_panel__templateSavePath = createFilePanel(SP_tab, "SP SAVE FOLDER PATH");
+  var SP_panel__templateSavePath = createFilePanel(
+    SP_tab,
+    "SP SAVE FOLDER PATH"
+  );
 
-  var SP_templateSavePath__button = createButton(SP_panel__templateSavePath, "Select", function () {
-    var SP_TSP = Folder.selectDialog();
-    SP_templateSavePath__path.text = SP_TSP.fullName;
-  });
+  var SP_templateSavePath__button = createButton(
+    SP_panel__templateSavePath,
+    "Select",
+    function () {
+      var SP_TSP = Folder.selectDialog();
+      SP_templateSavePath__path.text = SP_TSP.fullName;
+    }
+  );
 
-  var SP_templateSavePath__path = createFileText(SP_panel__templateSavePath, settingsData.SP_savePath);
+  var SP_templateSavePath__path = createFileText(
+    SP_panel__templateSavePath,
+    settingsData.SP_savePath
+  );
 
   // SP PROOF TEMPLATE PANEL
   // ======
-  var SP_panel__proofPath = createFilePanel(SP_tab, "SP PROOF TEMPLATE FILE PATH");
+  var SP_panel__proofPath = createFilePanel(
+    SP_tab,
+    "SP PROOF TEMPLATE FILE PATH"
+  );
 
-  var SP_proofPath__button = createButton(SP_panel__proofPath, "Select", function () {
-    var SP_PFP = File.openDialog();
-    SP_proofPath__path.text = SP_PFP.fullName;
-  });
+  var SP_proofPath__button = createButton(
+    SP_panel__proofPath,
+    "Select",
+    function () {
+      var SP_PFP = File.openDialog();
+      SP_proofPath__path.text = SP_PFP.fullName;
+    }
+  );
 
-  var SP_proofPath__path = createFileText(SP_panel__proofPath, settingsData.SP_proofTemplatePath);
+  var SP_proofPath__path = createFileText(
+    SP_panel__proofPath,
+    settingsData.SP_proofTemplatePath
+  );
 
   // SP PROOF SAVE PANEL
   // ======
-  var SP_panel__proofSavePath = createFilePanel(SP_tab, "SP PROOF TEMPLATE SAVE PATH");
+  var SP_panel__proofSavePath = createFilePanel(
+    SP_tab,
+    "SP PROOF TEMPLATE SAVE PATH"
+  );
 
-  var SP_proofSavePath__button = createButton(SP_panel__proofSavePath, "Select", function () {
-    var SP_PSP = Folder.selectDialog();
-    SP_proofSavePath__path.text = SP_PSP.fullName;
-  });
+  var SP_proofSavePath__button = createButton(
+    SP_panel__proofSavePath,
+    "Select",
+    function () {
+      var SP_PSP = Folder.selectDialog();
+      SP_proofSavePath__path.text = SP_PSP.fullName;
+    }
+  );
 
-  var SP_proofSavePath__path = createFileText(SP_panel__proofSavePath, settingsData.SP_proofTemplateSavePath);
+  var SP_proofSavePath__path = createFileText(
+    SP_panel__proofSavePath,
+    settingsData.SP_proofTemplateSavePath
+  );
 
-  // TAB2 - NTF
+  // TAB2 - DTF
+  // ====
+  var DTF_tab = createTabGroup(verticalTabPanel_innerwrap, "DTF");
+
+  // DTF TEMPLATE PANEL
+  // ======
+  var DTF_panel__templatePath = createFilePanel(
+    DTF_tab,
+    "DTF TEMPLATE FILE PATH"
+  );
+
+  var DTF_templatePath__button = createButton(
+    DTF_panel__templatePath,
+    "Select",
+    function () {
+      var DTF_TFP = File.openDialog();
+      DTF_templatePath__path.text = DTF_TFP.fullName;
+    }
+  );
+
+  var DTF_templatePath__path = createFileText(
+    DTF_panel__templatePath,
+    settingsData.DTF_templatePath
+  );
+
+  // DTF SAVE PANEL
+  // ======
+  var DTF_panel__templateSavePath = createFilePanel(
+    DTF_tab,
+    "DTF SAVE FOLDER PATH"
+  );
+
+  var DTF_templateSavePath__button = createButton(
+    DTF_panel__templateSavePath,
+    "Select",
+    function () {
+      var DTF_TSP = Folder.selectDialog();
+      DTF_templateSavePath__path.text = DTF_TSP.fullName;
+    }
+  );
+
+  var DTF_templateSavePath__path = createFileText(
+    DTF_panel__templateSavePath,
+    settingsData.DTF_savePath
+  );
+
+  // TAB3 - NTF
   // ====
   var NTF_tab = createTabGroup(verticalTabPanel_innerwrap, "NTF");
 
   // NTF TEMPLATE PANEL
   // ======
-  var NTF_panel__templatePath = createFilePanel(NTF_tab, "NTF TEMPLATE FILE PATH");
+  var NTF_panel__templatePath = createFilePanel(
+    NTF_tab,
+    "NTF TEMPLATE FILE PATH"
+  );
 
-  var NTF_templatePath__button = createButton(NTF_panel__templatePath, "Select", function () {
-    var NTF_TFP = File.openDialog();
-    NTF_templatePath__path.text = NTF_TFP.fullName;
-  });
+  var NTF_templatePath__button = createButton(
+    NTF_panel__templatePath,
+    "Select",
+    function () {
+      var NTF_TFP = File.openDialog();
+      NTF_templatePath__path.text = NTF_TFP.fullName;
+    }
+  );
 
-  var NTF_templatePath__path = createFileText(NTF_panel__templatePath, settingsData.NTF_templatePath);
+  var NTF_templatePath__path = createFileText(
+    NTF_panel__templatePath,
+    settingsData.NTF_templatePath
+  );
 
   // NTF SAVE PANEL
   // ======
-  var NTF_panel__templateSavePath = createFilePanel(NTF_tab, "NTF SAVE FOLDER PATH");
+  var NTF_panel__templateSavePath = createFilePanel(
+    NTF_tab,
+    "NTF SAVE FOLDER PATH"
+  );
 
-  var NTF_templateSavePath__button = createButton(NTF_panel__templateSavePath, "Select", function () {
-    var NTF_TSP = Folder.selectDialog();
-    NTF_templateSavePath__path.text = NTF_TSP.fullName;
-  });
+  var NTF_templateSavePath__button = createButton(
+    NTF_panel__templateSavePath,
+    "Select",
+    function () {
+      var NTF_TSP = Folder.selectDialog();
+      NTF_templateSavePath__path.text = NTF_TSP.fullName;
+    }
+  );
 
-  var NTF_templateSavePath__path = createFileText(NTF_panel__templateSavePath, settingsData.NTF_proofTemplateSavePath);
+  var NTF_templateSavePath__path = createFileText(
+    NTF_panel__templateSavePath,
+    settingsData.NTF_savePath
+  );
 
   // NTF PROOF TEMPLATE PANEL
   // ======
-  var NTF_panel__proofPath = createFilePanel(NTF_tab, "NTF PROOF TEMPLATE FILE PATH");
+  var NTF_panel__proofPath = createFilePanel(
+    NTF_tab,
+    "NTF PROOF TEMPLATE FILE PATH"
+  );
 
-  var NTF_proofPath__button = createButton(NTF_panel__proofPath, "Select", function () {
-    var NTF_PFP = File.openDialog();
-    NTF_proofPath__path.text = NTF_PFP.fullName;
-  });
+  var NTF_proofPath__button = createButton(
+    NTF_panel__proofPath,
+    "Select",
+    function () {
+      var NTF_PFP = File.openDialog();
+      NTF_proofPath__path.text = NTF_PFP.fullName;
+    }
+  );
 
-  var NTF_proofPath__path = createFileText(NTF_panel__proofPath, settingsData.NTF_proofTemplatePath);
+  var NTF_proofPath__path = createFileText(
+    NTF_panel__proofPath,
+    settingsData.NTF_proofTemplatePath
+  );
 
   // NTF PROOF SAVE PANEL
   // ======
-  var NTF_panel__proofSavePath = createFilePanel(NTF_tab, "NTF PROOF TEMPLATE SAVE PATH");
+  var NTF_panel__proofSavePath = createFilePanel(
+    NTF_tab,
+    "NTF PROOF TEMPLATE SAVE PATH"
+  );
 
-  var NTF_proofSavePath__button = createButton(NTF_panel__proofSavePath, "Select", function () {
-    var NTF_PSP = Folder.selectDialog();
-    NTF_proofSavePath__path.text = NTF_PSP.fullName;
-  });
+  var NTF_proofSavePath__button = createButton(
+    NTF_panel__proofSavePath,
+    "Select",
+    function () {
+      var NTF_PSP = Folder.selectDialog();
+      NTF_proofSavePath__path.text = NTF_PSP.fullName;
+    }
+  );
 
-  var NTF_proofSavePath__path = createFileText(NTF_panel__proofSavePath, settingsData.NTF_proofTemplateSavePath);
+  var NTF_proofSavePath__path = createFileText(
+    NTF_panel__proofSavePath,
+    settingsData.NTF_proofTemplateSavePath
+  );
 
-  // TAB3 - RTF
+  // TAB4 - RTF
   // ====
   var RTF_tab = createTabGroup(verticalTabPanel_innerwrap, "RTF");
 
   // RTF TEMPLATE PANEL
   // ======
-  var RTF_panel__templatePath = createFilePanel(RTF_tab, "RTF TEMPLATE FILE PATH");
+  var RTF_panel__templatePath = createFilePanel(
+    RTF_tab,
+    "RTF TEMPLATE FILE PATH"
+  );
 
-  var RTF_templatePath__button = createButton(RTF_panel__templatePath, "Select", function () {
-    var RTF_TFP = File.openDialog();
-    RTF_templatePath__path.text = RTF_TFP.fullName;
-  });
+  var RTF_templatePath__button = createButton(
+    RTF_panel__templatePath,
+    "Select",
+    function () {
+      var RTF_TFP = File.openDialog();
+      RTF_templatePath__path.text = RTF_TFP.fullName;
+    }
+  );
 
-  var RTF_templatePath__path = createFileText(RTF_panel__templatePath, settingsData.RTF_templatePath);
+  var RTF_templatePath__path = createFileText(
+    RTF_panel__templatePath,
+    settingsData.RTF_templatePath
+  );
 
   // NTF SAVE PANEL
   // =======
-  var RTF_panel__templateSavePath = createFilePanel(RTF_tab, "RTF SAVE FOLDER PATH");
+  var RTF_panel__templateSavePath = createFilePanel(
+    RTF_tab,
+    "RTF SAVE FOLDER PATH"
+  );
 
-  var RTF_templateSavePath__button = createButton(RTF_panel__templateSavePath, "Select", function () {
-    var RTF_TSP = Folder.selectDialog();
-    RTF_templateSavePath__path.text = RTF_TSP.fullName;
-  });
+  var RTF_templateSavePath__button = createButton(
+    RTF_panel__templateSavePath,
+    "Select",
+    function () {
+      var RTF_TSP = Folder.selectDialog();
+      RTF_templateSavePath__path.text = RTF_TSP.fullName;
+    }
+  );
 
-  var RTF_templateSavePath__path = createFileText(RTF_panel__templateSavePath, settingsData.RTF_savePath);
+  var RTF_templateSavePath__path = createFileText(
+    RTF_panel__templateSavePath,
+    settingsData.RTF_savePath
+  );
 
-  // TAB4 - MESH
+  // TAB5 - MESH
   // ====
   var MESH_tab = createTabGroup(verticalTabPanel_innerwrap, "MESH");
 
-  // TAB5 - COLOR LIBRARY
+  // TAB6 - COLOR LIBRARY
   // ====
-  var ColorLibrary_tab = createTabGroup(verticalTabPanel_innerwrap, "ColorLibrary");
+  var ColorLibrary_tab = createTabGroup(
+    verticalTabPanel_innerwrap,
+    "ColorLibrary"
+  );
 
   // COLOR LIBRARY FILE PANEL
   // ======
-  var ColorLibrary_panel__filePath = createFilePanel(ColorLibrary_tab, "COLOR LIBRARY FILE PATH");
+  var ColorLibrary_panel__filePath = createFilePanel(
+    ColorLibrary_tab,
+    "COLOR LIBRARY FILE PATH"
+  );
 
-  var ColorLibrary_filePath__button = createButton(ColorLibrary_panel__filePath, "Select", function () {
-    var ColorLibrary_TFP = File.openDialog();
-    ColorLibrary_filePath__path.text = ColorLibrary_TFP.fullName;
-  });
+  var ColorLibrary_filePath__button = createButton(
+    ColorLibrary_panel__filePath,
+    "Select",
+    function () {
+      var ColorLibrary_TFP = File.openDialog();
+      ColorLibrary_filePath__path.text = ColorLibrary_TFP.fullName;
+    }
+  );
 
-  var ColorLibrary_filePath__path = createFileText(ColorLibrary_panel__filePath, settingsData.ColorLibrary_filePath);
+  var ColorLibrary_filePath__path = createFileText(
+    ColorLibrary_panel__filePath,
+    settingsData.ColorLibrary_filePath
+  );
 
   // verticalTabPanel DISPLAY
   // ====================
-  var verticalTabPanel_tabs = [SP_tab, NTF_tab, RTF_tab, MESH_tab, ColorLibrary_tab];
+  var verticalTabPanel_tabs = [
+    SP_tab,
+    DTF_tab,
+    NTF_tab,
+    RTF_tab,
+    MESH_tab,
+    ColorLibrary_tab,
+  ];
 
   for (var i = 0; i < verticalTabPanel_tabs.length; i++) {
     verticalTabPanel_tabs[i].alignment = ["fill", "fill"];
@@ -209,7 +449,9 @@ function Settings_Config() {
       for (var i = verticalTabPanel_tabs.length - 1; i >= 0; i--) {
         verticalTabPanel_tabs[i].visible = false;
       }
-      verticalTabPanel_tabs[verticalTabPanel_nav.selection.index].visible = true;
+      verticalTabPanel_tabs[
+        verticalTabPanel_nav.selection.index
+      ].visible = true;
     }
   }
 
@@ -234,7 +476,11 @@ function Settings_Config() {
       }
     }
 
-    var meshCheckbox = createCheckbox(MESH_group, defaultSettings.meshCounts[i], isMeshChecked);
+    var meshCheckbox = createCheckbox(
+      MESH_group,
+      defaultSettings.meshCounts[i],
+      isMeshChecked
+    );
   }
 
   // BUTTON CONTROL GROUP
@@ -256,6 +502,8 @@ function Settings_Config() {
     settingsData.SP_savePath = SP_templateSavePath__path.text;
     settingsData.SP_proofTemplatePath = SP_proofPath__path.text;
     settingsData.SP_proofTemplateSavePath = SP_proofSavePath__path.text;
+    settingsData.DTF_templatePath = DTF_templatePath__path.text;
+    settingsData.DTF_savePath = DTF_templateSavePath__path.text;
     settingsData.NTF_templatePath = NTF_templatePath__path.text;
     settingsData.NTF_savePath = NTF_templateSavePath__path.text;
     settingsData.NTF_proofTemplatePath = NTF_proofPath__path.text;
@@ -321,7 +569,9 @@ function createTabGroup(parent, name) {
  * @returns {Panel}
  */
 function createFilePanel(parent, text) {
-  var panel = parent.add("panel", undefined, text, { name: "panel_" + text.replace(" ", "") });
+  var panel = parent.add("panel", undefined, text, {
+    name: "panel_" + text.replace(" ", ""),
+  });
   panel.orientation = "row";
   panel.alignChildren = ["left", "fill"];
   panel.spacing = 10;
