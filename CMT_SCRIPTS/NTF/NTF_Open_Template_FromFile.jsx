@@ -51,6 +51,9 @@ function NTF_Open_Template_FromFile() {
 
   // Set Order/Art #
   //@include './NTF_Set_OrderArt.jsx';
+
+  // Zoom to fit selection
+  //@include '../UTILITIES/ZoomAndCenterSelection.jsx';
 }
 
 // Run
