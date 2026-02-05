@@ -7,7 +7,7 @@ function DTF_SaveFile() {
   // Set up & load settings
   var settingsFile = setupSettingsFile(
     "CMT_Seps_Settings",
-    "Settings_Config.json"
+    "Settings_Config.json",
   );
   var settingsData = loadJSONData(settingsFile);
   var destinationFolder = settingsData.NTF_savePath;
@@ -33,7 +33,7 @@ function DTF_SaveFile() {
         slash +
         fileName +
         "\n\n" +
-        qualityPreset
+        qualityPreset,
     );
   } catch (e) {
     throw new Error(e.message);
@@ -48,7 +48,7 @@ try {
   ) {
     DTF_SaveFile();
   } else {
-    throw new Error("SP Template File Not Active");
+    throw new Error("DTF Template File Not Active");
   }
 } catch (e) {
   alert(e + "\n\n" + "Error Code: " + e.line, "Script Alert", true);
