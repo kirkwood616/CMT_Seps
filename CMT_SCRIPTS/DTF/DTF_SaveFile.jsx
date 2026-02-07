@@ -16,7 +16,7 @@ function DTF_SaveFile() {
   var doc = app.activeDocument;
 
   // // Create file name with appropriate ending & save options
-  var fileName = doc.layers[0].name + " (DTF).pdf";
+  var fileName = doc.layers[0].name + "sc (DTF).pdf";
   var qualityPreset = "[Press Quality]";
   var pdfSaveOpts = new PDFSaveOptions();
   pdfSaveOpts.pDFPreset = qualityPreset;
