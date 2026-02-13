@@ -8,7 +8,7 @@ function SP_PageProof_FromTemplate() {
   // Set up & load settings
   var settingsFile = setupSettingsFile(
     "CMT_Seps_Settings",
-    "Settings_Config.json"
+    "Settings_Config.json",
   );
   var settingsData = loadJSONData(settingsFile);
 
@@ -32,6 +32,9 @@ function SP_PageProof_FromTemplate() {
 
   // Copy art
   app.copy();
+
+  // Deselect everything
+  doc.selection = null;
 
   // Open template document
   var proofPageTemplatePath = settingsData.SP_proofTemplatePath;

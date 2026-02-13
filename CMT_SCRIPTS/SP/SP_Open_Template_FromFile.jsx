@@ -16,8 +16,14 @@ function SP_Open_Template_FromFile() {
   // Copy art
   app.copy();
 
+  // Deselect everything
+  doc.selection = null;
+
   // Set up & load settings
-  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsFile = setupSettingsFile(
+    "CMT_Seps_Settings",
+    "Settings_Config.json",
+  );
   var settingsData = loadJSONData(settingsFile);
   var filePath = settingsData.SP_templatePath;
 
@@ -64,7 +70,10 @@ function SP_Open_Template_FromFile() {
   }
 
   // Position art horizontally centered and 2 inches from top of artboard
-  pastedArt.position = new Array((artboardBounds[2] - artboardBounds[0]) / 2 - pastedArt.width / 2, -144);
+  pastedArt.position = new Array(
+    (artboardBounds[2] - artboardBounds[0]) / 2 - pastedArt.width / 2,
+    -144,
+  );
 
   // Store height of art
   var artHeight = pastedArt.height;
