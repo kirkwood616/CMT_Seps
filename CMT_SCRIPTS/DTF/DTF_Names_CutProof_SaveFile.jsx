@@ -21,8 +21,7 @@ function DTF_Names_CutProof_SaveFile() {
   var artNumber = metadataLayer.textFrames.getByName("ART_NUMBER").contents;
 
   // Create file name with appropriate ending
-  var fileName =
-    artNumber.toUpperCase() + "sc (DTF NAMES " + orderNumber + ").ai";
+  var fileName = orderNumber + " (DTF NAMES CP).ai";
 
   try {
     // Save file
