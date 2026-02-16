@@ -10,7 +10,7 @@ function DTF_SaveFile() {
     "Settings_Config.json",
   );
   var settingsData = loadJSONData(settingsFile);
-  var destinationFolder = settingsData.NTF_savePath;
+  var destinationFolder = settingsData.DTF_savePath;
 
   // Active Document
   var doc = app.activeDocument;
