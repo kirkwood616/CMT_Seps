@@ -1,5 +1,6 @@
 //@include '../UTILITIES/Settings.jsx';
 //@include '../UTILITIES/Elements.jsx';
+//@include '../UTILITIES/Colors.jsx';
 
 function DTF_Names_Open_FromFile() {
   // Set up & load settings
@@ -39,10 +40,6 @@ function DTF_Names_Open_FromFile() {
   app.paste();
   app.executeMenuCommand("group");
 
-  // NTF_Template artboard info
-  var templateArtBoard = templateDoc.artboards[0];
-  var templateRect = templateArtBoard.artboardRect;
-
   // Reset selection to pasted art
   sel = templateDoc.selection[0];
 
@@ -51,8 +48,14 @@ function DTF_Names_Open_FromFile() {
 
   if (isMultiline) app.executeMenuCommand("ungroup");
 
+  // Change spot Whites to the standard visible color values
+  toVisibleWhite();
+
   // Zoom to fit selection
   //@include '../UTILITIES/ZoomAndCenterSelection.jsx';
+
+  // Input for Order / Art # / Due Date
+  //@include './DTF_Names_OrderArtPrompt.jsx';
 }
 
 // Run
