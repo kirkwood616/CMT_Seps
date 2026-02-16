@@ -33,6 +33,15 @@ function Settings_Config() {
       slash +
       "DTF_Template.ait",
     DTF_savePath: Folder.desktop + slash + "- WORKING DAY -",
+    DTF_proofTemplatePath:
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "templates" +
+      slash +
+      "DTF_Cut_Proof.ait",
+    DTF_proofTemplateSavePath: Folder.desktop + slash + "- WORKING DAY -",
     NTF_templatePath:
       Folder.desktop +
       slash +
@@ -85,7 +94,7 @@ function Settings_Config() {
   // Set up & load settings
   var settingsFile = configSettingsFile(
     "CMT_Seps_Settings",
-    "Settings_Config.json"
+    "Settings_Config.json",
   );
   var settingsData = settingsFile.exists
     ? loadJSONData(settingsFile)
@@ -143,19 +152,19 @@ function Settings_Config() {
     function () {
       var SP_TFP = File.openDialog();
       SP_templatePath__path.text = SP_TFP.fullName;
-    }
+    },
   );
 
   var SP_templatePath__path = createFileText(
     SP_panel__templatePath,
-    settingsData.SP_templatePath
+    settingsData.SP_templatePath,
   );
 
   // SP TEMPLATE SAVE PANEL
   // ======
   var SP_panel__templateSavePath = createFilePanel(
     SP_tab,
-    "SP SAVE FOLDER PATH"
+    "SP SAVE FOLDER PATH",
   );
 
   var SP_templateSavePath__button = createButton(
@@ -164,19 +173,19 @@ function Settings_Config() {
     function () {
       var SP_TSP = Folder.selectDialog();
       SP_templateSavePath__path.text = SP_TSP.fullName;
-    }
+    },
   );
 
   var SP_templateSavePath__path = createFileText(
     SP_panel__templateSavePath,
-    settingsData.SP_savePath
+    settingsData.SP_savePath,
   );
 
   // SP PROOF TEMPLATE PANEL
   // ======
   var SP_panel__proofPath = createFilePanel(
     SP_tab,
-    "SP PROOF TEMPLATE FILE PATH"
+    "SP PROOF TEMPLATE FILE PATH",
   );
 
   var SP_proofPath__button = createButton(
@@ -185,19 +194,19 @@ function Settings_Config() {
     function () {
       var SP_PFP = File.openDialog();
       SP_proofPath__path.text = SP_PFP.fullName;
-    }
+    },
   );
 
   var SP_proofPath__path = createFileText(
     SP_panel__proofPath,
-    settingsData.SP_proofTemplatePath
+    settingsData.SP_proofTemplatePath,
   );
 
   // SP PROOF SAVE PANEL
   // ======
   var SP_panel__proofSavePath = createFilePanel(
     SP_tab,
-    "SP PROOF TEMPLATE SAVE PATH"
+    "SP PROOF TEMPLATE SAVE PATH",
   );
 
   var SP_proofSavePath__button = createButton(
@@ -206,12 +215,12 @@ function Settings_Config() {
     function () {
       var SP_PSP = Folder.selectDialog();
       SP_proofSavePath__path.text = SP_PSP.fullName;
-    }
+    },
   );
 
   var SP_proofSavePath__path = createFileText(
     SP_panel__proofSavePath,
-    settingsData.SP_proofTemplateSavePath
+    settingsData.SP_proofTemplateSavePath,
   );
 
   // TAB2 - DTF
@@ -222,7 +231,7 @@ function Settings_Config() {
   // ======
   var DTF_panel__templatePath = createFilePanel(
     DTF_tab,
-    "DTF TEMPLATE FILE PATH"
+    "DTF TEMPLATE FILE PATH",
   );
 
   var DTF_templatePath__button = createButton(
@@ -231,19 +240,19 @@ function Settings_Config() {
     function () {
       var DTF_TFP = File.openDialog();
       DTF_templatePath__path.text = DTF_TFP.fullName;
-    }
+    },
   );
 
   var DTF_templatePath__path = createFileText(
     DTF_panel__templatePath,
-    settingsData.DTF_templatePath
+    settingsData.DTF_templatePath,
   );
 
   // DTF SAVE PANEL
   // ======
   var DTF_panel__templateSavePath = createFilePanel(
     DTF_tab,
-    "DTF SAVE FOLDER PATH"
+    "DTF SAVE FOLDER PATH",
   );
 
   var DTF_templateSavePath__button = createButton(
@@ -252,12 +261,54 @@ function Settings_Config() {
     function () {
       var DTF_TSP = Folder.selectDialog();
       DTF_templateSavePath__path.text = DTF_TSP.fullName;
-    }
+    },
   );
 
   var DTF_templateSavePath__path = createFileText(
     DTF_panel__templateSavePath,
-    settingsData.DTF_savePath
+    settingsData.DTF_savePath,
+  );
+
+  // DTF PROOF TEMPLATE PANEL
+  // ======
+  var DTF_panel__proofPath = createFilePanel(
+    DTF_tab,
+    "DTF PROOF TEMPLATE FILE PATH",
+  );
+
+  var DTF_proofPath__button = createButton(
+    DTF_panel__proofPath,
+    "Select",
+    function () {
+      var DTF_PFP = File.openDialog();
+      DTF_proofPath__path.text = DTF_PFP.fullName;
+    },
+  );
+
+  var DTF_proofPath__path = createFileText(
+    DTF_panel__proofPath,
+    settingsData.DTF_proofTemplatePath,
+  );
+
+  // DTF PROOF SAVE PANEL
+  // ======
+  var DTF_panel__proofSavePath = createFilePanel(
+    DTF_tab,
+    "DTF PROOF TEMPLATE SAVE PATH",
+  );
+
+  var DTF_proofSavePath__button = createButton(
+    DTF_panel__proofSavePath,
+    "Select",
+    function () {
+      var DTF_PSP = Folder.selectDialog();
+      DTF_proofSavePath__path.text = DTF_PSP.fullName;
+    },
+  );
+
+  var DTF_proofSavePath__path = createFileText(
+    DTF_panel__proofSavePath,
+    settingsData.DTF_proofTemplateSavePath,
   );
 
   // TAB3 - NTF
@@ -268,7 +319,7 @@ function Settings_Config() {
   // ======
   var NTF_panel__templatePath = createFilePanel(
     NTF_tab,
-    "NTF TEMPLATE FILE PATH"
+    "NTF TEMPLATE FILE PATH",
   );
 
   var NTF_templatePath__button = createButton(
@@ -277,19 +328,19 @@ function Settings_Config() {
     function () {
       var NTF_TFP = File.openDialog();
       NTF_templatePath__path.text = NTF_TFP.fullName;
-    }
+    },
   );
 
   var NTF_templatePath__path = createFileText(
     NTF_panel__templatePath,
-    settingsData.NTF_templatePath
+    settingsData.NTF_templatePath,
   );
 
   // NTF SAVE PANEL
   // ======
   var NTF_panel__templateSavePath = createFilePanel(
     NTF_tab,
-    "NTF SAVE FOLDER PATH"
+    "NTF SAVE FOLDER PATH",
   );
 
   var NTF_templateSavePath__button = createButton(
@@ -298,19 +349,19 @@ function Settings_Config() {
     function () {
       var NTF_TSP = Folder.selectDialog();
       NTF_templateSavePath__path.text = NTF_TSP.fullName;
-    }
+    },
   );
 
   var NTF_templateSavePath__path = createFileText(
     NTF_panel__templateSavePath,
-    settingsData.NTF_savePath
+    settingsData.NTF_savePath,
   );
 
   // NTF PROOF TEMPLATE PANEL
   // ======
   var NTF_panel__proofPath = createFilePanel(
     NTF_tab,
-    "NTF PROOF TEMPLATE FILE PATH"
+    "NTF PROOF TEMPLATE FILE PATH",
   );
 
   var NTF_proofPath__button = createButton(
@@ -319,19 +370,19 @@ function Settings_Config() {
     function () {
       var NTF_PFP = File.openDialog();
       NTF_proofPath__path.text = NTF_PFP.fullName;
-    }
+    },
   );
 
   var NTF_proofPath__path = createFileText(
     NTF_panel__proofPath,
-    settingsData.NTF_proofTemplatePath
+    settingsData.NTF_proofTemplatePath,
   );
 
   // NTF PROOF SAVE PANEL
   // ======
   var NTF_panel__proofSavePath = createFilePanel(
     NTF_tab,
-    "NTF PROOF TEMPLATE SAVE PATH"
+    "NTF PROOF TEMPLATE SAVE PATH",
   );
 
   var NTF_proofSavePath__button = createButton(
@@ -340,12 +391,12 @@ function Settings_Config() {
     function () {
       var NTF_PSP = Folder.selectDialog();
       NTF_proofSavePath__path.text = NTF_PSP.fullName;
-    }
+    },
   );
 
   var NTF_proofSavePath__path = createFileText(
     NTF_panel__proofSavePath,
-    settingsData.NTF_proofTemplateSavePath
+    settingsData.NTF_proofTemplateSavePath,
   );
 
   // TAB4 - RTF
@@ -356,7 +407,7 @@ function Settings_Config() {
   // ======
   var RTF_panel__templatePath = createFilePanel(
     RTF_tab,
-    "RTF TEMPLATE FILE PATH"
+    "RTF TEMPLATE FILE PATH",
   );
 
   var RTF_templatePath__button = createButton(
@@ -365,19 +416,19 @@ function Settings_Config() {
     function () {
       var RTF_TFP = File.openDialog();
       RTF_templatePath__path.text = RTF_TFP.fullName;
-    }
+    },
   );
 
   var RTF_templatePath__path = createFileText(
     RTF_panel__templatePath,
-    settingsData.RTF_templatePath
+    settingsData.RTF_templatePath,
   );
 
   // NTF SAVE PANEL
   // =======
   var RTF_panel__templateSavePath = createFilePanel(
     RTF_tab,
-    "RTF SAVE FOLDER PATH"
+    "RTF SAVE FOLDER PATH",
   );
 
   var RTF_templateSavePath__button = createButton(
@@ -386,12 +437,12 @@ function Settings_Config() {
     function () {
       var RTF_TSP = Folder.selectDialog();
       RTF_templateSavePath__path.text = RTF_TSP.fullName;
-    }
+    },
   );
 
   var RTF_templateSavePath__path = createFileText(
     RTF_panel__templateSavePath,
-    settingsData.RTF_savePath
+    settingsData.RTF_savePath,
   );
 
   // TAB5 - MESH
@@ -402,14 +453,14 @@ function Settings_Config() {
   // ====
   var ColorLibrary_tab = createTabGroup(
     verticalTabPanel_innerwrap,
-    "ColorLibrary"
+    "ColorLibrary",
   );
 
   // COLOR LIBRARY FILE PANEL
   // ======
   var ColorLibrary_panel__filePath = createFilePanel(
     ColorLibrary_tab,
-    "COLOR LIBRARY FILE PATH"
+    "COLOR LIBRARY FILE PATH",
   );
 
   var ColorLibrary_filePath__button = createButton(
@@ -418,12 +469,12 @@ function Settings_Config() {
     function () {
       var ColorLibrary_TFP = File.openDialog();
       ColorLibrary_filePath__path.text = ColorLibrary_TFP.fullName;
-    }
+    },
   );
 
   var ColorLibrary_filePath__path = createFileText(
     ColorLibrary_panel__filePath,
-    settingsData.ColorLibrary_filePath
+    settingsData.ColorLibrary_filePath,
   );
 
   // verticalTabPanel DISPLAY
@@ -449,9 +500,8 @@ function Settings_Config() {
       for (var i = verticalTabPanel_tabs.length - 1; i >= 0; i--) {
         verticalTabPanel_tabs[i].visible = false;
       }
-      verticalTabPanel_tabs[
-        verticalTabPanel_nav.selection.index
-      ].visible = true;
+      verticalTabPanel_tabs[verticalTabPanel_nav.selection.index].visible =
+        true;
     }
   }
 
@@ -479,7 +529,7 @@ function Settings_Config() {
     var meshCheckbox = createCheckbox(
       MESH_group,
       defaultSettings.meshCounts[i],
-      isMeshChecked
+      isMeshChecked,
     );
   }
 
@@ -504,6 +554,8 @@ function Settings_Config() {
     settingsData.SP_proofTemplateSavePath = SP_proofSavePath__path.text;
     settingsData.DTF_templatePath = DTF_templatePath__path.text;
     settingsData.DTF_savePath = DTF_templateSavePath__path.text;
+    settingsData.DTF_proofTemplatePath = DTF_proofPath__path.text;
+    settingsData.DTF_proofTemplateSavePath = DTF_proofSavePath__path.text;
     settingsData.NTF_templatePath = NTF_templatePath__path.text;
     settingsData.NTF_savePath = NTF_templateSavePath__path.text;
     settingsData.NTF_proofTemplatePath = NTF_proofPath__path.text;
