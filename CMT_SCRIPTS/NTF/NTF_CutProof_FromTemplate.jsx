@@ -23,7 +23,7 @@ function NTF_CutProof_FromTemplate() {
   // Set up & load settings
   var settingsFile = setupSettingsFile(
     "CMT_Seps_Settings",
-    "Settings_Config.json"
+    "Settings_Config.json",
   );
   var settingsData = loadJSONData(settingsFile);
   var proofDocPath = settingsData.NTF_proofTemplatePath;
@@ -113,7 +113,7 @@ function NTF_CutProof_FromTemplate() {
       if (proofDoc.pathItems[i].name === "_BG") {
         proofDoc.pathItems[i].move(
           proofBackgroundLayer,
-          ElementPlacement.PLACEATEND
+          ElementPlacement.PLACEATEND,
         );
       }
     }
@@ -152,7 +152,7 @@ function NTF_CutProof_FromTemplate() {
         0,
         0,
         itemWidth + 36,
-        itemHeight + 36
+        itemHeight + 36,
       );
       borderBox.move(proofLayerNames, ElementPlacement.PLACEATEND);
       borderBox.selected = true;
