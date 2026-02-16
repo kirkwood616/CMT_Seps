@@ -126,6 +126,38 @@ function removeMeshSuffix(colorName, meshArray) {
  */
 function trimSwatchNames() {
   for (var i = 0; i < app.activeDocument.swatches.length; i++) {
-    app.activeDocument.swatches[i].name = app.activeDocument.swatches[i].name.trim();
+    app.activeDocument.swatches[i].name =
+      app.activeDocument.swatches[i].name.trim();
   }
+}
+
+/**
+ * Takes in a string of a DTF Names file, tests it for matching a pre-determined
+ * format and returns the order & art numbers in an array. If the string does not
+ * pass the pattern test, placeholder values will be returned instead.
+ * @param {String} fileName   The file name
+ * @returns {Array.<String>}  Array containing [orderNumber, artNumber]
+ */
+function splitOrderArtNamesDTF(fileName) {
+  // File Naming Pattern "##-XX-####sc (DTF NAMES ######)"
+  var namingPattern = /^\d{2}-[a-zA-Z]{2}-\d+[a-z]{2}\s\(DTF NAMES\s\d+\)$/gm;
+
+  var order = "######";
+  var art = "##-XX-####";
+
+  if (namingPattern.test(fileName)) {
+    var separator = " ";
+    var index = fileName.indexOf(separator);
+
+    // Split Order removing parenthesis first & then "DTF NAMES "
+    order = fileName
+      .slice(index + separator.length)
+      .replace(/[()]/g, "")
+      .replace(/DTF NAMES /gi, "");
+
+    // Split Art replacing last 2 characters at end of string
+    art = fileName.slice(0, index).replace(/..$/, "");
+  }
+
+  return [order, art];
 }
