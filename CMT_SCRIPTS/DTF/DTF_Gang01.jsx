@@ -19,6 +19,9 @@ function DTF_Gang01() {
   // Sort selection
   sortSelectionByArea();
 
+  // Reset selection to sorted selection
+  sel = doc.selection;
+
   // Blocks store
   var blocks = new Array();
 
