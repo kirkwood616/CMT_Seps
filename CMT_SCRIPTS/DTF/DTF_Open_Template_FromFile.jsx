@@ -81,9 +81,6 @@ function DTF_Open_Template_FromFile() {
   // View => Fit Artboard in Window
   app.executeMenuCommand("fitall");
 
-  // Change spot white(s) to pure white
-  toPureWhite();
-
   // Check for Process Inks & alert
   checkProcessInksAlert();
 }
