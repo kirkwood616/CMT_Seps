@@ -25,6 +25,9 @@ function DTF_SaveFile() {
   var pdfSaveOpts = new PDFSaveOptions();
   pdfSaveOpts.pDFPreset = qualityPreset;
 
+  // Change Spot White to Pure White
+  toPureWhite();
+
   try {
     // Save file with save options
     doc.saveAs(new File(destinationFolder + slash + fileName), pdfSaveOpts);
