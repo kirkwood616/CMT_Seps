@@ -42,6 +42,14 @@ function Settings_Config() {
       slash +
       "DTF_Cut_Proof.ait",
     DTF_proofTemplateSavePath: Folder.desktop + slash + "- WORKING DAY -",
+    DTF_PERS_templatePath:
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "templates" +
+      slash +
+      "PERS_Template.ait",
     NTF_templatePath:
       Folder.desktop +
       slash +
@@ -311,6 +319,27 @@ function Settings_Config() {
     settingsData.DTF_proofTemplateSavePath,
   );
 
+  // DTF PERS TEMPLATE PANEL
+  // ======
+  var DTF_panel__PERS_templatePath = createFilePanel(
+    DTF_tab,
+    "DTF PERSONALIZATIONS FILE PATH",
+  );
+
+  var DTF_PERS_templatePath__button = createButton(
+    DTF_panel__PERS_templatePath,
+    "Select",
+    function () {
+      var DTF_PERS_TFP = File.openDialog();
+      DTF_PERS_templatePath__path.text = DTF_PERS_TFP.fullName;
+    },
+  );
+
+  var DTF_PERS_templatePath__path = createFileText(
+    DTF_panel__PERS_templatePath,
+    settingsData.DTF_PERS_templatePath,
+  );
+
   // TAB3 - NTF
   // ====
   var NTF_tab = createTabGroup(verticalTabPanel_innerwrap, "NTF");
@@ -556,6 +585,7 @@ function Settings_Config() {
     settingsData.DTF_savePath = DTF_templateSavePath__path.text;
     settingsData.DTF_proofTemplatePath = DTF_proofPath__path.text;
     settingsData.DTF_proofTemplateSavePath = DTF_proofSavePath__path.text;
+    settingsData.DTF_PERS_templatePath = DTF_PERS_templatePath__path.text;
     settingsData.NTF_templatePath = NTF_templatePath__path.text;
     settingsData.NTF_savePath = NTF_templateSavePath__path.text;
     settingsData.NTF_proofTemplatePath = NTF_proofPath__path.text;
