@@ -1,4 +1,5 @@
 //@include '../UTILITIES/Settings.jsx';
+//@include '../UTILITIES/Colors.jsx';
 
 function DTF_SaveFile() {
   // System
@@ -14,6 +15,9 @@ function DTF_SaveFile() {
 
   // Active Document
   var doc = app.activeDocument;
+
+  // Check for Process Inks & alert
+  checkProcessInksAlert();
 
   // // Create file name with appropriate ending & save options
   var fileName = doc.layers[0].name + "sc (DTF).pdf";

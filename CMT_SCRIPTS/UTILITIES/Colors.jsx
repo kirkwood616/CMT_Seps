@@ -85,3 +85,32 @@ function toVisibleWhite() {
     }
   }
 }
+
+/**
+ * Checks the document for any Process Inks via inkList & alerts the user if present.
+ * @returns void
+ */
+function checkProcessInksAlert() {
+  var inkList = app.activeDocument.inkList;
+
+  for (var i = 0; i < inkList.length; i++) {
+    switch (inkList[i].name) {
+      case "Process Cyan":
+      case "Process Magenta":
+      case "Process Yellow":
+      case "Process Black":
+        if (inkList[i].inkInfo.printingStatus === InkPrintStatus.ENABLEINK) {
+          alert(
+            "PROCESS INKS FOUND" + "\n\n" + "Non-Spot Colors Detected.",
+            "Script Alert",
+            true,
+          );
+          return;
+        }
+        break;
+
+      default:
+        break;
+    }
+  }
+}

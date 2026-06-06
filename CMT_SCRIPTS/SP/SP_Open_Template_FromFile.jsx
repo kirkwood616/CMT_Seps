@@ -1,6 +1,7 @@
 //@include '../UTILITIES/Settings.jsx';
 //@include '../UTILITIES/Layers.jsx';
 //@include '../UTILITIES/FormatText.jsx';
+//@include '../UTILITIES/Colors.jsx';
 
 function SP_Open_Template_FromFile() {
   // Active Document
@@ -91,6 +92,9 @@ function SP_Open_Template_FromFile() {
 
   // De-select everything
   doc.selection = null;
+
+  // Check for Process Inks & alert
+  checkProcessInksAlert();
 }
 
 // Run

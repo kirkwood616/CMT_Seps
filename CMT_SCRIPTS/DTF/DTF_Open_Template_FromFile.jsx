@@ -23,7 +23,7 @@ function DTF_Open_Template_FromFile() {
   // Set up & load settings
   var settingsFile = setupSettingsFile(
     "CMT_Seps_Settings",
-    "Settings_Config.json"
+    "Settings_Config.json",
   );
   var settingsData = loadJSONData(settingsFile);
   var filePath = settingsData.DTF_templatePath;
@@ -83,6 +83,9 @@ function DTF_Open_Template_FromFile() {
 
   // Change spot white(s) to pure white
   toPureWhite();
+
+  // Check for Process Inks & alert
+  checkProcessInksAlert();
 }
 
 // Run

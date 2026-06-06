@@ -1,11 +1,15 @@
 //@include '../UTILITIES/Settings.jsx';
+//@include '../UTILITIES/Colors.jsx';
 
 function SP_SaveFile() {
   // System
   var slash = getSlashOS();
 
   // Set up & load settings
-  var settingsFile = setupSettingsFile("CMT_Seps_Settings", "Settings_Config.json");
+  var settingsFile = setupSettingsFile(
+    "CMT_Seps_Settings",
+    "Settings_Config.json",
+  );
   var settingsData = loadJSONData(settingsFile);
   var destinationFolder = settingsData.SP_savePath;
 
@@ -15,11 +19,16 @@ function SP_SaveFile() {
   // Metadata layer
   var metadataLayer = doc.layers.getByName("Metadata");
   var metaGroup = metadataLayer.groupItems.getByName("MetaGroup");
-  var metaLocation = metaGroup.textFrames.getByName("_LOCATION").contents.toLowerCase();
+  var metaLocation = metaGroup.textFrames
+    .getByName("_LOCATION")
+    .contents.toLowerCase();
   var metaArtFile = metaGroup.textFrames.getByName("_ART FILE").contents;
 
   // Create file name with appropriate ending
   var fileName = metaArtFile + metaLocation + ".ai";
+
+  // Check for Process Inks & alert
+  checkProcessInksAlert();
 
   try {
     // Save file
@@ -34,7 +43,10 @@ function SP_SaveFile() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "SP_Template"
+  ) {
     SP_SaveFile();
   } else {
     throw new Error("SP Template File Not Active");
