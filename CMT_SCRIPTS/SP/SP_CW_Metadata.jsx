@@ -51,7 +51,8 @@ function SP_CW_Metadata() {
 
   // Registration Layer items
   var registrationLayer = doc.layers.getByName("Registration");
-  var bottomCrosshair = registrationLayer.groupItems.getByName("REG_BOTTOM_CENTER");
+  var bottomCrosshair =
+    registrationLayer.groupItems.getByName("REG_BOTTOM_CENTER");
   var regPosition = bottomCrosshair.position;
 
   // De-select everything
@@ -81,7 +82,11 @@ function SP_CW_Metadata() {
     for (var j = 0; j < pathsArr.length; j++) {
       if (pathsArr[j].fillColor.typename !== "SpotColor") {
         cwRegroupArt(cwLayers);
-        throw new Error("Non-Spot Colors Found" + "\n" + "Check & Set Non-Spot Colors to Spot Color(s).");
+        throw new Error(
+          "Non-Spot Colors Found" +
+            "\n" +
+            "Check & Set Non-Spot Colors to Spot Color(s).",
+        );
       } else {
         colorNameStorage.push(pathsArr[j].fillColor.spot.name);
       }
@@ -94,7 +99,9 @@ function SP_CW_Metadata() {
   }
 
   // GUI Window
-  var windowCW = new Window("dialog", "Confirm Colorways", undefined, { closeButton: false });
+  var windowCW = new Window("dialog", "Confirm Colorways", undefined, {
+    closeButton: false,
+  });
   windowCW.alignChildren = "right";
 
   // Tab Panel
@@ -115,10 +122,15 @@ function SP_CW_Metadata() {
     // UB checkboxes
     for (var j = 0; j < swatchesUB.length; j++) {
       var ubCheck = cwTabPanel.add("checkbox", undefined, swatchesUB[j]);
+      ubCheck.value = true;
     }
     // Color checkboxes (disabled)
     for (var k = 0; k < cwValues[i].colors.length; k++) {
-      var cwColorCheck = cwTabPanel.add("checkbox", undefined, cwValues[i].colors[k]);
+      var cwColorCheck = cwTabPanel.add(
+        "checkbox",
+        undefined,
+        cwValues[i].colors[k],
+      );
       cwColorCheck.value = true;
       cwColorCheck.onClick = function () {
         this.value = true;
@@ -133,7 +145,9 @@ function SP_CW_Metadata() {
     cwRegroupArt(cwLayers);
     windowCW.close();
   };
-  var okButton = buttonGroup.add("button", undefined, "Generate", { name: "ok" });
+  var okButton = buttonGroup.add("button", undefined, "Generate", {
+    name: "ok",
+  });
 
   // Generate on OK
   okButton.onClick = function () {
@@ -159,7 +173,8 @@ function SP_CW_Metadata() {
     // Remove any pre-existing CW_ metadata
     doc.selection = null;
     for (var i = 0; i < metadataLayer.textFrames.length; i++) {
-      var frameContents = metadataLayer.textFrames[i].textRange.contents.toUpperCase();
+      var frameContents =
+        metadataLayer.textFrames[i].textRange.contents.toUpperCase();
       if (frameContents.indexOf("CW_") !== -1) {
         metadataLayer.textFrames[i].selected = true;
       }
@@ -183,21 +198,43 @@ function SP_CW_Metadata() {
       switch (true) {
         case cwCount < 3:
           for (var j = 0; j < cwFinalValues[i].colors.length; j++) {
-            var cwFrameColor = docSwatches.getByName(cwFinalValues[i].colors[j]).color;
-            var cwNewFrame = cwTextFrame(doc, cwFinalValues[i].name, cwFrameColor, [xValueOrigin, yPos], i);
+            var cwFrameColor = docSwatches.getByName(
+              cwFinalValues[i].colors[j],
+            ).color;
+            var cwNewFrame = cwTextFrame(
+              doc,
+              cwFinalValues[i].name,
+              cwFrameColor,
+              [xValueOrigin, yPos],
+              i,
+            );
           }
           break;
         case cwCount >= 3:
           if (i + 1 === 5) xOffset = 0;
 
           for (var j = 0; j < cwFinalValues[i].colors.length; j++) {
-            var cwFrameColor = docSwatches.getByName(cwFinalValues[i].colors[j]).color;
+            var cwFrameColor = docSwatches.getByName(
+              cwFinalValues[i].colors[j],
+            ).color;
             var cwNewFrame;
 
             if (i + 1 < 5) {
-              cwNewFrame = cwTextFrame(doc, cwFinalValues[i].name, cwFrameColor, [xValueLeftOrigin + xOffset, yPos], i);
+              cwNewFrame = cwTextFrame(
+                doc,
+                cwFinalValues[i].name,
+                cwFrameColor,
+                [xValueLeftOrigin + xOffset, yPos],
+                i,
+              );
             } else {
-              cwNewFrame = cwTextFrame(doc, cwFinalValues[i].name, cwFrameColor, [xValueRightOrigin + xOffset, yPos], i);
+              cwNewFrame = cwTextFrame(
+                doc,
+                cwFinalValues[i].name,
+                cwFrameColor,
+                [xValueRightOrigin + xOffset, yPos],
+                i,
+              );
             }
           }
 
@@ -225,7 +262,10 @@ function SP_CW_Metadata() {
 
 // Run
 try {
-  if (app.documents.length > 0 && app.activeDocument.artboards[0].name === "SP_Template") {
+  if (
+    app.documents.length > 0 &&
+    app.activeDocument.artboards[0].name === "SP_Template"
+  ) {
     SP_CW_Metadata();
   } else {
     throw new Error("SP Template File Not Active");
@@ -312,7 +352,10 @@ function ungroup(object, recursive) {
   recursive = typeof recursive !== "undefined" ? recursive : true;
   var subObject;
   while (object.pageItems.length > 0) {
-    if (object.pageItems[0].typename == "GroupItem" && !object.pageItems[0].clipped) {
+    if (
+      object.pageItems[0].typename == "GroupItem" &&
+      !object.pageItems[0].clipped
+    ) {
       subObject = object.pageItems[0];
       subObject.move(object, ElementPlacement.PLACEBEFORE);
       if (recursive) {
