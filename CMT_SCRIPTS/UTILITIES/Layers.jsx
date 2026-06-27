@@ -21,7 +21,8 @@ function isLayerNamed(name) {
  */
 function selectArtLayer() {
   if (app.activeDocument.selection.length) {
-    if (app.activeDocument.selection.length > 1) app.executeMenuCommand("group");
+    if (app.activeDocument.selection.length > 1)
+      app.executeMenuCommand("group");
     return;
   }
 
@@ -31,7 +32,8 @@ function selectArtLayer() {
     }
     app.activeDocument.activeLayer = app.activeDocument.layers.getByName("Art");
     app.activeDocument.layers.getByName("Art").hasSelectedArtwork = true;
-    if (app.activeDocument.selection.length > 1) app.executeMenuCommand("group");
+    if (app.activeDocument.selection.length > 1)
+      app.executeMenuCommand("group");
   } else {
     throw new Error("No Art Layer or Selected Art.");
   }
@@ -49,4 +51,42 @@ function cwLayersExist() {
   }
 
   return false;
+}
+
+/**
+ * Loops all the layers in the active document and stores their name &
+ * visibility in an object, returning an array of all layer objects.
+ * @returns {Array}
+ */
+function storeLayerVisibility() {
+  var layerStates = new Array();
+
+  for (var i = 0; i < app.activeDocument.layers.length; i++) {
+    var layer = app.activeDocument.layers[i];
+
+    layerStates.push({
+      name: layer.name,
+      visible: layer.visible,
+    });
+  }
+
+  return layerStates;
+}
+
+/**
+ * Takes an array of objects storing the name & visibility setting of
+ * each layer and sets the visibility to the value for the named layer
+ * in the active document.
+ * @param {Array<{name: String, visible: Boolean}>} visibleLayers
+ */
+function restoreVisibleLayers(visibleLayers) {
+  var documentLayers = app.activeDocument.layers;
+
+  for (var i = 0; i < documentLayers.length; i++) {
+    for (var j = 0; j < visibleLayers.length; j++) {
+      if (documentLayers[i].name === visibleLayers[j].name) {
+        documentLayers[i].visible = visibleLayers[j].visible;
+      }
+    }
+  }
 }
