@@ -56,7 +56,7 @@ function cwLayersExist() {
 /**
  * Loops all the layers in the active document and stores their name &
  * visibility in an object, returning an array of all layer objects.
- * @returns {Array}
+ * @returns {Array<{name: String, visible: Boolean}>}
  */
 function storeLayerVisibility() {
   var layerStates = new Array();
