@@ -17,6 +17,13 @@ function SP_Generate_UB_SelectColors_V2() {
   // Overprint selected art
   //@include '../UTILITIES/Overprint_Fill_True.jsx';
 
+  // Get the layer selection is on & set to active layer
+  if (sel.length > 0) {
+    var selItem = sel[0];
+    var selLayer = selItem.layer.name;
+    doc.activeLayer = doc.layers.getByName(selLayer);
+  }
+
   // Original Active Layer
   var originLayer = doc.activeLayer;
 
@@ -68,6 +75,7 @@ function SP_Generate_UB_SelectColors_V2() {
   // Buttons
   var buttonGroup = createGroup(gui, "row");
   var cancelButton = createButton(buttonGroup, "CANCEL", function () {
+    restoreVisibleLayers(visibleLayers);
     gui.close();
   });
   var okButton = createButton(buttonGroup, "OK", function () {
