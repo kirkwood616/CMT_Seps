@@ -114,3 +114,20 @@ function checkProcessInksAlert() {
     }
   }
 }
+
+/**
+ * Checks the active document for enabled inks and returns an array of their names.
+ * @returns {Array<String>} Array of enabled inks
+ */
+function storeEnabledInkNames() {
+  var inkList = app.activeDocument.inkList;
+  var inkStore = new Array();
+
+  for (var i = 0; i < inkList.length; i++) {
+    if (inkList[i].inkInfo.printingStatus === InkPrintStatus.ENABLEINK) {
+      inkStore.push(inkList[i].name);
+    }
+  }
+
+  return inkStore;
+}
