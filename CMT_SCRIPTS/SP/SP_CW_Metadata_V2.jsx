@@ -1,5 +1,6 @@
 //@include '../UTILITIES/Layers.jsx';
 //@include '../UTILITIES/Colors.jsx';
+//@include '../UTILITIES/Artboards.jsx';
 
 function SP_CW_Metadata_V2() {
   // Active Document
@@ -75,6 +76,9 @@ function SP_CW_Metadata_V2() {
   // Storage for color names in each CW layer
   var cwValues = new Array();
 
+  // Temporary Artboard (get enabled inks hack)
+  var newArtboard = addInchArtboard();
+
   // Add colors to storage
   for (var i = 0; i < cwLayers.length; i++) {
     var cwLayer = docLayers.getByName(cwLayers[i]);
@@ -83,6 +87,9 @@ function SP_CW_Metadata_V2() {
     cwValues.push({ name: cwLayer.name, colors: cwEnabledInks });
     cwLayer.visible = false;
   }
+
+  // Delete temporory Artboard
+  newArtboard.remove();
 
   // Restore visible layers
   restoreVisibleLayers(visibleLayers);

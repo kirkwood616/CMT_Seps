@@ -1,6 +1,7 @@
 //@include '../UTILITIES/Layers.jsx';
 //@include '../UTILITIES/Colors.jsx';
 //@include '../UTILITIES/UB.jsx';
+//@include '../UTILITIES/Artboards.jsx';
 
 function SP_Generate_UB_SelectColors_V2() {
   // Active Document
@@ -37,8 +38,14 @@ function SP_Generate_UB_SelectColors_V2() {
     }
   }
 
+  // Temporary Artboard (get enabled inks hack)
+  var newArtboard = addInchArtboard();
+
   // Get enabled ink names from visible layer
   var enabledInks = storeEnabledInkNames();
+
+  // Delete temporory Artboard
+  newArtboard.remove();
 
   // GUI window
   var gui = createWindow("SELECT COLORS FOR UB", 300);
