@@ -44,7 +44,7 @@ function SP_Generate_UB_SelectColors_V2() {
   // Get enabled ink names from visible layer
   var enabledInks = storeEnabledInkNames();
 
-  // Delete temporory Artboard
+  // Delete temporary Artboard
   newArtboard.remove();
 
   // GUI window

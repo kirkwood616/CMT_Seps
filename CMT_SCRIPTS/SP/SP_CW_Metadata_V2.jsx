@@ -88,7 +88,7 @@ function SP_CW_Metadata_V2() {
     cwLayer.visible = false;
   }
 
-  // Delete temporory Artboard
+  // Delete temporary Artboard
   newArtboard.remove();
 
   // Restore visible layers
