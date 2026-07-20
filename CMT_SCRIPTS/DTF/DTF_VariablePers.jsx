@@ -188,10 +188,12 @@ function DTF_VariablePers(USER_VALUE) {
 
     // TEMP text frames
     var currName = tempLayer.textFrames.getByName("_NAME");
+    var currNameLength = currName.contents.length;
     var currNumber = tempLayer.textFrames.getByName("_NUMBER");
+    var currNumberLength = currNumber.contents.length;
 
     // NAME
-    if (currName.contents.length > 0) {
+    if (currNameLength > 0) {
       dataDoc.selection = null;
       currName.selected = true;
       app.executeMenuCommand("outline");
@@ -209,11 +211,15 @@ function DTF_VariablePers(USER_VALUE) {
     }
 
     // NUMBER
-    if (currNumber.contents.length > 0) {
+    if (currNumberLength > 0) {
       dataDoc.selection = null;
       currNumber.selected = true;
       app.executeMenuCommand("outline");
-      tempLayer.groupItems[1].selected = true;
+      if (currNameLength > 0) {
+        tempLayer.groupItems[1].selected = true;
+      } else {
+        tempLayer.groupItems[0].selected = true;
+      }
       dataDoc.selection[0].name = "_NUMBER_" + String(i);
       dataDoc.selection = null;
     } else {
