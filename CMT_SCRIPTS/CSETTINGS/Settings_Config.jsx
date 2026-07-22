@@ -97,6 +97,14 @@ function Settings_Config() {
       "color_library" +
       slash +
       "Ink Color Palette 2025 LOAD.ai",
+    DTF_ColorLibrary_filePath:
+      Folder.desktop +
+      slash +
+      "CMT_seps-main" +
+      slash +
+      "color_library" +
+      slash +
+      "CMT_DTF_Color_Library.ai",
   };
 
   // Set up & load settings
@@ -487,6 +495,7 @@ function Settings_Config() {
 
   // COLOR LIBRARY FILE PANEL
   // ======
+  // STANDARD COLOR LIBRARY
   var ColorLibrary_panel__filePath = createFilePanel(
     ColorLibrary_tab,
     "COLOR LIBRARY FILE PATH",
@@ -504,6 +513,26 @@ function Settings_Config() {
   var ColorLibrary_filePath__path = createFileText(
     ColorLibrary_panel__filePath,
     settingsData.ColorLibrary_filePath,
+  );
+
+  // DTF COLOR LIBRARY
+  var DTF_ColorLibrary_panel__filePath = createFilePanel(
+    ColorLibrary_tab,
+    "COLOR LIBRARY FILE PATH",
+  );
+
+  var DTF_ColorLibrary_filePath__button = createButton(
+    DTF_ColorLibrary_panel__filePath,
+    "Select",
+    function () {
+      var DTF_ColorLibrary_TFP = File.openDialog();
+      DTF_ColorLibrary_filePath__path.text = DTF_ColorLibrary_TFP.fullName;
+    },
+  );
+
+  var DTF_ColorLibrary_filePath__path = createFileText(
+    DTF_ColorLibrary_panel__filePath,
+    settingsData.DTF_ColorLibrary_filePath,
   );
 
   // verticalTabPanel DISPLAY
@@ -593,6 +622,8 @@ function Settings_Config() {
     settingsData.RTF_templatePath = RTF_templatePath__path.text;
     settingsData.RTF_savePath = RTF_templateSavePath__path.text;
     settingsData.ColorLibrary_filePath = ColorLibrary_filePath__path.text;
+    settingsData.DTF_ColorLibrary_filePath =
+      DTF_ColorLibrary_filePath__path.text;
 
     // Mesh
     var checkedMeshes = new Array();
